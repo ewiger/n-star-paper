@@ -1,0 +1,805 @@
+\pagebreak
+\section{In search of String Theory for $SEF$}\label{sec_st_sef}
+
+\textit{Most of this section is still very much WORK IN PROGRESS, so any results are to be tentatively perceived as drafts only as they are provided without proof. For most purposes it is safe for the reader to ignore this section completely for now.}
+
+\subsection{Meta-level of FOL in Model Theory}
+
+Next, we will give a more formal definition for the theory around $SEF$\footnote{that we used to proof the $\neg CH$ cases} in terms of \textit{first order logic} (FOL). We will aim to show that $ZF+SEF$ is \textit{consistent relative to} $ZF$\footnote{If $T$ is some theory (consisting of axioms, e.g. like $ZF$) and $A$ is another axiom, then we say that $T + A$ is consistent relative to $T$ (or that $A$ is consistent with $T$ assuming that $T$ itself is consistent) - see p. 163 of \cite{jech2003set} for \textit{relative consistency}}. In order to make arguments about models for the $SEF$ theory we will employ some notations and definitions from \cite{marker2002model}.
+
+In the discourse of \textit{model theory} we rely on FOL language simply referenced as $\lsign$-language\footnote{here we primarily follow notations and main definitions from \cite{marker2002model}}, which is defined together with $\lsign$-terms, $\lsign$-formulas, $\lsign$-theories and most importantly models for logical interpretion. Next to being FOL language on its own, model theory concerns itself with other languages of non-logical nature that may accompany various mathematical objects of interest (also called domains or universes) and try to capture all structural information that can be reflected with functions, relations and constants. Notation for such languages is simply $\lsign$ or sometimes  $\lsign_{x}$, where $x$ is a name of a particular FOL theory in mind. Given that the language of set theory is also FOL, model theory can natively operate with it. 
+
+Pure formal systems with FOL have a number of limitations. This comes from inability to pass functions as values into formula variables. That's why this is called first-order rather than higher-order logic. Ultimately it is impossible to properly work with infinity in most classical FOL systems\footnote{That's why set theory has a separate language, although most of the statements are specified in FOL}. For model theory that means that all the quantifier are restricted to the domain of the model.
+
+Recall that a language $\lsign$ is a set of non-logical symbols\footnote{from \textit{Models of Set Theory} in \cite{jech2003set} as well as \cite{marker2002model,hodges1997shorter}} such that each symbol $c_n \in \lsign$ (endowed with some finite arity $n \in \nat$) is either a \textit{function} or a \textit{relation}. Other symbols can be just \textit{constants}. $\lsign$ is usually written in displayed form as the following definition. 
+
+\begin{definition}
+  Let $\lsign$ be a \textit{signature} or a \textit{language}\footnote{here signature\cite{hodges1997shorter} or language\cite{marker2002model} have the same meaning modulo literature on model theory} given by:
+  \begin{enumerate}
+    \item a set of function symbols $\Lf$ and positive integers $n_f$ for each $f \in \Lf$;
+    \item a set of relation symbols $\Lr$ and positive integers $n_R$ for each $R \in \Lr$;
+    \item a set of constant symbols $\Lc$.
+  \end{enumerate}
+\end{definition}
+
+Such languages can be often naturally \textit{satisfied} by their respective models\footnote{also see - "Tarski's definition of truth" in \cite{jech2003set}}. A model of $\lsign$ is a pair $\LsA = (A, I)$, where $A$ is the universe of $\LsA$ and $I$ is the interpretation function which maps the symbols of $\lsign$ to appropriate relations, functions, and constants in $A$. Non-logical symbols of the language might be different up to interpretation between concrete models. Sometimes when we consider a structure $\LsA = (A, I)$ as a model for the set of non-logical symbols of the language $\lsign = (\Lf, \Lr, \Lc)$, we might write the structure by explicitly indicating the interpretation mapping for occurrences of each non-logical symbol of $\lsign$ in the structure $\LsA$ with additional super-script index as $(A, \Lf^{\LsA}, \Lr^{\LsA}, \Lc^{\LsA})$\footnote{unless interpretation is already clear from the discourse}.
+
+For example, the signature of the set theory like $ZF$ is just $\{\in\}$\footnote{or, just the relation $\{\in\}$, where $=$ is meerly a constant}. Recall that in set theory language (for theories like $ZF$) we often use many more non-logical symbols such as 
+
+\[ =, \emptyset, \omega, \omega_1, \aleph_0, \subset, \pset, \cup \]
+
+which are merely definable elements (formulas encoded as sets like classes), relations, functions and constants. Since those symbols are not central for the main discourse in set theory, they can be seen merely as conservative extensions.
+
+In $\lsign$-language we will also use logical \textit{connectivity} symbols like $\neg, \land, \exists$ together with $\lor, \forall$\footnote{$\lor, \forall$ can be implemented as shorthand for formulas using only $\neg, \land, \exists$\cite{marker2002model}} to show syntactical truth $\top$ (or falsehood $\bot$)\footnote{both $\top,\bot$ are constant terms for FOL} of formulas under consideration. And, we will use square brackets for FOL $\lsign$-formulas to avoid potential confusion or overlap with replicator brackets\footnote{at this point, we consider only basic alphabet for SEFs, without "[1+]" extension and so on}.
+
+In general\footnote{and by following \textit{Models of Set Theory} in \cite{jech2003set} and \textit{Definable Sets and Interpretability} in \cite{marker2002model}}, given: 
+\begin{enumerate}[(1)]
+  \item some language $\lsign$ - a set of non-logical symbols
+  \item with some theory $\LsT$ - a sequence of $\lsign$-formulas (in FOL model theory language or $\lsign$-language), 
+  \item some model $\LsM$ of $\lsign$ - an $\lsign$-structure for this language, 
+  \item and some $\lsign$-formulas $\phi$ and $\varphi$,
+\end{enumerate}
+  we assume that:
+\begin{enumerate}[(a)]
+  \item proofs are finite;
+  \item (syntactic provability $\vdash$) when we mean that some theory $\LsT$ \textit{proves} a FOL formula $\phi$, we write $\LsT \vdash \phi$, or even shorter $\vdash_{\LsT} \phi$;
+  \item (semantic entailment $\models$) when we mean that some theory $\LsT$ \textit{satisfies} a FOL formula $\phi$, we write $\LsT \models \phi$, or even shorter $\models_{\LsT} \phi$;
+  \item when we mean that some model $\LsM$ \textit{satisfies} $\LsT$, we also mean that $\forall \varphi . [[\varphi \in \LsT] \land [\LsM \models \varphi]]$ or, we sometimes write $\varphi \models_{\LsM} \top$, or even shorter $\models_{\LsM} \varphi$;
+  \item to show that $\LsT \models \phi$, we give an informal mathematical proof that $\LsM \models \phi$ whenever $\LsM \models \LsT$;
+  \item to show that $\LsT \not\models \phi$, we usually construct a counterexample.
+  \item (soundness) $\LsT \vdash \phi \implies \LsT \models \phi$;
+  \item by Goedel's Completeness Theorem\footnote{In other words, syntactic notion of provability $\vdash$ in first-order logic is equivalent to the semantic notation of logical entailment $\models$}, if $\LsT$ is an $\lsign$-theory and $\phi$ is an $\lsign$-sentence, then 
+   $\LsT \models \phi \Longleftrightarrow \LsT \vdash \phi$; 
+  \item (corollary) every consistent set of sentences has a model - namely, $\LsT$ is consistent iff $\LsT$ is satisfiable;
+  \item (compactness) - $\LsT$ is satisfiable if and only if every finite subset of $\LsT$ is satisfiable.
+\end{enumerate}
+
+
+
+To sum up, model theory is a FOL meta language that can interoperate between other "languages" treating them and their objects as non-logical symbols on the meta-level. This helps to understand relations between those objects by translating respective theories into FOL to argue about object properties, etc. As such approach suites our needs well, we will do the same.
+
+To better understand how we are going to work with \textit{model theory}, it is useful to go (again) through some of its key concepts and results.
+
+\textbf{Absoluteness}. Here and later in the paper our plan is to work with multiple theories on a meta-level of model theory. \textit{Absoluteness of quantifier-free formulas in FOL} is an important tool to study which properties are absolute in different models:
+
+\begin{definition} 
+We define and use \textit{absoluteness} in following sense:
+\begin{enumerate}[(a)]
+  \item an $\lsign$-formula $\phi$ is said to be \textit{absolute} to some class of models (structures), if it has the same truth value in each of the members of that class;
+  \item (example) quantifier-free $\lsign$-formulas are absolute;
+  \item if the truth of a formula in each substructure $N$ of a structure $M$ follows from its truth in $M$, the formula is \textit{downward absolute};
+  \item if the truth of a formula in a structure $N$ implies its truth in each structure $M$ extending $N$, the formula is \textit{upward absolute};
+  % \item Shoenfield's absoluteness theorem 
+  \item (example of downward absoluteness) universal sentences \footnote{with only universal quantifiers} that are true in a structure are also true in every substructure of the original structure;
+  \item (example of upward absoluteness) existential sentences are upward absolute from a structure to any structure containing it;
+  \item (in set theory) one usually begins with the fixed model of set theory and only considers other transitive models containing the same ordinals as the fixed model.
+\end{enumerate}
+\end{definition}
+
+Firstly, we rely on the fact that (in set theory) $\boldsymbol{\Delta}_0$\footnote{Here and everywhere else in the paper we use bold Greek symbols $\boldsymbol{\Sigma}$, $\boldsymbol{\Pi}$ and $\boldsymbol{\Delta}$ to reference parts of the \textit{Lévy hierarchy} of formulas in the formal language of the ZF set theory} formulas of FOL are \textit{absolute} for all transitive models. On the meta-level of the model theory and its $\lsign$-language of the FOL such formulas are called quantifier-free formulas (see \textit{Proposition 1.1.8} in \cite{marker2002model}). 
+
+\textbf{Boundness}. Secondly and at risk of repeating ourselves, model theory $\lsign$-language \cite{marker2002model} is significantly limited by the capabilities of FOL (contrary to the higher order logic). For example, statements like "every bounded subset has a least upper bound" cannot be expressed as a FOL formula because we cannot quantify over subsets. Another consequence is coming from the direct limitation of the model theory itself, namely - quantification is always restricted to the elements of the model structure (i.e. the actual universe of the model). Basically, if we discuss a model $\LsM$ with some universe $M$ and use a quantifier $\forall x.[P(x)]$ we actually always mean $\forall x \in M.[P(x)]$.
+
+\begin{definition} 
+Absoluteness depends on boundness (or "freeness") of variables in $\lsign$-formulas:
+\begin{enumerate}[(a)]
+  \item we say that a variable $\nu$ is to occur freely in an $\lsign$-formula $\phi$ if it is not inside $\exists \nu$ or $\forall \nu$ quantifier; otherwise, we say that it is \textit{bound};
+  \item (example) quantifier-free $\lsign$-formulas have no bound variables;
+  \item an $\lsign$-sentence $\phi$ is an $\lsign$-formula with no free variables;
+  \item if a theory (or a fragment) $\LsT$ consists only of quantifier-free $\lsign$-formulas, it is called \textit{model-free}; otherwise, we say that $\LsT$ is \textit{bound};
+  \item (example) model-free $\lsign$-theories are absolute;
+  \item bound theory can have semantic interpretation (entailment) only after being bound to a model. 
+\end{enumerate}
+\end{definition} 
+
+\textbf{Axiomatization}. By the very definition of semantic entailment, no theory interpretation is possible without an existing model. This means that theory can contain axioms which can not be proven syntactically, since they are stated in a semantic fashion with propositions and objects which are true or false only depending on the properties of those objects (or depending on what they "mean" in a particular model). Ability to describe object properties in form of FOL statements ($\lsign$-formulas) is called to \textit{axiomatize}. In model theory objects are studied as part of domains in $\lsign$-structures. We can also simply say that $\lsign$-structures are axiomatized by $\lsign$-theories (or axioms in those theories). Note that this is different from \textit{axiomatizable} which is a reductionism applicable to the theory itself (and not the objects).
+
+\begin{definition} 
+A collection of objects that can have all their properties described (axiomatized) as FOL statements ($\lsign$-formulas) is called \textit{axiomatization}. Or more precisely:
+\begin{enumerate}[(a)]
+  \item \textit{axiomatized} in a language $\lsign$ means described uniquely up to isomorphism by a single $\lsign$-sentence;
+    \item (example) a collection of objects and all their properties can be \textit{axiomatized} if there is a one-to-one correspondence between those properties and FOL statements ($\lsign$-formulas);
+    \item (example) multiple FOL statements can be uniquely represented by a single conjugation (CNF), hence finite number of properties can be always axiomatized;
+    \item (example) any finite collection of finite structures can always be axiomatized in FOL; 
+    \item (example) some, but not all, infinite collections of finite structures can also be axiomatized by a single $\lsign$-sentence;
+    \item An $\lsign$-theory $T$ is said to be \textit{finitely axiomatizable} if there is a finite set of $\lsign$-sentences $\Sigma$ such that $\Sigma \vdash T$;
+    % TODO: decribe axiom schema in FOL A \implies A or B
+    \item \textit{recursively axiomatizable theory}
+\end{enumerate}
+\end{definition}
+
+Initially, when we wanted to discuss a new theory and its axioms, we did not want to come up with entirely new formulation for everything. If that can be possible we wanted to reuse well-working concepts like classes from set theory language. In our first attempt to write this, when we started talking about \textit{$\kappa$-String Theory} (which is coming in the next subsection and will be later extended by \textit{SEF Theory}), we simply wanted to mention that some classes or formulas (like cardinals) and axioms (like union axiom) were "borrowed" from $ZF$. "Borrowed" formulas means that we have initially translated some $ZF$ formulas using FOL of $\lsign$-language \cite{marker2002model} "implicitly" to describe SEF theory.
+
+However and in general, many such formulas may not necessarily be absolute. For example, many cardinality related statements are not absolute. Specifically, $Y = \pset(X)$, $|Y| = |X|$, \textit{$\alpha$ is a cardinal}, etc. It means that we also rely on the fact that given a transitive model $M$ statements like "\textit{$\alpha$ is a cardinal}" can be interpreted for specific quantifier-free formulas\footnote{or $\boldsymbol{\Delta}_0$ formulas in \textit{Lévy hierarchy}} in such model $M$\footnote{see exercise \textit{12.6} in \cite{jech2003set}}. Namely, If $\alpha \in M$ and if $alpha$ is a cardinal, then \textit{$ M \models \alpha$ is a cardinal} and so on.
+
+Now, to clarify this notion of "borrowing" formulas - we can do better. Let us define a notion of \textit{primordial theory}. Such theory typically consist mainly of convenient definitions, abbreviations or other aliases and constants. In that sense, it is almost consistent or naturally conservative as it does not try to proof anything about itself yet. Although we don't always know whether such primordial theory is consistent \textit{a priori} (before it has been extended by a normal theory and interpreted in a model), we certainly know that it is never complete by definition.
+
+
+\begin{definition}[Primordial theory]\label{def_primordial_theory}
+  \textit{Primordial theory} is a sequence of $\lsign$-formulas $\Upsilon$, which are either absolute or at most conservative. Meaning that $\Upsilon$ consists of two fragments: 
+    \begin{enumerate}[(a)]
+      \item \textit{absolute} - a sub-sequence of $\lsign$-formulas $A$ each is quantifier-free or otherwise absolute;
+      \item \textit{conservative} - a sub-sequence of $\lsign$-formulas $\Theta$, s.t. if there is an $\lsign$-theory $T_1$ with a conservative extension $T_2 \supset T_1$, then $T_2$ is $\Theta$-conservative over $T_1$.
+    \end{enumerate}
+\end{definition}
+
+According to the above definition any primordial theory has a requirement to remain absolute after satisfiable extension, which includes binding to a model for semantic interpretation. Note that before such binding to a model no semantic interpretation is possible (see \textit{bound theory} above). To clarify "otherwise absolute", by this we mean that every primordial theory can be accompanied by a model placeholder - a collection of items (but not really yet fully a set or even a class). We assume that upon binding with the model, each formula of a primordial theory with universal quantifiers (over "former" collection) can be either rewritten to iterate over the collection of formulas by replacing them with conjugation of consistent formulas or shown to be absolute in the model by other means of quantifier-elimination specific to the model.
+
+A few examples of a primordial theory would be:
+\begin{itemize}
+  \item \textbf{Trivial cases}: 
+    \begin{itemize}
+      \item Every empty theory $\LsT_0$ is trivially primordial.
+      \item Every theory that consists only of absolute $\lsign$-formulas is primordial.
+      \item Every theory that consists only of definitions is primordial.
+    \end{itemize}
+  \item \textbf{Finite collection of quantifier-free $\lsign$-formulas}: take a collection of finitely many quantifier-free $\lsign$-formulas $\phi$ in $\lsign$-language which will form a primordial theory $\LsT_0$ iff $\forall \phi \in \LsT_0 . \nexists \varphi \in \LsT_0 . [\varphi = [\LsT_0 \vdash \phi \land \LsT_0 \vdash \neg\phi]]$\footnote{in "pseudo set theoretical language"}. Observe that the same can be translated by rewriting such collection "$\forall \phi \in \LsT_0$" as a single formula which would be a (long) finite conjunction of consistent quantifier-free formulas (also called conjunctive normal form or CNF). Now, if any of $\phi$ has a universal quantifier, it again can iterate over a collection placeholder before binding, and only then to be rewritten into CNF after satisfiable extension of $\LsT_0$. Although existence of countably long CNF may be treated with much more meticulous adherence to technicalities (even on the meta-level), for our concerns it is enough to say that when infinite constructs are discussed - we always really on the semantic interpretation of the respective infinity axioms inside the model;
+  \item \textbf{Definition of a class in set theory}. Semantically (on a meta-level of the $\lsign$-language), classes can be described as equivalence classes of logical formulas\cite{enwiki:1125916999}: If $\mathcal{A}$ is a $\lsign$-structure interpreting $ZF$\footnote{Note that depending on formulation pure axioms of the $ZF$ set theory do not formalize the notion of classes, so each formula with classes must be reduced syntactically to a formula without classes in formal theorem provers. For example, one can reduce the formula $A=\{x\mid x=x\}$ to $\forall x(x\in A\leftrightarrow x=x)$}, then the object language "class-builder expression" $\{x\mid \phi \}$ is interpreted in $\mathcal{A}$ by the collection of all the elements from the domain of $\mathcal{A}$ on which $\lambda x\phi$ holds; thus, the class can be described as the set of all predicates equivalent to $\phi$ (which includes $\phi$  itself). In particular, one can identify the "class of all sets" with the set of all predicates equivalent to $x=x$.
+  \item \textbf{Quantifier elimination in Presburger arithmetic}\footnote{This theory is often applied in automatic theorem provers. The signature of Presburger arithmetic contains only the addition operation and equality (without the multiplication) and the axioms include a schema of induction\cite{enwiki:1112785748}} implies decidability of the theory. This means that such theory must have some initial primordial subset of definitions and other statements minus actual results. Results will include $\lsign$-sentences (theorems and proofs) about the properties of the theory itself such as consistency, completeness and decidability.
+\end{itemize}
+
+Below we use such concepts such as \textit{Boolean algebra}, \textit{Lindenbaum algebra} and \textit{realization of FOL} (Propositional logic), and later on (principal) \textit{ideal} and \textit{filter}, \textit{prime ideal} and \textit{ultrafilter}\footnote{for more detailed discussion please see p.117-122 in \cite{halbeisen2012}}. Let us also refine what we mean when we say that an $\lsign$-formula is \textit{satisfied by a model} (and so on) by using \textit{realization} map. We say that on a meta-level our $\lsign$-language can itself be interpreted (not only by a two-values Boolean algebra but) in any other Boolean algebra model $\LsB_A := (B, \lor, \land, \neg, \bot, \top)$.
+
+
+\begin{lemma}[FOL generic realization]\label{lemma_gen_fol_rel}
+  Assume that:
+  \begin{itemize}
+    \item $\lsign$-language is reduced to a FOL signature $(\lor, \land, \neg)$;
+    \item $P$ is a collection of all propositional variables of all finite subsets of $\lsign$-formulas of $\lsign$-language;
+    \item $\LsA = (\{\bot,\top\}, \lor, \land, \neg, \bot, \top)$ is a two-values algebra model;
+    \item $f: P \to \{\bot,\top\}$ be a FOL \textit{realization} map, where $\{\bot,\top\}$ is a domain of $\LsA$;
+    \item $\LsB := (B, \lor, \land, \neg, \bot, \top)$ is any model with the Boolean algebra signature.
+  \end{itemize}
+  
+  Then, for any $\lsign$-formula $\varphi$ we have that $\LsA \models \varphi \implies \LsB \models \varphi$ iff there exists an isomorphism $g: B \to P$ preserving $\lor, \land, \neg$, so that $\lsign$-language can be also \textit{realized} by a composition $r := f \circ g$.
+\end{lemma}
+\begin{proof}
+  Recall, by the definition of formula realization\cite{halbeisen2012} the map $f: P \to \{\bot,\top\}$ realizes every $\lsign$-formula $\phi$ and $\varphi$ iff $f$ can be extended over complexity of $\lsign$-formulas in a following inductive way: 
+  \begin{enumerate}[(i)]
+    \item $f(\neg \varphi) = \neg f(\varphi)$;
+    \item $f(\phi \land \varphi) = f(\phi) \land f(\varphi)$;
+    \item $f(\phi \lor \varphi) = f(\phi) \lor f(\varphi)$
+  \end{enumerate}
+  Furthermore, if any formula $\varphi$ in $\lsign$-language is mapped by $f: \varphi \mapsto \top$, then we say $f$ \textit{satisfies} $\varphi$. We can trivially check this for $\{\bot,\top\}$: if $\varphi = \bot$, then $\nvdash f(\bot) \rightarrow f \not\models \varphi$; if $\varphi = \top$, then $\vdash f(\top) \rightarrow f \models \varphi$.
+
+  We want to show that the same is true for $r := f \circ g$. Indeed, given that $g$ is $\lor, \land, \neg$ preserving, it means that for every $\lsign$-formula $\phi$ and $\varphi$ $\exists u,v \in B$:
+  \begin{enumerate}[a)]
+    \item $r(\neg u) = f(\neg \varphi) = \neg f(\varphi) = \neg r(u)$;
+    \item $r(u \land v) = f(\phi \land \varphi) = f(\phi) \land f(\varphi) = r(u) \land r(v)$;
+    \item $r(u \lor v) = f(\phi \lor \varphi) = f(\phi) \lor f(\varphi) = r(u) \lor r(v)$
+  \end{enumerate}
+  If $r$ is extended over complexity of $\lsign$-formulas by induction, then we get $\LsA \models \phi \Leftrightarrow  g(u) = \phi \land g^{-1}(\phi) = \top \Leftrightarrow \LsB \models \phi$. 
+\end{proof}
+
+
+We call algebra model to be abstract until the domain of the model has been fixed\footnote{chosen to be a specific object}. Otherwise, Boolean algebra is called concrete (as opposite to abstract).
+
+
+
+Boolean algebra can be defined from a boolean ring $(B_r, \oplus, \cdot, \bF, \bT)$ as:
+\begin{enumerate}
+  \item $\bot := \bF$
+  \item $\top := \bT$
+  \item $ x \land y := x \cdot y$
+  \item $ x \lor y := x \oplus y \oplus x \cdot y$ 
+  \item $ \neg x  := \bT - x$
+\end{enumerate}
+
+In general, the categories of Boolean rings and Boolean algebras are equivalent. It means that there is a categorical isomorphism between boolean rings and Boolean algebras. For example, if a boolean ring is implemented by binary strings then there is a corresponding concrete Boolean algebra.
+
+
+\begin{definition}[Bootstrap-Theory for FOL realisation]\label{def_bt_fol}
+  Let $\lsign$-structure $\LsB := (B, \lor, \land, \neg, \bot, \top)$ be an abstract Boolean algebra with realization $r$ of the $\lsign$-language\footnote{see \textit{Definition \ref{lemma_gen_fol_rel}}}. Also let $\phi$ and $\varphi$ be $\lsign$-formulas. 
+
+  Then $\LsT_0$ be a sequence of $\lsign$-formulas corresponding to the following convenient definitions:
+  \begin{legal}
+    \item boolean constants of truth and falsehood:
+      \begin{legal} 
+      \item $\top := \varphi \lor \neg \varphi$;
+      \item $\bot := \varphi \land \neg \varphi$;
+      \end{legal}
+    \item basic operations:
+      \begin{legal} 
+        \item Take $\lor, \land, \neg$ part of the $\LsB$ signature and define those operations on any subset of finite formulas recursively for arity $n>2$, otherwise via truth table;
+        % \item define recursively "over complexity of $\lsign$-formulas in a following inductive way: "
+        % \item use binary mess - functions from {0,1}* -> {0,1}? 
+        % \item deduction system?
+        % \item https://en.wikipedia.org/wiki/Propositional_calculus#math_5
+      \end{legal} 
+    \item secondary operations:
+      \begin{legal} 
+      \item (material conditional) $\phi \rightarrow \varphi := \neg \phi \lor \varphi$
+      \item (material biconditional) $\phi \rightarrow \varphi := \neg \phi \lor \varphi$
+      \item (exclusive or) $\phi \oplus \varphi := \neg [\phi = \varphi]$
+      \item (logical equivalence)  $\phi = \varphi := [\phi \leftrightarrow \varphi]$;
+      \end{legal} 
+    \item restricted logic:
+      \begin{legal}
+        \item $\neg$ and $\land$ are sufficient, since $\phi \lor \varphi \leftrightarrow \neg[\neg \phi \land \neg \varphi]$;
+        \item (quantifier) can be restricted to use of only $\exists$, since $\forall x \varphi(x) \leftrightarrow \neg \exists x \neg \varphi(x)$;
+        \item constant symbols and function symbols can be entirely rewritten using parentheses and predicates.
+      \end{legal}
+  \end{legal}
+  
+\end{definition}
+
+\begin{definition}[Bootstrap-Theory for Classes of objects]\label{def_bt_co}
+  Let $\LsT_0$ be a sequence of $\lsign$-formulas that define classes and operations on them following \cite{jech2003set}:
+
+  \begin{legal}
+    \item (\textit{object placeholder} or simply an \textit{object}) is a unique constant in any  $\lsign$-formula, which can be replaced (concretized or implemented) upon this bootstrap-theory extension, for example, by replacing it with \textit{set} or \textit{string} definition - depending on the context;
+    \item (\textit{class}) If $p_1, .., p_n$ is a $\lsign$-formula, we call $C = \{x : \varphi(x, p_1, .., p_n)\}$ a class and use curly brackets (braces) as containment notation;
+    \item (\textit{membership} relation)
+    \begin{quote}    
+      members of the class $C$ are those objects $x$ that satisfy $\varphi(x, p_1, .., p_n)$: 
+      \[ x \in C \leftrightarrow \varphi(x, p_1, .., p_n) \]
+    \end{quote}
+    \item (\textit{definable})
+    \begin{legal}
+      \item we say that $C$ is \textit{definable from} $p_1, .., p_n$; 
+      \item if $\varphi(x)$ has no parameters (context or bounded variables) $p_i$ then the class $C$ if \textit{definable};
+    \end{legal}
+    \item (\textit{equality}) two classes are considered equal if they have the same elements:
+      \begin{quote}    
+        if $C = \{x : \varphi(x, p_1, .., p_n)\}$ 
+        and $B = \{x : \psi(x, q_1, .., q_m)\}$, \\
+        then $C = D \Leftrightarrow \varphi(x, p_1, .., p_n) \leftrightarrow \psi(x, q_1, .., q_m)$ 
+      \end{quote}
+    \item (\textit{universal class} or \textit{universe}) the class of all objects: $V = { x : x = x }$
+    \item (\textit{class inclusion}) C is a subclass of D: $ C \subset D $ iff $\forall x. [x \in C] \rightarrow [x \in D]$
+    \item basic operations on classes:
+    \begin{legal}
+      \item $ C \cap D = \{x : x \in C \land x \in D\}$
+      \item $ C \cup D = \{x : x \in C \lor  x \in D\}$
+      \item $ C - D    = \{x : x \in C \land x \not\in D\}$
+      \item $\bigcup C = \{x : x \in S \land S \in C\} = \bigcup\{ S: S \in C\}$
+    \end{legal}
+    \item Every object can be considered a class; 
+    \item If $S$ is a class, then the formula $\{x : x \in S\}$ is also a class;
+    \item A class that is not an object is proper class\footnote{such as \textit{a class of all objects}}.
+  \end{legal}
+\end{definition}
+
+
+
+
+
+
+
+
+
+\begin{lemma}
+  The following are primordial theories:
+  \begin{enumerate}[(a)]
+    \item Bootstrap-theory for FOL realization (\textit{Definition - \ref{def_bt_fol}})
+    \item Bootstrap-theory for Classes of objects (\textit{Definition - \ref{def_bt_co}})
+  \end{enumerate}
+\end{lemma}
+\begin{proof}
+  Follows from definition of primordial theory, since both (a) and (b) contain only convenient definitions.
+\end{proof}
+
+\subsection{String Theory Model}
+
+Let $\ulsef = (\Sigma, \Delta)$ be an infinite String Enumeration Formula (SEF) language with finite alphabet $\Sigma := \{0,1,{(},{)}\}$\footnote{See \textit{Definition \ref{def_ulsef}}}. Now we want to endow it with $\lsign$-structure, so that we can redefine previously discussed statements as $\lsign$-theory\cite{marker2002model} for SEF using FOL. Again, we have to start with the theory behind infinite binary strings and its generalizations such as regular languages in computer science.
+
+Consider $\LsB = (\cbin_\kappa, \cdot)$ as an \textit{$\lsign$-structure} consisting of a class of binary strings $\cbin_\kappa = \{b : b \in \{0,1\}^{\kappa}, |b| = \kappa\}$ of infinite length $\kappa$ equipped with binary string concatenation function $f(x,y) = x\cdot y = \bos xy\eos _\kappa, \forall x,y \in \cbin_\kappa$. Observe that $\LsB$ is a concrete Boolean algebra\footnote{the signature can be extended to match $\lor, \land, \neg$ or equivalently $+, \cdot, -$ language}. It contains only infinite strings, since it is build around the concept of cardinality $k$ "borrowed" from ZF.
+
+Indeed, the above construction can be generalized for regular languages over a finite alphabet $\Sigma$ (not just the case of binary strings $\Sigma = \{0,1\}$). We will do so in two axiomatization steps by defining: 
+  \begin{enumerate}[i)]
+    \item an $\lsign_{str}$-language $(\cdot, \Sigma)$ (a signature of non-logical symbols); 
+    \item a \textit{basic string theory} $\LsT_{str}$ (mostly inspired to match ZF);
+    \item an $\LsS_{str}$-structure satisfying $\LsT_{str}$ (a model $\LsS := (S_{\kappa}, \cdot, \Sigma)$ with $\kappa$-infinite strings).
+  \end{enumerate}
+
+The motivation for later is that such model will become useful when dealing with infinite binary strings and SEFs - concepts that must be familiar by now due to prior and somewhat tedious discussion through this paper.
+
+\begin{definition}[Basic String Theory (extended list of axioms)]\label{def_ExtStrTheory}
+  Let $\lsign_{str} := (\cdot, \Sigma)$ be a language of the \textit{basic string theory}, where:
+  \begin{enumerate}
+    \item $\cdot$ - is a binary function of string concatenation operation;
+    \item $\Sigma$ - is a constant of the alphabet symbols of a regular language, e.g. $\Sigma = \{0,1\}$;
+  \end{enumerate}
+  
+  Then the theory of $\lsign_{str}$ is a list of axioms $\LsT_{str}$\footnote{here we simply provide an extended list of axioms under a strong assumption that a much smaller axiomatization is possible} extending primordial theory-bootstraps:
+  \begin{enumerate}[(a)]
+    \item Bootstrap-theory for FOL realization (\textit{Definition - \ref{def_bt_fol}})
+    \item Bootstrap-theory for Classes of objects (\textit{Definition - \ref{def_bt_co}})
+  \end{enumerate}
+  Specifically, we choose \textit{strings} as the name of the object\footnote{to be used instead of the nominal placeholder} for classes in the above bootstrap.
+  
+  Next, we define the notion of what a \text{string} is by the following axioms:
+  \begin{legal}
+    % A1 ----------------------
+    % ZF-2: axiom of pairing 
+    \item \textbf{\textit{Axiom of string concatenation}} - if $x$ and $y$ are strings, then so is: 
+     \[ z = x \cdot y \]
+    % A2 ----------------------  
+    \item \textbf{\textit{Axiom of substring}}
+    \begin{legal}
+      \item consequently\footnote{using the axiom of string concatenation}, we can also count how many times $y$ can be found in $x$ by using a shorthand $|x|_y$;
+      \item In fact, if defining of "pure" string-theoretic version of the membership relation is required for strings, then the following statements are equivalent - if $x,y,z,s$ are strings, then $\forall x,y,z,s$:
+        \begin{itemize}
+          \item $[z = x \cdot y] \Longleftrightarrow [[x \substr z] \land [y \substr z]]$.
+          \item $z = x \cdot y$ iff $|z|_x \neq 0$ and $|z|_y \neq 0$.
+          \item $z = x \cdot s \cdot y \implies s \substr z$.
+          \item $|x|_y \neq 0 \Longleftrightarrow y \substr x$
+        \end{itemize}
+      \item in the above formulas we have used "$y \substr x$" which means "substring of" relation and is semantically different from the set theoretical "member of" relation. We will slightly abuse the set theoretical notation for most cases where it is clear from the context that:
+        \begin{itemize}
+          \item if $x$ and $y$ are both strings, then we mean "substring of" and write $y \substr x$;
+          \item otherwise\footnote{if either one of $x$ and $y$ is a set or both of them are sets}, we mean "member of" and write $y \in x$;
+        \end{itemize}
+      \item furthermore, even when we say a set of strings without context of $ZF$, we most certainly mean the class of strings that can be represented as a formula in $\lsign_{s}$-language, and would be very similar to a set-theoretical notion of a class\footnote{also see \textit{Bootstrap-Theory of Classes} and \textit{Definition \ref{def_primordial_theory}}}.
+    \end{legal}
+    % A3 ----------------------
+    % ZF-0: axiom of empty set
+    \item \textbf{\textit{Axiom of empty string}}
+    \begin{legal}
+      \item there exists an empty string;
+      \item we use the same notation as in set theory to mean $\emptyset := ""_0$. Specifically, $[z = x \cdot s \cdot y] \land [s = \emptyset] \implies [z = x \cdot y] \land [s \substr z]$. \item the following are equivalent definitions:
+          \begin{itemize}
+            \item $x = x \cdot y \implies y = \emptyset$
+            \item $x \cdot y = y \implies x = \emptyset$
+          \end{itemize}
+      \item also $\emptyset \notin ""_0 \Longleftrightarrow \emptyset \notin \emptyset$, but $|\emptyset|_\emptyset = 0$
+    \end{legal}
+    % A4 ----------------------
+    \item \textbf{\textit{Axiom of prefix}} - $z = x \cdot y$ iff $x$ is a prefix of $z$. Sometimes notated as a prefix quotient $x \backslash z = y$.
+    % A5 ----------------------
+    \item \textbf{\textit{Axiom of suffix}} - (inverse of prefix) $z = x \cdot y$ iff $y$ is a suffix of $z$. Sometimes notated as a suffix quotient $z / y = x$.
+    % A6 ----------------------
+    \item \textbf{\textit{Axiom of string splitting}} - by analogy with the subset concept of set theory, we can define a "dual" of string concatenation by splitting the string into substrings. We define string splitting by always using some symbol $y$ and call it a weaker version of the axiom. If there exist $\exists y.[y \in \Upsilon \land \Upsilon \cap \Sigma = \emptyset]$, then we say that splitting is done using a separator symbol (which is not a part of the alphabet $\Sigma$). A stronger split version is when $y$ can be also a string\footnote{it is not a part of these \textit{basic string theory} axioms or $\LsT_{str}$}.
+    \begin{legal}
+      \item (weaker split) further on we assume a weaker version of the axiom for the basic string theory:
+      \begin{legal}
+        \item if $\tau = x \cdot y \cdot z$ and $\tau, x, z$ are strings, then we say that $\tau$ can be split into $x$ and $z$ by using symbol $y$, $y \in \Sigma$;
+        \item if $T := \S_{y}(\tau)$ and $\tau$ is a string and $y \in \Sigma$, then $T$ contains a class of all split substrings in $\tau$ by $y$, namely: $\forall x,y,z . [[x \cdot y \cdot z = \tau] \implies [x \in T] \land [z \in T]]$;
+        \item we can define a shorthand that when splitter symbol $y$ is not specified, then we assume a default separator (which is not a part of the alphabet $\Sigma$). For weak version of the axiom it would be any symbol that is not in $\Sigma$. For example, if $\Sigma = \{0,1\}$, then default separator is an extra comma symbol $\bos , \eos$;
+        \item in fact, we can benefit from as many finitely many separators $s \in \Upsilon$ as we need, as long as $\Sigma \cap \Upsilon = \emptyset$;
+        \item in general, it is possible that we can use some explicit $y \in \Sigma$ for splitting.
+      \end{legal}
+      \item (stronger split) which is provisioned only for comparison background:
+      \begin{legal}
+        \item if $\tau = x \cdot y \cdot z$ and $\tau, x, y, z$ are strings, then we say that $\tau$ can be split into $x$ and $z$ by using $y$ string as a separator;
+        \item the default separator is an empty string $y = \emptyset$;
+        \item if for $T := \S_{y}(\tau)$ we have $y = \emptyset$, then $T = \S_{\emptyset}(\tau)$ contains a class of all possible substrings in $\tau$ (split by empty string).
+      \end{legal}
+    \end{legal}
+    % A7 ----------------------
+    % ZF-1: axiom of extensionality - If X and Y have the same elements, then X=Y.
+    % ZF-3 Axiom Schema of Separation - if P is a property (with parameter p), then for any X and p there exists a set Y = {u ∈ X : P(u,p)} that contains all those u ∈ X that have property P.
+    % ZF-4: Axiom of Union - For any X there exists a set Y = U (X), union of all elements of X.
+    \item \textbf{\textit{Axiom of class representation}} 
+    \begin{legal}
+      \item each class of substrings $X$ can be uniquely represented by a comma separated string $x$ (even if the representation is unordered and comes with duplicates);
+      \item classes $X$ and $Y$ are equal, i.e. $X = Y$ iff each corresponding representation string $x$ and $y$ can be split into the same unique class of substrings $\S(x) \cup \S(y) = X = Y$\footnote{Note that class equality is not the same as string equality};
+      \item (Separation schema of classes) if $P$ is a property (with parameter $p$), then for any class of strings $X$ and $p$ there exists another class $Y = {u \in X : P(u,p)}$ that contains all those strings $u \in X$ that have property $P$;
+      \item (Union of classes) a union over a split of a comma separated string $x$ returns a unique representation of a class (a comma separated string), so that each unique substring occurs only once $\bigcup \S(x) = \{z \in \S(x) : |x|_z = 1\}$.
+    \end{legal}
+    % A8 ----------------------
+    % ZF-6 Axiom of Infinity - There exists an infinite set.
+    % there exists an infinite string, hence there exists an infinite class of strings
+    \item \textbf{\textit{Axiom of string infinity}}
+    \begin{legal}
+      \item there exists an inductive string - if $x$ is a string and $s \in \Sigma$ is a symbol, then $z = x \cdot s$ or $z = s \cdot x$ is also a string;
+      \item (corollary) there exists an infinite class of inductive strings called \textit{inductive class};
+    \end{legal}
+    % A9 ----------------------
+    % ZF-5 Axiom of Power Set - for any X there exists a set Y = P(X), the set of all subsets of X.
+    % ZF-7 Axiom Schema of Replacement - If a class F is a function, then for any X there exists a set Y = F(X) = {F(x) : x ∈ X}.
+    \item \textbf{\textit{Axiom of power-string}}
+    \begin{legal}
+      \item there exists a power-string of a class\footnote{again, such class can be uniquely represented by a comma separated string}:
+      \begin{legal}
+        \item let $\P(X)$ be a \textit{power-string} operation on classes of strings as defined in \textit{Definition \ref{def_pwrstr}};
+        \item for any class of strings $X$ the exists a class $Y = \P(X)$, the class of all unique concatenations pairs $x \cdot y$ from $X$.
+      \end{legal}
+      \item more convenient definitions such as \textit{class product} are possible:
+      \begin{legal}
+        \item class product $X \times Y$ can be represented by class of strings $\{ x \cdot s \cdot y : x \in X \land y \in Y \}$, where $s \in \Upsilon$ is a separator symbol;
+        \item or, equivalently, $X \times Y = \{[x,y] : x \in X \land y \in Y\}$\footnote{we can invoke the separation schema to justify the notation, but it seems superfluous as the previous string definition is expressive enough};
+        \item also from \textit{power-string} we have $X \times Y \subset \P( X \cup s \cup Y )$, where $s \in \Upsilon$ is a separator symbol;
+        \item in general, $X_1 \times \dots \times X_{n+1} = (X_1 \times \dots \times X_{n+1}) \times X_{n+1}$, but also $X_1 \times \dots \times X_{n} = \{ [x_1, ..., x_n] : x_1 \in X_1 \land ... \land x_n \in X_n\}$\footnote{together, with high-order split and power-string definitions this allows defining high-order string theory and transitive models, which however will not be covered in this paper}.
+      \end{legal}
+      \item \textit{relations}\footnote{we try to be as close as possible to the established set theory language \cite{jech2003set}}:
+      \begin{legal}
+        \item Let $X^n = \underbrace{X \times \dots \times X}_\text{n times}$ be a product class;
+        \item also let a string $x_1 \cdot s \cdot x_2 ... x_{n-1} \cdot s \cdot x_n$, where $s \in \Upsilon$ is a separator symbol, be an example of n-tuple;
+        \item then, \textit{n-ary relation} $R$ is class of n-tuples;
+        \item or, equivalently, $R$ is a relation on $X$ if $R \subset X^n$;
+        \item alternative notation is $R(x_1, ..., x_n)$ instead of $[x_1, ..., x_n] \in R$ or even $x_1 \cdot s \cdot x_2 ... x_{n-1} \cdot s \cdot x_n \in R$;
+        \item a binary relation is noted as $x R y$ or $[x,y] \in R$ or $x \cdot s \cdot y$;
+        \item if $R$ is binary relation, then the \textit{domain} of $R$ is a class:
+          \[dom(R) = \{u : \exists v.[u,v] \in R \} \]
+        \item and the \textit{range}:
+          \[ran(R) = \{v : \exists u.[u,v] \in R \} \]
+      \end{legal}
+      \item and \textit{functions}:
+      \begin{legal}
+        \item let $x, y, z$ be strings and $X, Y$ are classes of strings;
+        \item a binary relation $f$ is a function if $[x,y] \in f \land [x,z] \in f \rightarrow y = z$;
+        \item the unique $y$ such that $[x,y] \in f$ is the value of $f$ at $x$ or in a more standard notation:
+          \[ y = f(x) \]
+        \item or, equivalently, $f : x \mapsto y$ or $y = f_x$, etc;
+        \item $f$ is a function \textit{on} $X$ if $dom(f) = X$ (if $dom(f) = X^n$ , then f is n-ary function on X);
+        \item $f$ is a function \textit{from} $X$ \textit{to} $Y$:
+          \[ f : X \to Y \]
+          if $dom(f) = X$ and $ran(f) \subset Y$;
+        \item class of strings of all functions from $X$ to $Y$ is $Y^X$: $Y^X \subset \P(X \times Y)$;
+        \item if $Y = ran(f)$ then $f$ is \textit{onto};
+        \item if $f(x) = f(y) \rightarrow x = y$ then $f$ is \textit{one-to-one};
+        \item function is sometimes called \textit{mapping} or \textit{correspondence};
+        \item the rest of set theory language is also applicable to classes of strings and can be adopted according to \cite{jech2003set} including such definitions as: 
+          \begin{legal}
+            \item \textit{n-ary operation};
+            \item \textit{restriction};
+            \item \textit{extension};
+            \item \textit{composition};
+            \item \textit{image}, \textit{inverse image};
+            \item \textit{inverse function};
+            \item \textit{equivalence relation} (reflexive, symmetric, transitive);
+            \item \textit{disjoint classes}, \textit{partition of a class}, \textit{equivalence class}, \textit{quotient};
+            \item \textit{isomorphism}, \textit{isomorphic}, \textit{automorphism};
+          \end{legal}
+      \end{legal}
+    \end{legal}
+    % A10 ----------------------
+    \item \textbf{\textit{Axiom of index class}}
+    \begin{legal}
+      \item there exists an index class for any string or, equivalently, any symbol of any string can be accessed by its index\footnote{This is not equivalent to the axiom of choice in ZF, which is applicable to classes, not symbol indexes};
+      \item any index class can be constructed and defined from logical formulas:
+      \begin{legal}
+        \item Use FOL definitions from the extended bootstrap-theory;
+        \item Define $S(i) := i + 1, i \in \integers$ to be a successor (increment) formula;
+        \item Define $D(i) := i - 1, i \in \integers$ to be a predecessor (decrement) formula;
+        \item Use binary prefix codes to encode $0 \in \integers$ as well as all ordinals such as $w_0, w_1,.. \in Ord$;
+        \item Extend those codes, starting with $0$, by applying $S(i)$ and $D(i)$ formulas to obtain binary strings of every index for integers potentially extendable with any ordinals;
+        \item Now, a class of such indexes represented by an ordered sequence of unique comma separated strings of $\{0,1\}$ is called an \textit{index class}\footnote{Like this each index class is isomorphic to a linearly ordered sequence and corresponds to a unique ordinal};
+      \end{legal}
+      \item if $x$ is a string, then there exists a one-to-one correspondence between elements of an index class and each symbol from the sequence of symbols in the string $\exists f_x, f_x: I \to \Sigma$ (sometimes we abuse notation and treat strings as "functions" $x: I \to \Sigma$ meaning a respective function $f_x$).
+    \end{legal}
+    % A11 ----------------------
+    \item \textbf{\textit{Axiom of string and class cardinality}}
+    \begin{legal}
+      \item isomorphic strings
+      \begin{legal}
+        \item two strings $x$ and $y$ have the same cardinality $|x| = |y|$ iff each symbol of $x$ can be put in a one-to-one correspondence to each symbol of $y$;
+        \item equivalently, $x$ and $y$ have the same cardinality $|x| = |y|$ iff they have the same index class (namely, for $x: I_x \to \Sigma_x$ and $y: I_y \to \Sigma_y$ we have $I_x = I_y$);
+      \end{legal}
+      \item isomorphic classes
+      \begin{legal}
+        \item two classes $|X| = |Y|$ have the same cardinality iff there exists a one-to-one correspondence between respective classes meaning that there exists an isomorphic function $f: X \to Y$, where $X = \S(x)$ is a class resulting in splitting representation string $x$ and, similarly, $Y = \S(y)$ results in splitting representation string $y$ (note that the cardinality of the representation strings may not be equal $[|x| \ne |y|] \lor [|x| = |y|]$);
+      \end{legal}
+    \end{legal}
+    % A12 ----------------------
+    \item \textbf{\textit{Axiom of string equality}}\\
+    two strings $x$ and $y$ are equal $x = y$ iff both have the same index class $I$ (same cardinality) and consist of the same alphabet $\Sigma$, so that every symbol matches at the same index $x(i) = y(i), \forall i \in I$;
+    % A13 ----------------------
+    % ZF-8 Axiom of Regularity - Every nonempty set has an ∈-minimal element
+    \item \textbf{\textit{Axiom of regularity of representation strings}}
+    % there exists a transitive class fo strings? class of.. class of strings. Use separators 
+    \begin{legal}
+      \item every nonempty class of strings has an $\in$-minimal element;
+      \item or, equivalently, if $S$ is a class of strings, then $\forall S.[S \ne \emptyset \rightarrow [\exists x \in S.[S \cap x = \emptyset]]$;
+      \item (corollary) there exists no infinite class with representation string $x_0 \in x_1,x_1 \in x_2, .. ,x_{n} \in x_{n+1}, ..$ containing $\in$-relation;
+      \item specifically there exists no $S \in S$;
+      \item and there no "cycles" in representation strings $x_0 \in x_1 , x_1 \in x_2 , .. , x_{n} \in x_0$;
+    \end{legal}
+    % A14 ----------------------
+    % ZF-9 Axiom of Choice. Every family of nonempty sets has a choice function.
+    \item \textbf{\textit{Axiom of string arithmetic}}
+    \begin{legal}
+      \item (string exponent) we can define a shorthand, if $z = x \cdot \dots \cdot x$ and $|z|_x = n$, then $z = |x^n|$;
+      \item let $S$ be a collection of strings\footnote{a model placeholder}, so that: 
+      \begin{legal}
+        \item string concatenation function turns $(S, \cdot)$ into a \textit{monoid} with identity element $\emptyset$, s.t.:
+          \begin{itemize}
+            \item \textit{Associativity}: $\forall x,y,z.[x \cdot [y \cdot z] = [x \cdot y] \cdot z]$
+            \item \textit{Identity element}: $\forall x.[[x \cdot \emptyset] = x = [x \cdot \emptyset]]$
+          \end{itemize}
+        \item there is a set of natural numbers as a part of $\lsign$-structure $(\nat, 0, +)$
+      \end{legal}
+      \item then we can also define arithmetic on $S$ using:
+      \begin{legal}
+        \item the string length $|x|$
+        \item substring counting $|x|_y$
+      \end{legal}
+      by extending previous substring and empty string axioms as following:
+      \begin{legal}
+        \item $|\emptyset| = |\emptyset|_\emptyset = 0$
+        \item $x = x \cdot y \implies |x|_y = 0$
+        \item $x \cdot y = y \implies |y|_x = 0$
+        \item $|x|_y = 0 \implies x \neq y$
+        \item $\forall x.[x \in \Sigma \implies |x|_x = |x| = 1]$\footnote{but also, in general, $|x|_x = 1$}
+        \item $\forall x,y.[x,y \in \Sigma \implies |x|_x + |y|_y = |x| + |y| = |x \cdot x| = 2]$
+        \item $\forall x.[x \in \Sigma \implies [|x| + \dots + |x|= |x \cdot \dots \cdot x| = n] \land [n \in \nat]] $
+        \item $[|x \cdot \dots \cdot x|_x = |x^n|_x = n] \land [n \in \nat]$
+        \item $[|x|_y = 0] \land [ z = x \cdot y] \implies |z|_x = |z|_y = 1$
+        \item $[|x|_y = 0] \land [ z = x \cdot y \cdot x \cdot y] \implies |z|_y = 2$
+        \item $[|x|_y = 0] \land [ z = x \cdot y \cdot x \cdot y \cdot x \cdot y] \implies |z|_y = 3$
+        \item $[|x_1|_y = \dots = |x_n|_y = 0] \land [ z = x_1 \cdot y \cdot x_2 \cdot y\ \dots\ y \cdot x_n \cdot y] \implies |z|_y = n, n \in \nat$
+      \end{legal}
+      \item we can naturally extend the above definitions to classes of $\integers$ and $Ord$ by applying string arithmetic to the axiom of index class. % FIXME: needs more clarity or examples
+    \end{legal}
+    % A15 ----------------------
+    % ZF-9 Axiom of Choice. Every family of nonempty sets has a choice function.
+    \item \textbf{\textit{Axiom of Choice}} Every family of nonempty classes of strings has a choice function\footnote{This axiom is a semantically equivalent alias to \textit{Axiom of Choice} in ZFC, and is supposed to be considered separately from the rest of the \textit{basic string theory} axioms or $\LsT_{str}$ (just like choice is separate from ZF)}.
+  \end{legal}
+\end{definition}
+
+\textbf{String arithmetic} as mentioned in the previous defintion\footnote{in the \textit{Axiom of string arithmetic} of \textit{Definition - \ref{def_ExtStrTheory}}} can be compared to other arithmetical formal systems like Presburger arithmetics or recursive Peano axioms\cite{jech2003set}. Namely, string arithmetic allows unary substring-counting with $|x|_y$ over some string concatenation monoid $S$. Specifically, for Peano addition $a + 0 = a$ we will have something equivalent as in $a + 0 = |x^a \cdot \emptyset|_x = |x^a|_x$ (see the \textit{table \ref{Tab:PeanoSubstr}} below).
+
+\begin{table}[ht]
+\caption{Matching Peano addition with substring-counting addition}
+\centering
+\begin{tabular}{ |c|r|l| }
+  \hline
+  \# & Peano addition                  & Substring counting                            \\
+  \hline
+  1  & $a + 0 = a$              & $a + 0 = |x^a \cdot \emptyset|_x = |x^a|_x$         \\
+  2  & $a + S(b) = S(a) + S(b)$ & $a + |x^b|_x = |x^a|_x + |x^b|_x$ \\
+  \hline
+  3  & $a + 1 =  S(a) $         & $a + 1 = |x^a|_x + |x|_x$                     \\
+  4  & $a + 2 =  S(S(a)) $      & $a + 2 = |x^a|_x + |x \cdot x|_x$                     \\
+  5  & $a + 3 =  S(S(S(a))) $   & $a + 3 = |x^a|_x + |x \cdot x \cdot x|_x$                     \\
+     & $\dots $                 & $\dots $                                      \\
+  \hline
+\end{tabular}
+\label{Tab:PeanoSubstr}
+\end{table}
+
+
+
+
+\textbf{Power-string} operation is defined as a generalization of a concatenation "product" $X \cdot X$, where $X$ is some class of strings. If we want to run power-string operation recursively, we can start with some $X_0 := \bigcup \{\{s \in \Sigma\} \cup \emptyset\}$ (union of some finite alphabet $\Sigma$ and an empty string $\emptyset$). Next iteration will start over the union of $X \cdot X$.
+
+\begin{definition}\label{def_pwrstr}
+  Given a class of strings $X$, we can define \textit{power-string} operation as $\P(X) := \bigcup \{x \cdot y : \forall x,y \in X\}$, so that $\P(X)$ is a subclass of all unique strings in $X \cdot X$ table produced by string concatenation\footnote{refer to appendix and see power-string operation illustrated in fig. \ref{fig:pwrstr} and finite examples illustrated in python}.
+\end{definition}
+
+
+
+
+\textbf{$\kappa$-String Model} is a straightforward example of \textit{basic string theory} implementation that works with infinite strings. Given a model theory notion of a language $\lsign_{str} = (\cdot^{str},c_1^{str},..c_n^{str})$, we can redefine regular languages\footnote{and $\omega$-regular languages - computer science notions that we used earlier in the paper to argue about computability of SEFs} as an extension of $\lsign_{str}$-theory, i.e. $\LsT_{str}$. 
+
+\begin{theorem}[$\kappa$-String Model]\label{theorem_kStrModel}
+  Consider a string concatenation monoid $S_{\kappa}$ with strings of fixed cardinality $\kappa$. We say that $\LsT_{str}$ can be satisfied by $\lsign_{str}$-structure $\LsS := (S_{\kappa},\cdot,\Sigma)$, where:
+  \begin{itemize}
+    \item $S_{\kappa}$ - is a set of all strings of cardinality $\kappa$ over a finite alphabet $\Sigma$, s.t. $S = \{ s : s \in \Sigma^\kappa, |s| = \kappa\}$\footnote{here if $\kappa = \omega$, this becomes $\omega$-Kleene operator for $\Sigma^\kappa$ as with $\omega$-regular languages, however we leave the definition open-ended or abstract enough to accept greater cardinalities};
+
+    \item $\cdot$ - is a binary function of string concatenation operation;
+
+    \item $\Sigma$ - is a constant of the alphabet symbols of a regular language, e.g. $\Sigma = \{0,1\}$;
+  \end{itemize}
+\end{theorem}
+
+\begin{lemma}[Lemma of the same length]
+  The maximum length or simply length of each string in $S_\kappa$ is fixed by $\kappa$: $\forall x,y : [x,y \in S_\kappa] \implies [|x| = |y| = \kappa]$
+\end{lemma}
+
+
+
+
+
+
+
+
+
+
+In set theory one can define the cumulative hierarchy of sets\footnote{Also see \textit{\ref{subsect_expected_length_of_strings} - \nameref{subsect_expected_length_of_strings}}} $V_\alpha$. Recall that a class $T$ is transitive if $x \in T \implies x \subset T$. By analogy, we can observe the same for strings: 
+  \begin{enumerate}[i.)]
+    \item if $\forall \tau. [[\tau \in T] \land [\S(\tau) \subset T]]$, then $T$ is transitive for string $\tau$;
+    \item recursive application of \textit{power-string} operation forms a cumulative hierarchy of strings $T_\gamma$, where $\gamma$ is either ordinal or cardinal.
+  \end{enumerate}
+
+Again, note that since $T$ is a class and $\tau$ is a string, $\tau \in T$ means "member of". Now, let us explain how power-string operates in more detail before formally defining the cumulative hierarchy of strings.
+
+\begin{definition}\label{def_comThrch}
+  The cumulative hierarchy of strings is a class of strings $T_\gamma$ indexed by the class of ordinal numbers $\gamma \in Ord$; s.t., $T_\gamma$ is the class of all strings having \textit{ranks} less than $\gamma$. Thus, there is one class $T_\gamma$ for each ordinal number $\gamma$. $T_\gamma$ may be defined by \textit{transfinite recursion} as follows:
+  
+  \begin{enumerate}
+    \item Let $T_0$ be the empty set: $T_0 := \emptyset$ 
+  
+    \item Let $T_1$ be the union set: $T_1 := \emptyset \cup \Sigma$, where $\Sigma$ is a finite alphabet (for example, $\Sigma := \{0,1\}$\footnote{as in fig. \ref{fig:pwrstr}})    
+
+    \item For any ordinal number $\gamma \in Ord$, let $T_{\gamma + 1}$ be the power-string of $T_{\gamma}$: $T_{\gamma + 1} := \P(T_{\gamma})$
+    
+    \item For any limit ordinal $\mcar$, let $T_{\mcar}$ be the union of all the $T_\gamma$ so far ($\forall \gamma \in Ord . [\gamma < \mcar]$): $T_{\mcar} := \bigcup_{\gamma < \mcar} T_{\gamma}$
+    
+  \end{enumerate}
+\end{definition}
+
+\begin{lemma}
+  There exists a surjection between any ordinal $\gamma$ and a string $\tau$: \\ $\forall \gamma.\exists \tau.[\gamma \mapsto \tau]$.
+\end{lemma}
+\begin{proof}
+  Follows from definition of ranks of strings in $T_\gamma$. There is one set $T_\gamma$ for each ordinal number $\gamma$. Now pick any string $\tau \in T_\gamma$ to obtain mapping $\gamma \mapsto \tau$.
+\end{proof}
+
+\begin{lemma}\label{lem_propTgamma}
+  Sets $T_\gamma$ have the following properties\footnote{which are very much similar to the cumulative hierarchy of sets $V_\alpha$} (by induction):
+  \begin{enumerate}[i.)]
+    \item Each $T_\gamma$ is transitive\footnote{in the sense of \textit{string splitting axiom}}
+    \item If $\forall \beta, \gamma \in Ord: \beta < \gamma$, then $T_\beta \subset T_\gamma$
+    \item $V_\gamma \subset T_\gamma$\footnote{see appendix for fig. \ref{fig:pwrstr} and table \ref{Tab:PwrStrVsSet} in \textit{power-string} subsection}
+    \item $\gamma \subset T_\gamma$ \footnote{ordinals can be encoded as sets using $V_\alpha$, so this follows from previous $[\gamma \subset V_\gamma] \land [V_\gamma \subset T_\gamma] \implies \gamma \subset T_\gamma$}
+  \end{enumerate}
+\end{lemma}
+
+If we can consider strings as another representation for sets\footnote{for example, a string can be just a formula in pure set theoretical thinking}, that provides some important insight into the nature of fundamental set-theoretical constructs such as $V_\alpha$. In fact, according to \textit{Lemma \ref{lem_propTgamma} (iii)}, for each $\forall V_\gamma, \exists T_\gamma$: $V_\gamma \subset T_\gamma$. This becomes very obvious from the illustration of how \textit{power-string} works and comparison in table \ref{Tab:PwrStrVsSet}. Namely:
+
+\[  i>0:  |T_i| = 2^{2^{i}} - 1 \land  |V_i| = 2^{2^{i-1}}  \]
+
+\subsection{Some morphisms between sets and strings}
+
+Previous formula makes sense only after mapping sets of cumulative hierarchy $V_\alpha$ into their respective counterparts as binary strings. In other words, a number of morphisms will become handy for our further discussion.
+
+\begin{definition}[Kuratowski morphism]\label{def_kuratowski_morph}
+
+  Let $S$ and $V$ be respectively a class of strings (with some finite alphabet $\Sigma$) and a class of sets. Then there exists an injective morphism $k: S \to V$, which can be defined using a recursive version of the Kuratowski notation. Such morphism will take each symbol of every $\alpha$-index string $x \in S, |x| = \alpha, \alpha \in Ord$, so that $x = \bos x_1,..,x_\alpha \eos, x_\alpha \in \Sigma$, and recursively map it to an ordered pair $k(x) \in V$ as following:
+
+  \begin{align*}
+    k(x_1,..,x_\alpha)=\left\{
+      \begin{array}{ll}
+        \{\}, & \mbox{if $\alpha=0$}\\
+        \big\{x_1\big\}, & \mbox{if $\alpha=1$}\\
+        \big\{\{x_1\},\{x_1, x_2\}\big\}, & \mbox{if $\alpha=2$}\\
+        \big\{\{k(x_1,..,x_{\alpha-1})\},\{k(x_1,..,x_{\alpha-1}), x_\alpha\}\big\}, & \mbox{otherwise}
+      \end{array}
+    \right.
+  \end{align*}
+
+  An important property of Kuratowski notation is that images of any two strings can be easily validated if they are equal or not.
+\end{definition}
+
+\begin{definition}[Fraenkel-Cantor morphism]\label{def_fraenkel_cantor_morph}
+  Consider \textit{Lemma 3.3} in \cite{jech2003set}, saying that $|A|=\kappa \implies |\pset(A)| = 2^\kappa$ and the corresponding mapping from its proof. For every $X \subset A$, let $f_X$ be the function 
+
+  \begin{align*}
+    f_X(x)=\left\{
+      \begin{array}{ll}
+        1 & \mbox{if $x \in X$,}\\
+        0 & \mbox{if $x \in A - X$.}
+      \end{array}
+    \right.
+  \end{align*}
+  
+  The mapping $f: X \to f_X$ is in a one-to-one correspondence between $\pset(A)$ and $\{0,1\}^A$. 
+\end{definition}
+
+Again, an important consequence of the \textit{Lemma 3.3} (referenced in the above \textit{Definition \ref{def_fraenkel_cantor_morph}}) is that: given $|A| = \aleph_0 \implies |\pset(A)| = 2^{\aleph_0}$. We have already used this fact much earlier in text - see \textit{Lemma \ref{lemma_cardinality_can}}.
+
+Next morphism is based on the principle of formal logic which we prefer to state more formally as well. 
+\begin{principle}[Principle of explicit representation]\label{principle_explicit_rep}
+  Implicit definition equals explicit definition.
+\end{principle}
+Here, by explicit definition we mean that when we define $ZF$ classes as formulas we should be able to explicitly write them down\footnote{Including such less common representations for sets as using a variation of a TM with an infinite multitude of tapes as the machine state or even some other formalism}. For instance, take a recipe for set construction of cumulative hierarchy $V_\alpha$ and apply transfinite induction. According to this \textit{principle of explicit representation} one should still be able to map each set into an infinite sequence of $\bos\{\eos$ and $\bos\}\eos$ braces, or equivalently as $\{0,1\}$. In that case, we can consider a morphism that does exactly this.
+
+\begin{definition}[Catalan morphism]\label{def_katalan_morph}
+  Let $V$ be a class of sets, then as per \textit{principle of explicit representation} we assume existence of the following corresponding sets:
+  
+  \begin{itemize}
+    \item $S$ is a class of strings with a fixed finite alphabet of $\bos\{\eos$ and $\bos\}\eos$ 
+    \item $\cbin$ is a class of binary strings with a fixed finite alphabet of $\{0,1\}$
+  \end{itemize}
+
+  so that $S$ and $\cbin$ can admit the following morphisms:
+
+  \begin{itemize}
+    \item for every $x \in V$ there is an identity mapping to its explicit representation $e: V \to S$ 
+    \item there exists also a binary encoding $r: S \to \cbin$ of such representation, which maps $\bos\{\eos$ and $\bos\}\eos$ braces into $\{0,1\}$
+  \end{itemize}
+
+  Namely, for every $x \in V$ and representation image $e(x)$:
+
+  \begin{align*}
+    r_x(s)=\left\{
+      \begin{array}{ll}
+        0 & \mbox{if $s = \bos\{\eos$,}\\
+        1 & \mbox{if $s = \bos\}\eos$.}
+      \end{array}
+    \right.
+  \end{align*}
+
+  Finally, we call \textit{Catalan morphism} a composition of $c := r \circ e$, so that $c: V \to \cbin$. Note that well-balancing of $\bos\{\eos$ and $\bos\}\eos$ braces implies that binary strings in $ran(c)$ must be well-balanced pairs of $\{0,1\}$. Which means that $c$ is naturally injective as it maps each $x \in V$ into $b \in ran(c)$, where $ran(c)$ is a subset of strings with well-balanced $\{0,1\}$.
+\end{definition}
+
+
+
+\subsection{Strictly-stronger consistency of ZFS}
+
+\textit{SEF Theory} can be defined as an extension over \textit{$\kappa$-String Theory}.
+
+\begin{definition}[SEF Theory]\label{def_seftheor}
+  Let $\LsS := (S_{\kappa},\cdot,=,\Sigma)$ be a $\lsign_{str}$-structure and a model for $\lsign_{str}$ language in which we describe \textit{$\kappa$-String Theory}\footnote{as according to \textit{Definition \ref{def_kStrTheory}}} denoted as $\LsT_{str}$, s.t. $\LsS \models \lsign_{str}$ (including $\LsS \models \LsT_{str}$). Since we want to describe \textit{SEF Theory}, we will define an extension of $\lsign_{str}$ language called $\lsign_{sef}$. Namely, $\lsign_{sef} \supset \lsign_{str}$, s.t. if $\LsS \models \lsign_{str}$, then $\exists \LsS_{sef} . [[\LsS_{sef} \supset \LsS] \land [\LsS_{sef} \models \lsign_{sef}]]$.
+  
+  We describe \textit{SEF Theory} as $\lsign_{sef}$-theory denoted as  $\LsT_{sef}$. It can be defined as an extension over \textit{$\kappa$-String Theory} $\LsT_{str}$ and satisfied by the respective $\lsign_{sef}$-structure $\LsS_{sef}$. Namely, $\LsS_{sef} \models \lsign_{sef}$ iff (1) $\lsign_{sef} \supset \lsign_{str}$, (2) $\LsT_{sef} \supset \LsT_{str}$ and (3) there is a subset of strings $\exists \vsef_{\kappa} . [\vsef_{\kappa} \subset S_{\kappa}]$, s.t. each string is a syntactically valid SEF or $\vsef_{\kappa} \vdash_{\LsT_{sef}} \top$\footnote{or simply $\vsef_{\kappa} \vdash \top$ if $\LsT_{sef}$ is clear from the context}, and (4) $\LsT_{sef} \vdash \vsef_{\kappa} \implies \LsS_{sef} \vdash \LsT_{sef} \implies \LsS_{sef} \models \LsT_{sef}$.
+
+  Specifically, (1) and (2) means that $\LsT_{sef}$ theory extends axioms of $\LsT_{str}$ theory with the following additional FOL axioms:
+
+  \begin{enumerate}
+    \setcounter{enumi}{16}
+    \item \textit{Axiom of well-balanace} - $z = \bos x \cdot y\eos \implies z \vdash_{\LsT_{sef}} \top$ is syntactically valid iff $x$ (as every initial prefix of z) never contains more opening brackets than closing brackets and brackets are equally matched. Namely, $\forall x,y \in z.[|x|_{)} \leq |x|_{(}] \land [|z|_{(} = |z|_{)}]$.
+    
+    \item \textit{Axiom of replication} - if alphabet constant $\Sigma \in \LsS_{sef}$ contains round brackets $\{(,)\} \subset \Sigma$, which are required to act as replication operator, then the following recursive definition for \textit{string enumeration formula} (SEF) is true:
+  
+    \begin{enumerate}[i.)]
+      \item if $x$ is a string and $|x|_{(} = |x|_{)} = 0$, then 
+      \begin{itemize}
+        \item $x$ is a syntactically valid SEF: $x \vdash_{\LsT_{sef}} \top$ 
+        \item $\phi := \bos(\eos \cdot x \cdot \bos)\eos = x \cdot .. \cdot x$ is replication of $x$, s.t. $|x| \leq |\phi| \leq \kappa$
+        \item $\phi$ is a syntactically valid SEF: $\phi \vdash_{\LsT_{sef}} \top$
+      \end{itemize}
+      \item if $x,y,z$ are syntactically valid SEFs, then $\phi = x \cdot \bos(\eos \cdot y \cdot \bos)\eos \cdot z$ is also a SEF, namely $\phi \vdash_{\LsT_{sef}} \top$\footnote{note that \textit{ii.} implies \textit{well-balance} and vice versa (if we avoid empty pairs - see \textit{Lemma \ref{lem_sefmodel}})}
+    \end{enumerate}
+  \end{enumerate}
+\end{definition}
+
+Further, we are going to show that there exists a model that can satisfy $\LsT_{sef}$\footnote{Note that we will not be  assuming $ZF+AC$ axioms behind the scene, specifically for \textit{power-string} operation, recursion (transfinite induction) and cardinal arithmetic - all of this is provisioned by \textit{basic string theory} $\LsT_{str}$ and extended by $\LsT_{sef}$}.
+
+\begin{lemma}[Model of SEF Theory]\label{lem_sefmodel}
+  Our assumptions are as following:
+  \begin{itemize}
+    \item $\LsT_{sef} \supset \LsT_{str}$
+    \item $\Sigma = \{0,1,(,)\}$ is an alphabet constant
+    \item $\LsS := (S_{\kappa},\cdot,=,\Sigma)$ be a $\lsign_{str}$-structure
+    \item $\LsS_{sef} := (\vsef_{\kappa},\cdot,\pi,=,\Sigma)$ is a $\lsign_{sef}$-structure
+  \end{itemize}
+  
+  If $\vsef_{\kappa} \subset S_{\kappa}$ and $\vsef_{\kappa} \vdash_{\LsT_{sef}} \top$, then $\LsS_{sef} \models \LsT_{sef}$.
+\end{lemma}
+  
+  
+
+
+
+
+\begin{corollary}
+  $\vhsef_{\kappa}$ is a \textit{transitive model} of $\LsT_{sef}$.
+\end{corollary}
+
+Now let us show that $SEF$ is \textit{consistent with} $ZF$, and vice versa. To do so, we follow the narrative in \cite{jech2003set}\footnote{Specifically, see p. 163-166 for topics of \textit{Relative Consistency}, \textit{Transitive Models and $\boldsymbol{\Delta}_0$ Formulas} and \textit{Consistency of the Axiom of Regularity}} as well as some results in model theory\cite{marker2002model}. In order to proof (relative) consistency we will rely on the notion of absoluteness of quantifier-free formulas in FOL \footnote{mentioned earlier - see \textit{Definition \ref{def_primordial_theory} of Primordial theory}}.
+
+We will look at \textit{strictly-stronger consistency theory than SEF and ZF}\footnote{Recall that if $T$ is consistent relative to $S$, but $S$ is not known to be consistent relative to $T$, then we say that $S$ has greater consistency strength than $T$} defined as $ZFS := ZF + SEF$ to show that $ZFS$ is both \textit{consistent relative to} $ZF$ and \textit{consistent relative to} $SEF$\footnote{Can be abbreviated as $Con(ZF) \implies Con(ZFS)$, etc}. This can be a viable alternative to any other approach of examining a version of \textit{pure SEF theory} (already discussed as $\LsT_{sef}$) in attempt to show that it can be as rich and expressive as $ZF$\footnote{As we know from GSIT $ZF \notimplies Con(ZF)$ as well as $SEF \notimplies Con(SEF)$}. But as we will soon see - $ZF$ and $SEF$ theories are closely interconnected, so it is rather natural to have $ZFS$ as an extension to both.
+  
+However, there is still a small detail. The corollary of the below stronger consistency proof suggests that both propositions in $ZF$ and in $SEF$ are \textit{mutually inclusive} not only as theories but as languages. Meaning that $ZFS$ can (semantically) act as a \textit{lingua franca} for propositions with inherently different language structures. For example, let $\psi(x_1, ..., x_n)$ be a formula of the $ZF$ set theory language $\lsign_{zf}$ with $\{\in\}$ structure \textit{versus} another formula $\varphi(x_1, ..., x_n)$ of the $SEF$ theory language $\lsign_{sef}$ with $\{\cdot, \pi, \Sigma\}$ structure. It is not uncommon for the structure complexity to grow next to the development of the actual theory and the object of interest behind it\footnote{For example, in the hierarchy of algebraic structures one can construct fields from commutative rings and so on}. Further we will assume that whenever an upstream formula like $\psi$ or $\varphi$ is brought downstream into $\lsign_{zfs}$ language, the semantic preserving structure translation is taking place with model relativization. 
+
+\begin{theorem}[Strictly-stronger consistency of $ZFS$]\label{zfs_st_con}
+  $ZFS := ZF + SEF$ is strictly-stronger consistent than $SEF$ and $ZF$. Namely, given $\lsign_{zfs}$ language with structure $\{\in, \cdot, \pi, \Sigma\}$ the following holds:
+  \begin{enumerate}[1.]
+    \item $Con(ZF) \implies Con(ZFS)$
+    \item $Con(SEF) \implies Con(ZFS)$
+  \end{enumerate}
+\end{theorem}
+
+    
+  
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+\begin{corollary}
+  $\LsM^\prime \prec \LsQ$ and $\LsN^\prime \prec \LsQ$ are elementary submodels of $\LsQ$.
+\end{corollary}
+
+On one hand, the later corollary is merely a useful observation that given the existence of $\LsQ$ as a model for $\LsT_{zfs}$ the nature of set $Q$ may remain abstract. On the other hand - each of the concrete elementary submodels $\LsM^\prime$ and $\LsN^\prime$ provides an important insight that $\LsQ$ may behave both as a class of $ZF$ sets and a collection of $SEF$ strings depending on the context.
+
+\begin{corollary}
+  $\LsQ$ can act as a transitive model for $ZFS$.
+\end{corollary}
+
+
+
+
+

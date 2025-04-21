@@ -1,0 +1,544 @@
+\pagebreak
+\section{A replicated Set Theory model deciding $CH$}\label{sec_rep_model}
+
+
+It must be mathematical common knowledge by now that $CH$ is independent of $ZF$. Specifically, an immediate and foundational example of the Set Theory ($ZF$) model satisfying $CH$ would be Gödel's model $L$ \cite{jech2003set} - a constructable universe of all transitive sets which includes all ordinals. Obviously, only if one also accepts the axiom of constructability $V=L$, that every set in the universe $V$ is constructible by following Gödel's approach. Paul Cohen result, in its turn, famously shows the independence of $CH$ by creating a counter example model using forcing, when, assuming $con(ZF)$, $ZF+CH$ fails. Of course, another important\footnote{The following quote from \cite{Jech1973AboutTA} seems appropriate to explain the significance of it: "A mathematician of the present generation hardly considers the use of the Axiom of Choice a questionable method of proof. As a result of algebra and analysis going abstract and the development of new mathematical disciplines such as set theory and topology, practically every mathematician learns about the Axiom of Choice (or at least of its most popular form, Zorn’s Lemma) in an undergraduate course. He also probably vaguely knows that there has been some controversy involving the Axiom of Choice, but it has been resolved by the logicians to a general satisfaction."} independence result produced by Cohen is the independence of $AC$, namely: $con(ZFC) \implies con(ZF + \neg AC)$.
+
+On one hand, there is a strong sentiment among many modern mathematicians that there may be a missing axiom. It can be either coming from assuming existence of large cardinals. Or, such missing axiom can be ${\sf MM}^{++}$, which, assuming $con(ZF)$, if considered in addition to the existing Set Theory $ZFC$ decides $CH$ \cite{aspero2021sf}. On the other hand, assuming any additional axiom may still seem like a strong stance to adopt, even though we cannot hope to obtain a complete (and unique) theory with respect to forceability which extends $ZFC + CH$\footnote{Specifically, see the discussion and counterexamples on p.7 in \cite{viale2016category} of Woodin Theorem 3.2.1 \cite{Larson2010} on $\Omega$-consistency of $T$ extending theory $ZFC+$\textit{"$\exists$ class many Wooding cardinals"} iff $T+CH \vdash \phi(p) $, where $\phi(p)$ is a $\Sigma^2_1$ statement with real parameter $p$.}.
+
+In this section we are going to put together all the main points that we have discussed until now. The result would be a $\neg CH$ model built with bijective representation of sets as infinite binary strings. Such arguably "simple" illustration \footnote{"If the Continuum Hypothesis fails then there should be a "simple", "definable" evidence for this failure." \cite{magidor2011}} will rest on a special example of partial order that can be constructed from the infinite binary strings using substring relation (see \textit{Definition \ref{def_po_substr_rep}} of sppo in previous section). 
+
+We would also look into whether or not our approach (to define such model) is consistent with the main generic forcing results. In fact, we would ask if $CH$ can be decided for all $ZF+DC$ models. As already mentioned, forcing is a technique, which was initially proposed and used by Paul Cohen. It has evolved into a rich theory and became a main tool to obtain independence proofs \cite{jech2003set}. 
+
+\subsection{Constructing the replicated model}
+
+For all our purposes we assume $N$ is either the whole universe $V$ of $ZF+DC$ or a large enough portion\footnote{Here, by large enough portion we mean that all $ZF$ axioms plus $DC$ can been "seen" as a part of the "smaller" $V_\alpha \subset V$ but still large enough transitive set.} of the cumulative hierarchy $\{V_\alpha : \alpha \in Ord\}$, so that $N$ is a well-founded transitive model of $ZF+DC$.
+
+Let us check the plausibility of the following working scenario of $M$ being a transitive submodel of $N$: 
+\begin{enumerate}
+    \item \textbf{assumption}: if $ZF$ is consistent, then $ZF+DC$ is also consistent;
+    \item \textbf{independence}: $ZFC$ is independent of $ZF+DC$;
+    \item \textbf{conclusion}: $M \models ZFC$ and is a transitive \textit{submodel} of $N$: $M \subseteq N$.
+\end{enumerate}
+
+Firstly, as usual step (1), we suppose that if $ZF$ is consistent, then $ZF+DC$ is also consistent. In modern set-theoretic practice, one typically strengthens "$ZF$ is consistent" to "there is a transitive model of $ZF$”. Using standard reflection or constructibility arguments, one then obtains a transitive model $N$ such that:
+
+\[ N \models ZF+DC \]
+
+Secondly, as step (2), we rely on independence. It is known that $ZFC$ is independent of $ZF+DC$ (See Problem 5.26 on p. 83 in \cite{Jech1973AboutTA}, where a model is constructed in which the Axiom of Choice fails but Dependent Choice still holds\footnote{Problem 5.26 on p.83 in \cite{Jech1973AboutTA} describes such model of $ZF$ "Let $N$ be the class of all sets which are hereditarily definable from a countable sequence of ordinals. In $N$, the Axiom of Choice fails, and the Principle of Dependent Choices is true. Thus the Axiom of Choice is independent of the Principle of Dependent Choices."}.)
+
+Finally, as conclusion for our scenario: from $N$ one can form a transitive submodel $M \subseteq N$ satisfying 
+
+    \[ M \models ZFC \]
+
+This arises, for instance, by taking the constructible universe inside $N$ (often denoted $L^N$), which ensures the full $AC$ holds in $M$ even though it may fail in $N$. So the idea of constructing such or even similar submodel $M$ of $N$ seems plausible.
+
+Next, we will complete the outline the main scenario in which we will operate as well as the structure for the rest of the section.
+
+Let's begin by addressing the fundamental query: What is meant by a replicated model? Conceptually, a replicated model $M$ is any transitive Set Theory model, such that, if $(P, \leq)$ is a notion of forcing in $M$ (ground model), then it can be mapped by embedding $h: M \to N$ into superset model $N \supset M$ that satisfies existence of a replicata construct $N \models R_{<\omega_1}$ (see \textit{Definition \ref{def_replicata}}) and $ran(h) \subseteq R_{<\omega_1}$. The fact that restriction of such embedding $h{\upharpoonright}_P$ can be mapped into a replicata (existing in $N$) is called \textit{replication}, meaning that if one takes the Set Theory language as it is interpreted in $M$, then formulates generic forcing notion on it, so that forcing language can be also interpreted on $R_{<\omega_1}$ structure (which is merely a collection of string replicators or SEF-language formulas built with sets living in $N$). One can also say that with such arrangement $R_{<\omega_1}$ offers to host a replica of $P \in M$ inside $N$, although $M$ is already a submodel of $N$ by construction. 
+
+\begin{definition}[A replica host]\label{def_replica_host}
+    Let $(R_{<\omega_1}, P_\varepsilon, \pi)$ be a replicata and $N$ a transitive model of Set Theory $ZF$. Also let $M \subset N$ be a submodel of $N$. Then, we call the Set Theory model $N$ a \textit{replica host} for $M$ iff the following holds:
+    \begin{enumerate}
+        \item $N \models (R_{<\omega_1}, P_\varepsilon, \pi)$ with $R_{<\omega_1} \subset N$ (constructed in $N$);
+        \item $M$ is a transitive model of Set Theory language, s.t. $M \subset N$;
+        \item $(P, \leq)$ is a generic notion of forcing in $M$ (ground model);
+        \item There exists an embedding $h: M \to N$ into superset model (since $M$ is a submodel of $N$), s.t. $h(P) \subseteq R_{<\omega_1}$;
+        \item Furthermore, we require restriction $h{\upharpoonright}_P$ to be order preserving on $R_{<\omega_1}$.
+    \end{enumerate}
+\end{definition}
+
+Again, by the above definition since $M$ is a submodel of $N$, there exists an embedding $h: M \to N$. This makes $M$ kind of \textit{inner-model}, but this is of minor importance as long as both $M$ and $N$ are transitive.
+
+\begin{definition}[A replicated model]\label{def_replicated_model}
+    Let $N$ be a transitive model of Set Theory $ZF$ with submodel $M$.
+    If $N$ serves as replica host for $M$ (as specified in \text{Definition \ref{def_replica_host}}), then $M$ is called a \textit{replicated model}.
+\end{definition}
+
+In the context of the above definition we will mean the same by interchangeably saying that: 
+\begin{itemize}
+    \item $M$ is a \textit{replicated model};
+    \item forcing replicas from $M$ are interpreted in the replicata $R_{<\omega_1}$;
+    \item $P \in M$ is a replicated forcing over $R_{<\omega_1}$;
+    \item replicated forcing of $M$ is hosted by $N$.
+\end{itemize}
+
+
+Given the above definitions and explanations, a complete outline for our scenario and the rest of the section looks as following:
+\begin{enumerate}[label=(\roman*)]
+    \item $\exists N: N \models ZF + DC$ (assuming $ZF$ is consistent)
+    \item $M$ is a submodel of $N$, s.t. $M \models ZFC$;
+    \item We want to show that $N$ is a replica host for submodel $M$, so that $P \in M$ is a replicated forcing over $R_{<\omega_1}$: 
+    \begin{enumerate}
+        \item $N \models (R_{<\omega_1}, P_\varepsilon, \pi)$
+        \item $(P, \leq)$ is a generic notion of forcing in $M$ (ground model);
+        \item $h: M \to N$ is an embedding, s.t. $h(P) \subseteq R_{<\omega_1}$ and restriction $h{\upharpoonright}_P$ is order preserving on $R_{<\omega_1}$;
+    \end{enumerate}
+    \item We claim that Martin Maximum (${\sf MM}$) as well as stronger statement ${\sf MM}^{++}$ hold in $M$. Notably \cite{aspero2021sf}, ${\sf MM}$ decides cardinality of the continuum (implying $\neg CH$) and, in fact, confirms Goedel's conjecture $2^{\aleph_0} = \aleph_2$.
+\end{enumerate}
+
+Let us break up the scenario into coverage per subsections.
+\begin{itemize}
+    \item Item (i) of the above scenario is already discussed in this section, and we have fixed $N$ as a transitive model of $ZF + DC$. The following subsection - \textit{\nameref{subsection_countable_bin_str_and_rep}} - is focused on showing that $N \models (R_{<\omega_1}, P_\varepsilon, \pi)$. Namely, that one can construct a replicata in $ZF + DC$ model. It culminates with \textit{Theorem \ref{lemma_construct_replicata} - \nameref{lemma_construct_replicata}}, claiming that one can construct replicata in $N$. This goes in line with work in previous section, where most of our results were obtained primarily assuming $ZF+DC$. 
+    %  TODO: add a theorem at the end of section and join with previous results.
+    \item Item (ii) in the above scenario is covered by section - \textit{\nameref{subsection_rep_model}}. We define $M$ as boolean valued model on complete fair algebra in $R_{<\omega_1}$ and show that $M \models ZFC$. Essentially, $M$ is also a submodel of $N$, which implies most of the item (iii) in our scenario.
+    \item The story is concluded with item (iv) in the last subsection - \textit{\nameref{subsection_rep_mm}}.
+\end{itemize}
+
+
+
+
+
+\subsection{Countable binary strings and replicators in $R_{<\omega_1}$}\label{subsection_countable_bin_str_and_rep}
+
+In general, we assume that all coding is done in Set Theory language. We assume that $\cbin$ and $R_{<\omega_1}$ consists of $ZF$ sets, but will also work with their high-level view as strings. In literature strings are often defined as sequences in \cite{kunen1980set,jech2003set}. Unfortunately, ambiguity may arise from many options in notation like $\{0,1\}^\omega$, $\langle 1, 0, 1, .. \rangle$ or $Seq_\omega({0,1})$\footnote{note that $Seq(\{0,1\})$ notation often means all finite partial functions $\omega \to \{0,1\}$ which is a very different structure than what we understand under countable binary string, hence the $\omega$ index}, all of which mean sequence as a tuple set but without clarity about its ultimate representation in $V$ (even if we call them strings). Specifically, we extend previous \textit{Definition \ref{def_substr_seq}} (where we define strings from sequences) and will now use two kinds of $\{0,1\}^\omega$ string representation as a set: 
+\begin{enumerate}
+    \item \textit{flat string} - implemented as some mapping $f : I \to \{0,1\}$, where $I \in Ord$ is an index set $|I| < \omega_1$ \footnote{again, see \textit{Definition \ref{def_substr_seq}}}; 
+    \item \textit{recursive string} - implemented by using recursive Kuratowski notation\footnote{as defined in \textit{Definition \ref{def_kuratowski_morph}}}. 
+\end{enumerate}
+
+This means that all $R_{<\omega_1}$ strings can be seen essentially seen either as functions or as nested sequences, both kinds are "stored" as sets in $V$ at their low-level representation. Especially, and also, if we define any functions between strings and sets. 
+
+Of course, we will continue to use figure brackets to note such string functions as sets $\{0,1\}^\omega$. In that case, we implicitly mean flat representation. Otherwise, when we care about specific representation\footnote{Also see \textit{Definition \ref{def_code_str}}}, then we will explicitly write:
+\begin{itemize}
+    \item either $\{0,1\}^\omega)$ to mean \textit{flat string} represented by a function and packed as a flat countable set like $\{\langle0,1\rangle, \langle1,0\rangle, \langle2,1\rangle, \langle3,0\rangle, ..\}$ to represent $\bos1,0,1,0,..\eos$;
+    \item or $kur(\{0,1\}^\omega)$ to mean \textit{recursive string} - the countable sequence of $\{0,1\}$, explicitly represented as the $ZF$ set with recursive Kuratowski notation.
+\end{itemize}
+
+Depending on our needs (what kind of model we intend to construct), the replicata structure $R_{<\omega_1}$ within some model $N$ usually consists of infinite strings encoded as tuples of ordinals. In fact, since we need the whole replicata as part of the model universe, which means that both the range (set of strings $\cbin \in V^N$) and the domain\footnote{Remember that one can always obtain $R_{<\omega_1} = \pi^{-1}(\cbin)$} (SEFs $R_{<\omega_1} \in V^N$) are included into $V^N$ as part of $\pi$ definition. If we are to restrict the construction process of the model only to the use of binary strings of countable length, then we define such structure inside the model as $R_{<\omega_1} = \{ b : b = flat(\{0,1\}^\omega), |b| = \omega\}$\footnote{Since we work in $ZF$, it means that here and similar context we actually take as the alphabet (base) of the string some unique ordinal mappings from shorthand like $0 \mapsto \{\}, 1 \mapsto \{\{\},\{\{\}\}\}$ and so on - see \textit{\nameref{subsection_transitive_rep_code}} below}. Furthermore, we target the construction of $R_{<\omega_1}$ so that its cardinality is equal to $|\reals| = \cont$, which follows from Cantor's Theorem.
+
+\begin{definition}[Axiom of string concatenation $SC(\kappa)$]\label{def_axiom_str_concat}
+    Let $\kappa$ be a cardinal. If $x$ and $y$ are two strings of cardinality $|x| = |y| = \kappa$, then $\exists z : z = x \cdot y, |z| = \kappa$.
+\end{definition}
+
+In terms of $ZF+DC$, the above \textit{Axiom of string concatenation}\footnote{Also see future instances of how string concatenation would be defined in this paper - specifically \textit{Definition \ref{def_ExtStrTheory}.}} or $SC(\kappa)$ means that there exists string concatenation process that can be expressed in terms of concatenation of sequences - see \textit{Definition \ref{def_concat_seq}}, which is applicable for both flat (functions on sequences to $\{0,1\}$) and recursive (nested) strings provided by Kuratowski notation. Specifically, $SC(\omega)$ indicates that only the existence of concatenated strings of countable cardinality are implied by the axiom. It follows that, after encoding, the underlying sets are also of countable cardinality.
+
+\begin{definition}[Axiom of string replication $SR(\kappa)$]\label{def_axiom_str_rep}
+    Let $\kappa$ be a cardinal. If $x$ is a string of cardinality $|x| \leq \kappa$, then $\exists y : y = \bos (x) , |y| = \kappa$, where parentheses $(\dots)$ is a replication operator that can be recursively applied to a finite or possibly infinite string $x$ by concatenating the same substring $x$ to itself in order to produce a new string $y$.
+\end{definition}
+
+Once again, the above definition is applicable to both $flat(\{0,1\}^\omega)$ and $kur(\{0,1\}^\omega)$ representations. For $flat(\{0,1\}^\omega)$ strings we have already used a similar \textit{Definition \ref{def_substr_seq}}. For $kur(\{0,1\}^\omega)$ strings, replication process is equally applicable via concatenation. Replication is applied to the substring between two paired parentheses (round brackets). It resembles algorithmic string copying over and over again - that would be infinitely many times or in an \textit{infinite loop}. Compare provided definitions with the ones offered earlier. Namely, \textit{Definition - \ref{def_seftheor}}, etc. Also in case of $SR(\omega)$ we mean to consider only at most countable strings as operands and replication outcome.
+
+The phrase \textit{applied recursively} does mean both recursive implementation of the loop and the ability to nest parentheses inside expressions to generate a new string $y$. The expression on the right hand is called \textit{string enumeration formula (SEF)} and can be defined as a formal language\footnote{see earlier discussion in the paper}. We will leave the exercise of proving this for the reader. But it is enough to mention, that the same $SR(\kappa)$ can be recursively applied to define $x$ and so on\footnote{But, again, greater ordinality is more relevant for the discussion in the future section where this result is a separate axiom.}.
+
+Furthermore, we want to extend \textit{production} function as it was given in \textit{Definition \ref{def_replicata}}, simply by noting that it works correctly with both string representations ($flat(\{0,1\}^\omega)$ and $kur(\{0,1\}^\omega)$) and, in general, can be defined on all valid SEF expressions. $ZF$\footnote{also see much earlier \textit{Definition - \ref{def_prodfunc}}}. Recall, that production function is able to evaluate $SEF$ expressions - binary strings with replication operator and produce a corresponding binary string as an output. Note that for our current purposes it is enough to consider only countable binary strings and countable $SEF$ expressions that produce them.
+
+\begin{definition}[Extended Production function ($ZF+DC$)]\label{def_ext_prodfunc_zf}
+    Let $B_{SEF}$ be a set of all valid countable binary $SEF$ expressions, which can be taken as a domain of a function. Again, a valid countable binary $SEF$ expression has either $flat(\{0,1,(,)\}^\omega)$ or $kur(\{0,1,(,)\}^\omega)$ underlying representation of a string, s.t. any included parentheses are always paired with opening round bracket coming first. If $\cbin$ is a set of all countable binary strings, namely either $\cbin = \{b : b = flat(\{0,1\}^\omega)\}$, or $\cbin = \{b : b = kur(\{0,1\}^\omega)\}$, depending on representation. Then $\exists \pi^\star: B_{SEF} \to \cbin$, which is called \textit{extended production} function.
+\end{definition}
+
+By now, we have a very good understanding of how countable binary strings can be represented as $flat(\{0,1\}^\omega)$, which, in fact, was already discussed in the previous section - \textit{\nameref{section_determinacy}} - of this paper. We will now focus on $kur(\{0,1\}^\omega)$. So, for the next lemma we would need to take a closer look at the recursive version of the Kuratowski notation that we use as set representation of strings (again, see the \textit{Definition \ref{def_kuratowski_morph}}). 
+
+According to the usual Kuratowski definition, an ordered pair or tuple $(a, b)$ is represented as a set: $\{\{a\}, \{a, b\}\}$. Such Kuratowski pairs are typically used to construct Cartesian products and relations, not to encode sequences or strings. Such definition doesn't extend naturally to sequences of more than two elements. On the contrary, our recursive version of the Kuratowski notation can do exactly the opposite - represent strings\footnote{See an example of \textit{String concatenation encoded as sets} in \textit{Table \ref{Tab:ExmplRecKurMorph}}}.
+
+\begin{lemma}[Recursive countable string representation ($ZF$)]\label{lemma_str_kur_zf} 
+    Countable binary strings can be represented as $ZF$ sets using recursive Kuratowski notation $k$. Which means that all $kur(\{0,1\}^\omega)$ are $ZF$ sets.
+\end{lemma}
+\begin{proof}
+    Let $M$ be a model of $ZF$. If we apply recursive Kuratowski notation to represent countable binary strings, then $kur(\{0,1\}^n) = \{y : y = k(x_1,..,x_n), x_i \in \{0, 1\}, i \leq n \}$ for some $n \geq \omega$. This means that $k(x_1,..,x_n)$ is just a function $k: X \to Y$ that takes an $n$-tuple (or sequence) $\langle x_n \rangle$ of $\{0, 1\}$ from the domain $X$ and maps it recursively to a pair 
+        \[ \big\{\{k(x_1,..,x_{n-1})\}, \{k(x_1,..,x_{n-1}), x_n\}\big\} \] 
+    in the image $Y$. This means that $k(x_1,..,x_n)$ always produces a pair $(x_{n-1}, x_n)$ which is a set in $M$ iff $X \subset M$. Hence, either by \textit{Axiom of Pairing} or by \textit{Separation Schema} of $ZF$, $Y \subset M$. It remains to show that $X \subset M$ for any (at least) countable $kur(\{0,1\}^n)$ or for $n < \omega_1$.
+
+    Since $M$ is a model of $ZF$, then it must be transitive and inductive. Let $\nat$ be the smallest subset of $M$, s.t. $\nat = \bigcap \{I : I \text{ is inductive}\}$\footnote{See \textit{exercise 1.2} in \cite{jech2003set}}. We can encode natural numbers like $0 = \{\}, 1 = \{0\}, 2 = \{0, 1\}, 3 = \{0, 1, 2\} \dots$, so that the cardinality of each set is finite. Since $M$ must contain all ordinals $Ord$\footnote{As shown by Gödel using smallest $L$ model of $ZF$\cite{jech2003set}}, let us also extend $\nat$ for the purpose of indexing of countable strings, so that $\Theta = \{ \alpha : \alpha \in Ord \land \alpha < \omega_1 \}$ includes all countable ordinals. Obviously, $\Theta \subset Ord$ implies that our index set $\Theta$ must be both transitive and inductive.
+    
+    Now, being equipped with the above encoding for $\{0, 1\} \subset M$ and for our index set $\Theta \in M$, let us show that every $\langle x_n \rangle \in X$ is also a member of $M$. The finite case $n \in \nat$ is trivial - we can always map all finite sequences to some finite ordered pair $\big\{\{k(x_1,..,x_{n-1})\},\{k(x_1,..,x_{n-1}), x_n\}\big\}$ in the image of $k$. At closer look, so is the remaining case $n \in \Theta$. It is enough to observe for any $\iota \in \Theta: \iota \leq n$ we also have $\langle x_\iota \rangle \in M$ by applying the \textit{Axiom of Infinity}. Indeed, assume $\langle x_\iota \rangle \notin M$. Then $\iota$ must be either finite, but we have shown all finite indexes are already in $M$. So $\iota$ must be an infinite ordinal. Since $M$ is both transitive and inductive, it must contain all ordinals including such as $\forall \iota \in \Theta : \iota \in Ord \implies \iota \in M$. Hence, the image of recursive Kuratowski notation for countable binary strings is always a $ZF$ set.
+\end{proof}
+
+\begin{lemma}[Countable Replication]\label{lemma_count_rep}
+    The following holds in $ZF+DC$:
+    \begin{enumerate}
+        \item $CC \implies CUT$
+        \item $CUT \implies SC(w)$
+        \item $SC(w) \implies SR(w)$
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \begin{enumerate}
+        \item $CC \implies CUT$, where $CUT$ stands for \textit{Countable Union Theorem} which says that \textit{a union of at most countable sets is a countable set}\footnote{or alternatively \textit{Any countable union of countable sets is a countable set}}. For the details of the proof please see \cite{herrlich2006ac}.
+        \item To show $CUT \implies SC(w)$, it is enough to interpret $x \cdot y$ as a union of two countable sets $kur((z_1, .., z_{n+m-1})) \cup kur((z_1, .., z_{n+m-1}, z_{n+m}))$, where $|x| = n$, $|y| = m$ and $k$ is a recursive Kuratowski morphism. Here we define $\langle z_{n+m} \rangle$ as a countable union of countably many applications of $k$ to represent the remaining sequence $(x_1,..,x_n, y_1, .., y_{m-1})$ mapped to $(z_1, .., z_n, z_{n+1}, .., z_{n+m-1})$ under "inwards" recursion. In our Kuratowski representation $kur(\langle z_{n+m} \rangle)$ translates into \\ $\big\{k(z_1, .., z_{n+m-1})\big\} \bigcup \big\{k(z_1, .., z_{n+m-1}), z_{n+m}\big\}$. Assuming $CUT$ means that such set $kur(\langle z_{n+m} \rangle)$ exists iff it is a result of a countable union of countably many applications of $k$. It remains to show that we can merge $x$ and $y$ together into concatenated sequence by defining a map $\mu: \mu(x , y) = z = x \cdot y$. The later is achieved by defining a big enough index set $I = \{\alpha: \alpha \in Ord \cap \alpha < n + m < \omega_1\}$, so that the result of concatenation is just a function $z : I \to \{0,1\}$ with explicit representation $kur(\langle z_{n + m} \rangle) = k(z_1, .., z_{n+m})$.
+        \item $SC(w) \implies SR(w)$: we start by observation that replication operator is a shorthand for concatenation of the same string countably many times. Indeed, $y = (x)$ is an equivalent or a shorthand of the formula $y = x \cdot x \cdot \ldots \cdot x \land |y| = \alpha$, where $x,y$ are strings represented as sets and $\alpha \in Ord : \omega \leq \alpha < \omega_1$. Assuming $CUT$ there exists $\langle z_{\alpha} \rangle$ s.t. $\bigcup_{\alpha \in I}{z_\alpha} = k(x_1,..,x_\alpha)$, where $I$ is a big enough index set $I = \{\alpha: \alpha \in Ord \cap \alpha < \omega_1\}$ and $k$ is a recursive Kuratowski notation for $x = x_1 = ... = x_\alpha$. In that case $y = (x)$ can be interpreted as a formula in set theoretical language for countable union of sets in recursive Kuratowski notation. If both strings and their representations as sets are countable $|x|=|y|=\aleph_0$, then there exists a countable string replication and $SR(w)$ holds. 
+    \end{enumerate}
+\end{proof}
+
+In general, $CUT$ is required to show exactly this - if $x$ and $y$ are countable, then so is their union, intersection and difference. So we need to assume $CUT$ both for concatenation and for replication of countable strings. Given the above result, we can see that $ZF + CC$ 
+is indeed sufficient for our needs.
+
+Obviously, if $SR(w)$ holds then string replication can be represented as a set not only for a single pair of brackets per formula, but at least for countably many recursively nested replicators following the same logic of countable unions as discussed in previous lemma but with more complex encoding in recursive Kuratowski notation. A production function\footnote{see \textit{Definition \ref{def_ext_prodfunc_zf}}} defined over the domain of such expressions or SEFs is discussed in the next theorem.
+
+
+
+\begin{theorem}[Countable Replication Theorem (CRT)]\label{theorem_crt}
+    There exists an extended production function $\pi^\star: B_{SEF} \to \cbin$ iff one can produce countable strings by replication (meaning that axiom $SR(\omega)$ holds). Furthermore, production function $\pi$ defined on the whole domain $B_{SEF}$ is surjective (many formulas can be evolved into the same countable binary string).
+\end{theorem}
+\begin{proof}
+    Recall from \textit{Definition \ref{def_ext_prodfunc_zf}} that $B_{SEF}$ is a set of all valid countable binary $SEF$ expressions, which can be taken as a domain of a function. A valid countable binary $SEF$ expression is a $kur(\{0,1,(,)\}^\omega)$, s.t. any included parentheses are always paired with opening round bracket coming first. $\cbin$ is a set of all countable binary strings, namely $\cbin = \{b : b = kur(\{0,1\}^\omega)\}$.
+
+    $\exists \pi, \pi: B_{SEF} \to \cbin$ $\implies SR(\omega)$: this direction is trivial. Given  production function $\pi^\star: B_{SEF} \to \cbin$, one can produce countable strings which would be equivalent to any replication result simply by taking the mapped countable binary string in the image of the function, i.e. $\forall \phi \in B_{SEF}:  b = \pi^\star(\phi) \land b \in \cbin$. By applying \textit{Replacement Schema} of $ZF$ \cite{jech2003set}, we can state that $b = \pi^\star(\phi)$ is a set or a string having a set representation using recursive Kuratowski morphism. Which means that we can compute countable $SEF$ expressions into countable infinite binary strings. Hence $SR(\omega)$ holds.
+    
+    $\exists \pi^\star, \pi^\star: B_{SEF} \to \cbin$ $\impliedby SR(\omega)$: for other direction we start by showing that $\cbin \subset B_{SEF}$. Indeed, if one omits all parentheses in a $SEF$ expression, then one gets just a countable binary string, meaning that $\forall \phi \in B_{SEF} : \phi \in \cbin \iff |\phi|_{(} = |\phi|_{)} = 0$\footnote{For $|x|_y$ notation - see \textit{Definition \ref{def_ExtStrTheory}}}. Next, we rely on the result obtained earlier\footnote{See \textit{lemma \ref{lemma_cardinality_can}} and \textit{theorem \ref{th_cont_card_uncount_sef_lang}} where $B_{SEF}$ is essentially the same set as $\ulsef$} that $|\cbin| = |B_{SEF}|  = \cont$. Having $\cbin \subset B_{SEF} \land |\cbin| = |B_{SEF}|$ also means that if $\pi^\star$ exists then it must be surjective, since $\pi^\star$ is clearly not an identity mapping. Now, if one assumes the ability to compute any countable binary SEF expression into a countable binary string, then such computation would be exactly what is achieved by $SR(\omega)$. This allows us to define a correspondence $\forall \phi \in B_{SEF}: \exists b \in \cbin \land \phi \mapsto b$, which is precisely the production function\footnote{note that here and the rest of the proof we do not need to rely on any additional choice beside $CC$}. 
+
+\end{proof}
+
+Finally, we want to notice that similar set theoretical claims equally hold for $flat(\{0,1\}^\omega)$ and $kur(\{0,1\}^\omega)$ representations. This follows from the below lemma.
+
+\begin{definition}[Coding of recursive and flat strings]\label{def_code_str}
+    Let $z = \{0,1\}^\omega$. Usually we assume that every string has flat representation as tuple (unless explicitly specified differently), i.e. we assume $x = flat(z)$. Also, let $y = kur(z)$. Then, $c_r: z \to y$ is \textit{recursive string coding} morphism and $c_f: z \to x$ is \textit{flat string coding} morphism. For notational convenience, we say that both representation functions are aliases to respective coding morphism and are, in fact, idempotent. Meaning that for $z = \{0,1\}^\omega$ we have $flat(flat(z)) = flat(z)$ and $kus(kusr(z)) = kur(z)$.
+\end{definition}
+
+\begin{lemma}[String Representation Equivalence]\label{lemma_kurflat_eq}
+    Let $c_r: z \to y$ and $c_f: z \to x$ be respectively \textit{recursive} and \textit{flat} string coding morphisms (\textit{Definition \ref{def_code_str}}), then there exists a bijection between their images $x$ and $y$.
+\end{lemma}
+\begin{proof}
+    Beforehand, we want to make sure that $x, y$ are both $ZF$ sets, i.e. $x, y \in V$. The observation that $x \in V$ follows from $ZF$ axioms since every flat string is merely a function. Other observation $y \in V$ follows from \textit{lemma \ref{lemma_str_kur_zf}}. Now, since each representation coding must be one-to-one and onto with the defined domain of all binary sequences such as $z = \{0,1\}^\omega$, $c_r$ and $c_f$ codings themselves are recoverable. Hence, there exists an identity bijection $id = c_r^{-1} = c_f^{-1}$.
+\end{proof}
+
+
+\subsection{Full Boolean-Valued Models}
+
+Consider \textit{full Boolean-valued models} as described on p. 208 in \cite{jech2003set}.
+
+\begin{lemma}[Full Boolean-valued model of $ZFC$]\label{lemma_full_bvm_zfc}
+    Assume $N \models ZF+DC$, $B$ is a complete Boolean algebra in $N$ and $V^B$ is a Boolean-valued submodel of $N$. 
+    If \( F \) is an ultrafilter on a complete Boolean algebra \( B \), then the Boolean-valued submodel \( V^B \) satisfies not only $ZF$ but also the axiom of choice.
+\end{lemma}
+
+\begin{proof}
+Consider \( V^B \) as the Boolean-valued model constructed from \( B \). Assume \( F \) is an ultrafilter on \( B \). Clearly $ZF$ holds in $V^B \subset N$ - assuming it is constructed according to \cite{jech2003set}. We aim to demonstrate that \( V^B \) also upholds the axiom of choice under this configuration, and thus $V^B$ is a transitive model of $ZFC$.
+
+\begin{enumerate}
+    \item \textbf{Boolean-Valued Models and Ultrafilters:}
+    \begin{itemize}
+        \item A Boolean-valued model \( A \) is considered full if for any formula \( \varphi(x, x_1, \ldots, x_n) \) and for all \( a_1, \ldots, a_n \in A \), there exists an \( a \in A \) satisfying:
+        \[
+        \llbracket \varphi(a, a_1, \ldots, a_n) \rrbracket = \llbracket \exists x \, \varphi(x, a_1, \ldots, a_n) \rrbracket
+        \]
+        \item An ultrafilter \( F \) on \( B \) allows us to define an equivalence relation \( \equiv \) on \( A \) by:
+        \[
+        x \equiv y \iff \llbracket x = y \rrbracket \in F.
+        \]
+        \item Furthermore, a binary relation \( E \) on \( A/\equiv \) is defined as:
+        \[
+        [x] E [y] \iff \llbracket x \in y \rrbracket \in F.
+        \]
+    \end{itemize}
+
+    \item \textbf{Properties of the Equivalence Relation:}
+    \begin{itemize}
+        \item The relation \( \equiv \) is an equivalence relation due to the properties of \( F \) as a filter.
+        \item The definition of \( E \) remains independent of the choice of representatives, supported by the properties of \( F \) as an ultrafilter.
+    \end{itemize}
+
+    \item \textbf{Two-Valued Model \( A/F \):}
+    \begin{itemize}
+        \item The structure \( A/F = (A/\equiv, E) \) forms a two-valued model, inheriting the logical properties of \( V^B \).
+    \end{itemize}
+
+    \item \textbf{Transforming \( V^B \) to a Two-Valued Model:}
+    \begin{itemize}
+        \item By employing the ultrafilter \( F \), we transform \( V^B \) into a two-valued model \( V^B/F \).
+        \item If \( V^B/F \) adheres to the $ZFC$ axioms, so does \( V^B \) since the transformation preserves the logical structure.
+    \end{itemize}
+
+    \item \textbf{Verifying the Axiom of Choice in \( V^B/F \):}
+    \begin{itemize}
+        \item Construct a choice function \( \sigma \) in \( V^B/F \) ensuring for any set \( x \), \( \sigma(x) \) selects an element from \( x \).
+        \item The ultrafilter \( F \) guarantees that for each \( x \), a \( y \) exists such that \( \llbracket y \in x \rrbracket \in F \), thereby validating \( \sigma(x) \) as a well-defined function.
+        \item Since \( \llbracket \sigma(x) \in x \rrbracket = 1 \) within \( V^B/F \), the axiom of choice holds in this model.
+    \end{itemize}
+\end{enumerate}
+
+Given that \( V^B/F \) satisfies the axiom of choice and that the ultrafilter-based transformation preserves the $ZFC$ axioms, \( V^B \) fully satisfies the axiom of choice. Consequently, \( V^B \) supports all the axioms of $ZFC$, including the axiom of choice.
+
+\end{proof}
+
+\subsection{A replicated model of Set Theory}\label{subsection_rep_model}
+
+We assume that the universe $V^N$ of our model of interest is "large enough" to contain $R_{<\omega_1}$ set, which has the size of continuum and consists of $\{0,1\}^\omega$ strings (similar to Cantor space). Those strings can be also expressed as formulas in "dialect" of Set Theory language (so-called String Enumeration Formulas or SEF) and manipulated by a production function $\pi$. We also have $P_\varepsilon$ poset defined on $R_{<\omega_1}$. All together those concepts are part of the replicata structure.
+
+\begin{lemma}[Constructability of replicata]\label{lemma_construct_replicata}
+    Let $N$ be a transitive model of $ZF+DC$. If there exists a replicata $(R_{<\omega_1}, P_\varepsilon, \pi)$, s.t. $R_{<\omega_1} \in V^N$, then $N \models (R_{<\omega_1}, P_\varepsilon, \pi)$ and $N \models P_\varepsilon \text{ is ccc}$.
+\end{lemma}
+\begin{proof}
+    Our proof consists of summarizing previous results and grouping them together as following: 
+    \begin{enumerate}
+        \item \textbf{$\pi^\star$ is well-defined}: If $N \models ZF + DC$, then $N \models \pi^\star \text{ is a production function}$.
+        \begin{enumerate}[label=(\roman*)]
+            \item $DC$ is known\footnote{Also see discussion of \textit{Definition \ref{def_dc}}} to be stronger than $CC$, but weaker than $AC$, i.e. $N \models DC \implies N \models CC$ \cite{Jech1973AboutTA,herrlich2006ac,asper2020}.
+            \item $N \models SR(\omega)$ follows from \textit{Lemma \ref{lemma_count_rep} - \nameref{lemma_count_rep}}.
+            \item Extended production function $\pi^\star$ is well-defined for both $flat(\{0,1\}^\omega)$ and $kur(\{0,1\}^\omega)$ representations on countable binary strings:
+            \begin{itemize}
+                \item if $B_{SEF} \subset \{0,1,(,)\}^\omega$ is a domain of $\pi^\star$ that consists of all valid SEFs, then $B_{SEF}$ is also a $ZF$ set;
+                \item if $\cbin = \{0,1\}^\omega$ is a codomain of $\pi^\star$ that consists of all countable binary strings, then $\cbin$ is also a $ZF$ set;
+                \item For every $s_x \in B_{SEF}$, there exists a unique $x \in \cbin$. This follows from \textit{Theorem \ref{theorem_crt} - \nameref{theorem_crt}} as each valid SEF formula can be evaluated into its replication-free from by applying replication. Hence, $\pi^\star$ is a well-defined function in $ZF+DC$, and it satisfies \textit{Definition \ref{def_ext_prodfunc_zf}};
+                \item Finally, \textit{Lemma \ref{lemma_kurflat_eq}} guarantees that $\pi^\star$ is well-defined for both recursive and flat representations.
+            \end{itemize}
+        \end{enumerate}
+        \item \textbf{Constructability of $R_{<\omega_1}$}: If $N \models ZF + DC$, then $N \models R_{<\omega_1}$ and $N \models \pi$.
+        \begin{enumerate}[label=(\roman*)]
+            \item $R_{<\omega_1} = \{s_x: s_x \in B_{SEF}\}$ is defined as a set of labels of SEF equivalence classes $[s_x]$, where $[s_x] = \{\varphi \in R_{<\omega_1}: \pi^\star(\varphi) = \pi^\star(s_x) \}$ is an equivalence class of formulas that point to the same image ($\pi^\star$ is constant). $R_{<\omega_1}$ is $ZF+DC$ set and $N \models R_{<\omega_1}$.
+            \item Furthermore, \textit{Lemma \ref{lemma_biject_pi} - \nameref{lemma_biject_pi}} implies that restriction $\pi = \pi^\star{\upharpoonright}_{R_{<\omega_1}}$ is bijective. It follows that $N \models \pi^\star \implies N \models \pi$.
+        \end{enumerate}
+        \item \textbf{Partial order $P_\varepsilon$ on $R_{<\omega_1}$}: If $N \models ZF + DC$, then $N \models P_\varepsilon(R_{<\omega_1}, \leq)$.
+        \begin{enumerate}[label=(\roman*)]
+            \item $P_\varepsilon$ is a sppo defined on $R_{<\omega_1}$ (\textit{Definition \ref{def_po_substr_rep} - \nameref{def_po_substr_rep}}).
+            \item Furthermore, \textit{Theorem \ref{theorem_rw_ccc} - \nameref{theorem_rw_ccc}} implies that $N \models P_\varepsilon \text{ is ccc}$.
+        \end{enumerate}
+    \end{enumerate}
+\end{proof}
+
+An immediate corollary of $N \models (R_{<\omega_1}, P_\varepsilon, \pi)$ is the negation of $CH$.
+
+\begin{corollary}[Failure of $CH$ in $N$]\label{corollary_ch_fails_in_n}
+    $N \models (R_{<\omega_1}, P_\varepsilon, \pi) \implies N \models \neg CH$
+\end{corollary}
+\begin{proof}
+    Follows from \textit{Theorem \ref{corollary_card_rep_part} - \nameref{corollary_card_rep_part}}.
+\end{proof}
+
+Although this result is not novel, as it simply demonstrates the independence of $CH$ from $ZF$ in another manner (without applying forcing), it raises an intriguing question: does $CH$ fail in all "large enough" models of $ZF+DC$? If so, what property (in addition to "largeness" as $R_{<\omega_1} \subset N$) characterizes such a class of $ZF+DC$ models?
+
+Certainly, there are several $ZF+DC$ models where $CH$ holds (trivially due to $CH$ being independent of $ZF$). For example, we can group them as:
+\begin{itemize}
+    \item Cohen's Forcing Extension: Let $V$ be our starting model of $ZFC+CH$ (such as $L$), then use proper forcing to preserve $DC$ and even $CH$;
+    \item model of $ZF$, where $HOD$ satisfies $CH$ ($DC$ is often preserved in $HOD$ models);
+    \item model of $ZF+DC$ with $CH$ using Symmetric Extensions, and so on.
+\end{itemize}
+
+These examples typically rely on the $V=L$ assumption or involve adding no more than $\omega_1$ reals to the model universe. Nonetheless, identifying $DC$ as the crucial axiom to decide $CH$ in "large enough" models would be groundbreaking.
+
+One approach to show this would be to rely on results obtained in the context of axioms stating the existence of certain large cardinals. The nature of this has been heavily studied by many, prominently by R. Solovay \cite{Solovay1970}, H. Woodin \cite{Woodin1999TheAO, Woodin2001TheCH, Woodin2001TheCH2, Woodin2011SetTA}. It seems that some of the results discussed in the subsection \textit{\ref{subsection_quasilarge_cardinals} \nameref{subsection_quasilarge_cardinals}} can be potentially used to construct such forcing. But for now we would follow on the different line of thought to obtain our result, mainly by M. Foreman and M. Magidor and S. Shelah \cite{ForemanMagidorShelah1988} as well as D. Asperó and R. Schindler \cite{aspero2021sf}. We will construct a model $M$ of $ZFC$ as a submodel of $N$ to show that, in fact, our construction implies existence of forcing conditions equivalent to ${\sf MM}$.
+
+\begin{lemma}[Boolean-valued submodel for replicated forcing]\label{lemma_submodel}
+    Let $N$ be a transitive model of $ZF+DC$. If $(B_{F}, \cdvee, \cdwedge, \neg, \bot, \top)$ is a fair algebra in $N$, where $S_{FC} \subset R_{<\omega_1}$ is a subset of fair countable strings and $B_{F}$ is a complete Boolean algebra extended over the fair lattice $P_{\varepsilon}(S_{FC}, \leq)$ (as defined in \textit{Lemma \ref{lemma_fair_ba}}). Then, there exists a Boolean-valued model $V^{B_F}$ of $ZFC$, s.t. $N \models B_F$ and $M = V^{B_F}$ is a submodel of $N$.
+\end{lemma}
+\begin{proof}
+    \begin{enumerate}
+        \item We start by defining $B_{R_{<\omega_1}}$. From previous result we have $N \models (R_{<\omega_1}, P_\varepsilon, \pi)$. Let $B_{R_{<\omega_1}} = B(P_\varepsilon(R_{<\omega_1}))$ be a complete boolean algebra on sppo defined with replicata $R_{<\omega_1}$. From earlier results, \textit{Lemma \ref{lemma_bpi_rw} - \nameref{lemma_bpi_rw}} and \textit{Theorem \ref{theorem_pitx} - \nameref{theorem_pitx}}, we have that such Boolean algebra $B_{R_{<\omega_1}}$ has prime ideal $N \models BPI(B_{R_{<\omega_1}})$ as well as that every filter can be extended to an ultrafilter on $R_{<\omega_1}$ - $N \models UltrafilterTheorem(B_{R_{<\omega_1}})$.
+        \item Observe that $B_{R_{<\omega_1}}$ is a complete Boolean algebra. Furthermore, fair algebra $B_F$ is a complete subalgebra of $B_{R_{<\omega_1}}$: $B_F \subset B_{R_{<\omega_1}}$ as $B_F$ is complete on itself (\textit{Lemma \ref{lemma_fair_ba}}).
+        \item Let $V^{B_{R_{<\omega_1}}}$ be a Boolean-valued model constructed on $B_{R_{<\omega_1}}$ and $V^{B_{R_{<\omega_1}}} \models ZFC$ (follows from \textit{Lemma \ref{lemma_full_bvm_zfc}}). Clearly, $V^{B_{R_{<\omega_1}}} \subset N$.
+        \item Similarly, $V^{B_F}$ is a Boolean-valued model constructed on $S_{FC} \subset R_{<\omega_1}$. Let $U_{R_{<\omega_1}}$ be an ultrafilter on $R_{<\omega_1}$ and $U_F \subset U_{R_{<\omega_1}}$ be an ultrafilter on the set of fairs $S_{FC}$, s.t. $U_F = \{ x : x \in U_{R_{<\omega_1}} \land x \in S_{FC}\}$. If we define the choice function on $U_F$ (instead of $U_{R_{<\omega_1}}$) in \textit{Lemma \ref{lemma_full_bvm_zfc}}, then $V^{B_F} \models ZFC$. Clearly, $V^{B_F} \subset N$.
+    \end{enumerate}
+\end{proof}
+
+To sum up, the compatibility of the scenario considered above is meaningful only if $N$ satisfies $AC$ for the sets and operations defined in $M$. However, $N$ may still not satisfy $AC$ globally (for all of $V$). In general, $M$ cannot be a submodel of $N$ if $N$ globally violates $AC$ in ways that conflict with satisfaction of $ZFC$ axioms in $M$. Our conclusion is that if $M = V^{B_F}$ is large enough, then $AC$ will not fail in $M$.
+
+\subsection{Properties of Stationary Sets}\label{subsection_stat_sets}
+
+Before we can start looking in detail if $ZF+DC$ implies ${\sf MM} $, we want to highlight a few more known results. Recall from \cite{jech2003set} definition of a stationary set\footnote{Also see \textit{Lemma \ref{lemma_closed_unbounded_filter}}}:
+
+\begin{definition}\label{def_stat_set}
+    Let \(\kappa\) be a regular uncountable cardinal. A set \(C \subseteq \kappa\) is
+a closed unbounded subset of \(\kappa\) if \(C\) is unbounded in \(\kappa\) and if it contains all
+its limit points less than \(\kappa\).
+    A set \(S \subseteq \kappa\) is stationary if \(S \cap C \neq \emptyset\) for every closed unbounded subset \(C\)
+of \(\kappa\).
+\end{definition}
+
+Observe that the set of all perfectly fair strings forms a stationary subset in $R_{<\omega_1}$. 
+
+\begin{lemma}[Stationary Set of Perfect Fairs]\label{lemma_spf_stat}
+    Let $N \models (R_{<\omega_1}, P_\varepsilon, \pi)$ and $S_{PF} \subset R_{<\omega_1}$ be a set of perfectly fair strings. Then,
+         \[ N \models S_{PF} \text{ is a stationary set} \]
+\end{lemma}
+\begin{proof}
+    \begin{enumerate}
+        \item We start by noticing that the set of all fair countable binary SEFs $S_{FC}$ is closed and unbounded. $S_{FC}$ \textit{is unbounded} since $|S_{FC}| = |S_{PF}| = |S_{IF}| = \aleph_1 > \aleph_0$, which follows from \textit{Lemma \ref{lemma_uncountfair_seq}}, \textit{Lemma \ref{lemma_perf_imp_card}}, \textit{Lemma \ref{lemma_card_uc}}. This implies that $S_{FC}$ is also a closed unbounded subset of $\aleph_2$, since it contains all limit points of cardinality $\aleph_1 < \aleph_2$.
+        \item Now let us show that  $S_{PF} \subseteq S_{FC}$ is stationary\footnote{as according to \textit{Definition \ref{def_stat_set}}}. Note that for every perfectly fair $x \in S_{PF}$, there exists some imperfectly fair $y \in S_{IF}$ so that $x \substr y$, which implies that $x \subset y$ as according to\footnote{or simply via string-to-set isomorphism in \textit{Definition \ref{def_fraenkel_cantor_morph}}} \textit{Definition \ref{def_substr_seq}}. Since $S_{FC} = S_{PF} \cupdot S_{IF}$, we have that every closed unbounded subset $\forall C \subset S_{FC}$ will have a non-empty intersection with $S_{PF}$: $S_{PF} \cap C \neq \emptyset$. Hence, $S_{PF}$ is a stationary set.
+    \end{enumerate}
+\end{proof}
+
+\begin{corollary}[Perfect stationary subset]\label{corollary_perfect_stat_subset}
+    Every stationary set $S$ contains $S_{PF}$ as a subset, i.e. $S \supset S_{PF}$.
+\end{corollary}
+\begin{proof}
+    Assume the opposite. Then $S$ and $S_{PF}$ are either disjoint or partially overlap. Let $z \in S_{PF}: z \notin S \cap S_{PF}$. In the proof of the previous lemma we made an observation that for every perfectly fair $x \in S_{PF}$, there exists some imperfectly fair $y \in S_{IF}$, so that $x \substr y$, which implies that $x \subset y$. However, since $S_{FC}$ must contain all clubs, there exists a club $C \in S_{FC}$, which is not intersected by $z$. But then $S$ can not be a stationary set. Hence, we arrived at contradiction.
+\end{proof}
+
+
+Next we will provide two results from \cite{jech2003set} about preservation of stationary sets but without proof\footnote{Please see \textit{lemma 22.25} and \textit{lemma 31.2} in \cite{jech2003set} for the proof}:
+
+\begin{lemma}\label{lemma_preserve_stat_in_regular_card}
+    Let \(\kappa\) be a regular uncountable cardinal. Let \(V[G]\) be a generic extension of \(V\) by a \(\kappa\)-c.c. notion of forcing. Then every closed unbounded subset \(C \subset \kappa\) in \(V[G]\) has a closed unbounded subset \(D \in V\). Consequently, if \(S \in V\) is stationary in \(V\), then \(S\) remains stationary in \(V[G]\).
+\end{lemma}
+    
+However, if the notion of forcing $\mathbb{P}$ is more restricted and satisfies the countable chain condition, then one can obtain a more general result (see \textit{lemma 31.2} from \cite{jech2003set}):
+
+\begin{lemma}[Preservation of stationary sets]\label{lemma_preserve_stat}
+    If $\mathbb{P}$ satisfies the countable chain condition, then for every uncountable $\lambda$, every closed unbounded set $C \subset [\lambda]^\omega \in V[G]$ has a subset $D \in V$ that is closed unbounded in V. Hence, every stationary set $S \subset [\lambda]^\omega$ remains stationary in $V[G]$.
+\end{lemma}
+
+To summarize\footnote{Recall \textit{Definition \ref{def_forcing_terms} - \nameref{def_forcing_terms}}, the above \textit{Definition \ref{def_stat_set}} and \textit{Martin's Maximum} chapter in \cite{jech2003set} as well as the results on preservation of stationary sets}:
+\begin{itemize}
+    \item Closed unbounded sets, or \textit{club sets}, are significant in the context of large cardinals and their preservation under various forcing conditions.
+    \item A subset \(S\) of a limit ordinal \(\lambda\) (usually \(\omega_1\)) is called \textit{stationary} if it intersects every closed unbounded subset of \(\lambda\).
+    \item The notion of forcing \(P\) is \textit{stationary set preserving} if every stationary set \(S\) remains stationary in the generic extension \(V[G]\).
+    \item The preservation of stationary sets under forcing indicates the robustness of these sets against perturbations in the set-theoretical universe. It also underlines the continuity of certain set properties despite the potential addition of new sets or changes in the structure of the extended universe \(V[G]\) by forcing.
+    \item The countable chain condition (ccc) on the forcing notion \(\mathbb{P}\) ensures that the forcing does not add new countable sequences of ordinals, which is crucial for maintaining stationary subsets of \(\lambda\) in the extended universe \(V[G]\).
+\end{itemize}
+
+
+
+
+
+\subsection{Replicating Martin Maximum}\label{subsection_rep_mm}
+
+
+
+
+\begin{definition}[Martin's Maximum ({\sf MM})]\label{def_mm}
+    If \((P, <)\) is a stationary set preserving notion of forcing and if \(D\) is a collection of \(\aleph_1\) dense subsets of \(P\), then there exists a \(D\)-generic filter $G$ on \(P\).
+\end{definition}
+
+\begin{theorem}[Martin's Maximum Model]\label{theorem_mmm}
+    Assuming that $ZF$ is consistent. If $\exists N: N \models ZF + DC$ and $M$ is a submodel of $N$, s.t. $M \models ZFC$, then $N$ is a replica host for submodel $M$, so that $P \in M$ is a replicated forcing over $R_{<\omega_1}$: 
+    \begin{enumerate}
+        \item $N \models (R_{<\omega_1}, P_\varepsilon, \pi)$
+        \item $(P, \leq)$ is a generic notion of forcing in $M$ (ground model);
+        \item $h: M \to N$ is an embedding, s.t. $ran(h) \subseteq R_{<\omega_1}$ and restriction $h{\upharpoonright}_P$ is order preserving on $R_{<\omega_1}$;
+    \end{enumerate}
+    Furthermore, 
+        \[ M \models {\sf MM} \]
+\end{theorem}
+\begin{proof}
+    \begin{enumerate}
+        \item $N \models (R_{<\omega_1}, P_\varepsilon, \pi)$ follows from \textit{Lemma \ref{lemma_construct_replicata}}.
+        \item $N \models B_F$ and $M = V^{B_F}$ is a submodel of $N$ follows from \textit{Lemma \ref{lemma_submodel}}. \item Let $h: M \to N$ be an embedding that corresponds to the fact that $M$ is submodel of $N$. Notice that fair algebra $B_F \subset B_{R_{<\omega_1}}$, which implies $ran(h) \subseteq R_{<\omega_1}$. 
+        \item Let $(P, \leq)$ be a candidate for the generic notion of forcing in $M$ (as a ground model). Keep in mind that we might later choose to extend $(P, \leq)$ by pretending that it aligns not just with $P_\varepsilon(B_F)$ but with large $P_\varepsilon(B_{R_{<\omega_1}})$. Explicit requirement that restriction $h{\upharpoonright}_P$ is order preserving on $R_{<\omega_1}$ follows from the fact that $h: M \to N$ is already a model embedding - an isomorphism that preserves relations like $P$. Since $M = V^{B_F}$, it is reasonable to assume that we can choose $(P, \leq) = h^{-1}(P_\varepsilon(B_F))$, so that all dense subsets of $P_\varepsilon(B_F)$ can be matched with dense subsets in $(P, \leq)$ in $M$. 
+        \item Next, we will verify the $M \models {\sf MM}$ claim: namely, that $(P, \leq)$ is stationary set preserving forcing notion and if \(D\) is a collection of \(\aleph_1\) dense subsets of \(P\), then there exists a \(D\)-generic filter $G$ on \(P\):
+        \begin{enumerate}
+            \item \boldmath $M \models P \textbf{ is ccc}$\unboldmath: Since $(P, \leq)$ in $M$ corresponds to $P_\varepsilon(B_F)$ in $N$ via embedding $h$, it means that $(P, \leq)$ is also a well-founded p.o. relation (a consequence of $M = V^{B_F}$ being a full Boolean-valued model over ultrafilter) and is $ccc$ (recall that \textit{Theorem \ref{theorem_rw_ccc} - \nameref{theorem_rw_ccc}} implies that $N \models P_\varepsilon \text{ is ccc}$).
+            \item A set of conditions \boldmath\textbf{$G \subset P$ is generic over $M$}\unboldmath: 
+            \begin{enumerate}[label=(\roman*)]
+                \item \boldmath\textbf{$G$ is a filter on $P$}\unboldmath: 
+                Notice that if $h(G)$ is a filter on $P_\varepsilon(B_F)$ (in $N$), then the pre-image $G$ must be also a filter on $(P, \leq)$ (when viewed from inside the model $M = V^{B_F}$). Let us first construct the image $H = h(G)$ as such a filter in $N$, and then show that $G$ is a filter on $P$ in $M$. At this point of the proof we need to do it in the most explicit manner. Now let $f: S_{FC} \to S_{UC}$ be an injective map, s.t. for each fair string there exists a corresponding unfair string $\forall s \in  S_{FC}: f(s) = \bos (s) \eos$. Also let $F \subset S_{FC}$ be a filter\footnote{Here we follow sppo definition to match $p \leq q$ with $p \substr q$, but it is also possible to work with the reverse $P_\varepsilon$ without loss of generality} on $S_{FC}$ as according to \textit{Definition \ref{def_filter_posets}}:
+
+                \begin{enumerate}
+                    \item $F$ is not empty: for simplicity we require $S_{PF} \subset F$ so that its cardinality is as large as $|F| = |S_{PF}| = |S_{FC}|$.
+                    \item If $p,q \in F$, there is some $r \in F$ such that $r \leq p$ and $r \leq q$: in case of $P_\varepsilon$ this follows from $r \substr p \oplus q$.
+                    \item If $p \in F$, $q \in P$ and $p \leq q$, then $q \in F$: for $P_\varepsilon$ this is translated into if $p \substr q$, then $q \in F$.
+                \end{enumerate}
+                
+                We know that $F$ exists on $P_\varepsilon(B_F)$, since $B_F$ is a complete Boolean algebra\footnote{see \textit{lemma \ref{lemma_fair_ba}}}. Next, one can define $H$ to be a filter on $P_\varepsilon(R_{<\omega_1})$ build from $F$:
+
+                    \[ H = \{ \bos (s) \eos : s \in F \} \]
+
+                With such construction, on one hand, $H \notin M$, but, on the other hand, $\forall s \in F: f(s) \in H$ and $s \substr f(s) \implies s \leq f(s)$. We have that both $F$ and $H$ are filters on $P_\varepsilon$ in $N$ if $P_\varepsilon$ is taken large enough, e.g. over the whole $R_{<\omega_1}$. Furthermore, we have that $G = h^{-1}(H)$ is also a filter on $P$. After this point, we have extended  $(P, \leq)$ to be large and matched by $P_\varepsilon(B_{R_{<\omega_1}})$.
+                \item \boldmath\textbf{if $D$ is dense in $P$ and $D \in M$, then $G \cap D \neq \emptyset$}\unboldmath: Suppose there is \(D\), which consists of all $\aleph_1$-dense subsets in $(P, \leq)$ and $D \in M$. We can show that such $D$ exists by observing that it can correspond one-to-one to $h(D) \in P_\varepsilon(B_F)$, which is $\aleph_1$-dense in $P_\varepsilon(B_F)$. Indeed, according to \textit{Lemma \ref{lemma_fair_ba}}, fair algebra $B_F$ is a complete Boolean algebra constructed around a fair lattice on $P_{\varepsilon}(S_{FC})$, where $S_{FC} = S_{PF} \cupdot S_{IF}$ is a disjoint union of two $\aleph_1$-dense subsets. Note that $D$ is $\aleph_1$-dense in $P$ iff the corresponding set $h(D)$ is $\aleph_1$-dense in $P_\varepsilon(B_F)$. 
+            \end{enumerate}
+            \item \boldmath\textbf{$(P, \leq)$ is stationary set preserving forcing notion}\unboldmath: Recall from \cite{jech2003set}, that a notion of forcing $P$ is \textit{stationary set preserving} if every stationary set $S \subset \omega_1$ remains stationary in $V^{P_\varepsilon(B_F)}$. A stationary set $S \subset \omega_1$ \footnote{here $\omega_1$ is a regular uncountable cardinal as well as the limit ordinal} is a set that intersects every closed unbounded subset of $\omega_1$. \textit{Lemma \ref{lemma_spf_stat}} implies that $S_{PF}$ is such a stationary set, since $S_{PF}$ intersect every subset of $S_{IF}$ (by definition of imperfect fairs) and $S_{UC}$ by definition of unfair countable. Every subset of $B_F$ is closed and unbound. Furthermore, since each \textit{imperfectly fair} SEF is a concatenation of \textit{perfectly fair} strings (basically, a subset of $S_{PF}$), we have that: 
+                \begin{enumerate}[label=(\roman*)]
+                    \item any large enough subset $S \subset S_{PF}$ with $|S| \geq \aleph_1$ is dense and stationary in $R_{<\omega_1}$, hence $S_{FC}$ contains all stationary subsets, which are also $\omega$-closed.
+                    \item $h(G)$ intersects every dense set in $h(D)$, hence, respectively $G$ is $D$-generic in $M$;
+                    \item if $M[G]$ is a generic extension of $M$ with filter $G$, then $M = V^{P_\varepsilon(B_F)} \subset M[G] \subset V^{P_\varepsilon(B_{R_{<\omega_1}})} \subset N$, where $V^{P_\varepsilon(B_{R_{<\omega_1}})}$ is a full Boolean algebra model of $ZFC$ constructed around larger $R_{<\omega_1} \supset S_{FC}$ (by General forcing theorem and embedding $M \subset N$ as well as \textit{corollary \ref{corollary_card_rep_part} - \nameref{corollary_card_rep_part}}).
+                \end{enumerate}
+
+        \end{enumerate}
+        \item Finally, we want to show that if $M[G]$ is a generic extension of $M$ with filter $G \in M[G]$, then all stationary subsets in $M$ are preserved in $M[G]$.  This follows from (5.a) and (5.b.i). Namely, that  $M \models P \text{ is ccc}$ and  $\forall s \in F: f(s) \in H$ and $s \substr f(s) \implies s \leq f(s)$, where $H = h(G)$.
+        
+        \item Furthermore, it follows from (1) that since replicata $(R_{<\omega_1}, P_\varepsilon, \pi)$ is constructable in any model $N$ of $ZF + DC$ (without any additional specific requirement except "largeness", i.e. $R_{<\omega_1} \in V^N$), it is evident that for any large enough forcing notion\footnote{See \textit{lemma \ref{corollary_perfect_stat_subset}} and \textit{lemma \ref{lemma_preserve_stat}}} $P_\varepsilon$, s.t. $S_{PF} \subset P_\varepsilon$ and $P_\varepsilon \text{is ccc}$, we have that $P_\varepsilon$ is stationary set preserving and not only $M \models {\sf MM}$, but also $M[G] \models {\sf MM} $ and $N \models {\sf MM} $ (since $M \subset M[G]$, but also $M[G] \subset N$ as it has been constructed within $N$ structure).
+    \end{enumerate}
+\end{proof}
+
+
+Let us take a moment to discuss the $M \models {\sf MM}$ implications.
+
+\begin{itemize}
+    \item \textbf{Failure of the Continuum Hypothesis (CH):}
+          ${\sf MM}$ forces $2^{\aleph_0}=\aleph_2$.\footnote{Foreman--Magidor--Shelah~\cite{FMS88}.}
+  
+    \item \textbf{Stationary set reflection:}
+          Every stationary subset of $\omega_2\cap\mathrm{cof}(\omega)$ reflects to some $\omega_1$-size ordinal.\footnote{Foreman~\cite{Foreman01}.}
+  
+    \item \textbf{Strong $\Delta$-system lemma:}
+          Under ${\sf MM}$, every family of $\aleph_1$ countable sets has an $\aleph_1$-sized $\Delta$-system.\footnote{Todorčević~\cite{Todor84}.}
+  
+    \item \textbf{Non-existence of $\omega_2$-Aronszajn trees:}
+          ${\sf MM}$ gives the tree property at $\omega_2$.\footnote{Baumgartner~\cite{Baumgartner84}.}
+  
+    \item \textbf{Determination of $\Sigma^{1}_{2}$ sets of reals:}
+          ${\sf MM}$ (via PFA) yields $\mathrm{AD}^{L(\mathbb R)}$ and hence determinacy for all projective sets, in particular $\Sigma^{1}_{2}$.\footnote{Steel~\cite{Steel00}.}
+  
+    \item \textbf{Bounded Proper Forcing Axiom (BPFA):}
+          ${\sf MM}\Rightarrow{\sf PFA}\Rightarrow{\sf BPFA}$.\footnote{Caicedo~\cite{Caicedo06}.}
+  
+    \item \textbf{Large-cardinal-like behaviour:}
+          ${\sf MM}$ produces precipitous ideals, failure of $\square$, strong reflection, etc.\footnote{Foreman--Magidor--Shelah~\cite{FMS88}.}
+  
+    \item \textbf{Well-ordering of the reals:}
+          Under BPFA (hence under ${\sf MM}$) the reals admit a $\Delta^{1}_{2}$ well-order of type~$\omega_2$.\footnote{Caicedo--Veličković~\cite{CaicedoVel04}.}
+  
+    \item \textbf{Canonical models:}
+          Iteration techniques preserve ${\sf MM}$ and let one build canonical models with many combinatorial properties simultaneously.\footnote{Foreman~\cite{Foreman08}.}
+  \end{itemize}
+  
+
+\subsection{Goedel's conjecture}\label{subsection_goedels_conjecture}
+
+We can extend our previous conclusion to a more general statement:
+
+\begin{corollary}[General failure of $CH$ in large $ZF+DC$ models]\label{corollary_ch_fails_in_large_zf_dc}
+    If $N \models (R_{<\omega_1}, P_\varepsilon, \pi)$, then $CH$ fails in any large enough model $N$ of $ZF + DC$ s.t. $R_{<\omega_1} \in V^N$.
+\end{corollary}
+\begin{proof}
+    Follows from \textit{Corollary \ref{corollary_ch_fails_in_n}} as well as \textit{Theorem \ref{theorem_mmm}}.
+\end{proof}
+
+The following theorem effectively captures largeness of the any corresponding transitive $ZF+DC$ model, which is necessary and sufficient to imply Goedel's conjecture and decide $CH$.
+
+\begin{theorem}[Largness criteria]\label{theorem_largness_criteria}
+    Let $N$ be a transitive model of $ZF+DC$. Then the following are equivalent:
+    \begin{enumerate}
+        \item $N \models 2^{\aleph_0} = \aleph_2$ (Goedel's conjecture)
+        \item $N \models (R_{<\omega_1}, P_\varepsilon, \pi)$
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    (1) $\to$ (2): $N \models 2^{\aleph_0} = \aleph_2$ means that $V^N$ is large enough to contain set $\reals$ with cardinality of the continuum equal to $\aleph_2$, which is consistent with replicata construct. If $V^N$ can contain a cantor set $\cbin = \pi(R_{<\omega_1})$ of countable binary strings bijective to $\reals$, then $N \models (R_{<\omega_1}, P_\varepsilon, \pi)$ by \textit{Lemma \ref{lemma_construct_replicata}}.
+    
+    (2) $\to$ (1): Follows from $N \models {\sf MM}$, since it contains the replicata structure $(R_{<\omega_1}, P_\varepsilon, \pi)$ with the inner model $M \models {\sf MM}$ (by \textit{Theorem \ref{theorem_mmm}}), which means $V^N$ is large enough to contain $V^{M[G]}$ (in case of large enough forcing), but also in general ${\sf MM} \implies 2^{\aleph_0} = \aleph_2$ \cite{jech2003set,aspero2021sf}.
+\end{proof}
+
+\begin{corollary}
+    Any set of cardinality of the continuum $2^{\aleph_0}$ can be well-ordered by $\omega_2$.
+\end{corollary}
+\begin{proof}
+    $2^{\aleph_0} = \aleph_2$ implies\footnote{without assuming full AC} that there is a bijection between respective cardinals $f: \omega_2 \to 2^{\aleph_0}$. Hence, any set of cardinality of the continuum $2^{\aleph_0}$ can be well-ordered by definition.
+\end{proof}
+
+We conclude this subsection by trying to make the strongest possible claim about consistency of $ZF+DC$ models. 
+
+The scenario that we are aiming at:
+\begin{enumerate}[label=(\roman*)]
+    \item If there was a trivial proof showing that in any model of $ZF + DC$, the set of reals is bijective with the Cantor set and that this set must have cardinality $2^{\aleph_0} = \aleph_2$, it would have significant implications for models of $ZF + DC$ (including smaller models carefully built using of forcing by adding only $\aleph_1$ many reals).
+    \item If every model of $ZF + DC$ inherently has $2^{\aleph_0} = \aleph_2$, this would mean that models created by forcing to make $2^{\aleph_0} = \aleph_1$ or $2^{\aleph_0}$ equals to any cardinal other than $\aleph_2$ are inconsistent.
+\end{enumerate}
+
+Earlier, in {lemma \ref{lemma_construct_replicata}}, we assumed that our model already contains a large enough structure like $R_{<\omega_1} \in N$ mainly to make our live and logistics around construction of inner models easier. However, if we focus on the idea that it is very straightforward (almost trivial) to construct a replicata $(R_{<\omega_1}, P_\varepsilon, \pi)$ in any $ZF+DC$ model (as this process does not need any special assumptions except $DC$ - see \textit{Theorem \ref{theorem_dc_ca_gcta_equivalence}}), we arrive at very striking conclusion. 
+
+\begin{theorem}[Inconsistency of smaller $ZF+DC$ models]\label{theorem_inconsistent_small_zfdc}
+    Let $N$ be a transitive model of $ZF+DC$, s.t. \item $N \not\models 2^{\aleph_0} = \aleph_2$.
+    Then, $N$ is inherently inconsistent.
+\end{theorem}
+\begin{proof}
+    Can be show in several steps:
+    \begin{enumerate}
+        \item Indeed, let $N$ be such a transitive model of $ZF+DC$, where $CH$ holds and $2^{\aleph_0} = \aleph_1$ (meaning that $N$ is small). 
+        \item Assume $N$ is consistent, meaning that there is no statement $\phi$, s.t. $N \models \phi$ and $N \models \neg \phi$. So, let $\phi$ be equal to $2^{\aleph_0} = \aleph_1$.
+        \item Now, consider some trivial enough proof that is true in all transitive models of $ZF+DC$:
+            \begin{enumerate}
+                \item Let $\cbin$ be a Cantor Set containing all countable binary strings and $|\cbin| = \cont = 2^{\aleph_0}$.
+                % such set exists - we can use P(X) and is_flat - add a reference to replication schema section.
+                % this is better than claiming that N must be large enough and already contain reals or replicata.
+                \item Invoke $DC$ to construct a set of labels with SEFs $R_{<\omega_1}$, consisting of disjoint union of:
+                \begin{itemize}
+                    \item $S_{UF}$ all unfair finite labels; 
+                    \item $S_{FC}$ all fair countable labels (equal to their exact string values $\pi(S_{FC})$);
+                    \item $S_{UC}$ all unfair uncountable labels.
+                \end{itemize}
+                % add reference to replicata
+                \item $R_{<\omega_1}$ is the main part of replicata, together with poset $P$ and production function $\pi$. The latter is a bijective map that evaluates SEFs formulas into countable binary strings $\cbin = \pi(R_{<\omega_1})$, which have the cardinality of continuum by Cantor's theorem.
+                \item It follows from \textit{Theorem \ref{corollary_card_rep_part} - \nameref{corollary_card_rep_part}} that $|R_{<\omega_1}| > \aleph_1$ and $2^{\aleph_0} = \aleph_2$. In fact, by \textit{Theorem \ref{theorem_mmm}} we also have that $2^{\aleph_0} = \aleph_2$.
+            \end{enumerate}
+        \item We arrived at contradiction with our initial assumption at step (1).
+    \end{enumerate}
+\end{proof}

@@ -1,0 +1,880 @@
+\pagebreak
+\section{Replication Schema}\label{section_replication_schema}
+
+In this section we cover topics like transfinite strings, which are simply contiguous sequences defined on the proper class of all cardinals $Ord$. We also look at generalization of replicata as a proper class $\Lambda$, which has a transitive model. Finally, we discuss the connection between Large Cardinals such as supercompact cardinal and $N^\ast$ model of $ZF+DC_\lambda+I$, where such $\Lambda$ replicata class exists.
+
+\subsection{Iterative Powerset}
+
+This brief subsection contains a definition that would become handy on later stages of discussing the replication schema. An iterative higher-order powerset operation is denoted \( P^\alpha(X) \) for an ordinal \( \alpha \). This is a generalization of the standard powerset operation \( P(X) \), where \( P(X) \) refers to the set of all subsets of \( X \). The operation \( P^\alpha(X) \) applies the powerset operation iteratively according to the ordinal \( \alpha \). Here is a formal definition of \( P^\alpha(X) \), where \( \alpha \in Ord \):
+
+\begin{definition}[Iterative Powerset]\label{def_iter_pset}
+
+    Let \( X \) be any set and \( \alpha \) be an ordinal. The operation \( \pset^\alpha(X) \) is defined inductively on \( \alpha \) as follows:
+    
+    \begin{itemize}
+        \item \textbf{Base case (when \( \alpha = 0 \)):}
+        \[
+        \pset^0(X) = X.
+        \]
+        This means the 0th powerset is simply the original set \( X \) itself.
+    
+        \item \textbf{Successor ordinal \( \alpha + 1 \):} If \( \alpha \) is an ordinal and \( \pset^\alpha(X) \) has been defined, then:
+        \[
+        \pset^{\alpha+1}(X) = P(\pset^\alpha(X)).
+        \]
+        This means that \( \pset^{\alpha+1}(X) \) is the powerset of \( \pset^\alpha(X) \), i.e., the set of all subsets of \( \pset^\alpha(X) \).
+    
+        \item \textbf{Limit ordinal \( \lambda \):} If \( \lambda \) is a limit ordinal (i.e., there is no immediate predecessor to \( \lambda \)), then:
+        \[
+        \pset^\lambda(X) = \bigcup_{\alpha < \lambda} \pset^\alpha(X).
+        \]
+        This means that at a limit ordinal \( \lambda \), the iterative powerset operation results in the union of all the previous stages \( \pset^\alpha(X) \) for \( \alpha < \lambda \).
+    \end{itemize}
+\end{definition}
+
+\subsection{Expected Length of Strings}\label{subsect_expected_length_of_strings}
+
+We seek to define a transfinite string as a sequence or function $s: Ord \to X$ that maps ordinals to values in some set $X$ (see \textit{Definition \ref{def_transfinite_strings}}). If the range of such a function can be fixed as some an alphabet or the \textit{coding base}, i.e.\ $X = B$, then such a function can be seen as being part of some $B$-coding space (see \textit{Definition \ref{def_coding_space}}). Before proceeding, we must first clarify what is meant by the notion of transfinite string \textit{length}.
+
+Let $s_x$ and $s_y$ be two of such strings. One way to compare them is to compare their respective lengths, i.e. $|s_x|$ and $|s_y|$. Now, as per our definition, transfinite string is a function that maps $Ord$ to $B$. So this turns out very convenient as ordinals are well-ordered and hence are excellent for such kind of comparison. Furthermore, we want to avoid potential confusion around concepts of cardinality and ordinality when it comes to strings. For example, when we are saying that $s_x < s_y$ but $|s_x| = |s_y|$, we do mean that both strings have the same cardinality but different ordinality, or, even more so, if $s_x \substr s_y$ implies $s_x < s_y$. Hence, we always map cardinality of the transfinite string to the cardinality of its domain.
+
+\begin{definition}[Length of the transfinite string]\label{def_transfinite_string_length}
+    Let $B$ be a coding base. If $s: \lambda \to B, \lambda \in Ord$ is a transfinite string, then $|s| = |\lambda|$
+\end{definition}
+
+Finally, we call such length \textit{expected} to underpin the fact that the exact representation and what we call “length” may depend on the coding of strings — particularly when it comes to considering all possible other “unorthodox” representations of strings as sets in foundational frameworks such as ZF. In this subsection, we aim to systematically clarify any possible confusion surrounding the notion of transfinite string length, beginning by revisiting the construction of ordinals and the cumulative set-theoretic universe.
+
+\paragraph{Construction of Ordinals in ZF}
+
+In ZF set theory, ordinals are defined using the von Neumann construction:
+
+\begin{itemize}
+  \item The \emph{empty set} is the first ordinal: $0 := \emptyset$.
+  \item The \emph{successor} of an ordinal $\alpha$ is defined as $\alpha + 1 := \alpha \cup \{\alpha\}$.
+  \item A \emph{limit ordinal} is an ordinal $\lambda$ such that $\lambda = \bigcup_{\alpha < \lambda} \alpha$, and it has no immediate predecessor.
+  \item Every ordinal $\alpha$ is a transitive set well-ordered by $\in$, and equals the set of all smaller ordinals: $\alpha = \{\beta \in Ord \mid \beta < \alpha\}$.
+\end{itemize}
+
+The class of all ordinals, $Ord$, is strictly well-ordered by $\in$ and serves as a canonical indexing tool for transfinite processes such as induction and recursion.
+
+\paragraph{Cumulative Hierarchy of Sets}
+
+The cumulative hierarchy\footnote{see p. 64 in \cite{jech2003set}} is a transfinite sequence $\{V_\alpha\}_{\alpha \in Ord}$ defined by transfinite recursion:
+
+\begin{itemize}
+  \item $V_0 := \emptyset$
+  \item $V_{\alpha+1} := \mathcal{P}(V_\alpha)$
+  \item $V_\lambda := \bigcup_{\beta < \lambda} V_\beta$, for limit ordinals $\lambda$
+\end{itemize}
+
+The universe of all sets is then given by $V := \bigcup_{\alpha \in Ord} V_\alpha$. Each stage $V_\alpha$ contains all sets that can be constructed before stage $\alpha$, and this hierarchy indicates the growth of set-theoretic complexity at each ordinal stage.
+
+\paragraph{Ordinals vs.\ Cardinals}
+
+\begin{itemize}
+  \item Every cardinal can be viewed as an \emph{initial ordinal}, i.e.\ an ordinal $\kappa$ which has no smaller ordinal of the same cardinality.
+  \item A \emph{successor cardinal} is one of the form $\kappa^+$, the next cardinal above $\kappa$.
+  \item A \emph{limit cardinal} is a cardinal $\lambda$ that is not a successor cardinal (i.e.\ there is no $\kappa$ with $\kappa^+ = \lambda$); equivalently, $\lambda$ is a limit point in the sequence of all cardinals.
+\end{itemize}
+
+\paragraph{Regular vs.\ Singular}
+
+\begin{itemize}
+  \item A cardinal $\lambda$ is \emph{regular} if its cofinality $\mathrm{cf}(\lambda)$ equals $\lambda$.
+  \item A cardinal $\lambda$ is \emph{singular} if $\mathrm{cf}(\lambda) < \lambda$.
+\end{itemize}
+
+\paragraph{Successor Ordinal vs.\ Limit Ordinal}
+
+\begin{itemize}
+  \item A \emph{successor ordinal} is any ordinal of the form $\alpha + 1$.
+  \item A \emph{limit ordinal} is an ordinal $\lambda$ such that $\lambda \neq \alpha + 1$ for any $\alpha$.
+\end{itemize}
+
+To better understand how different types of ordinals arise as potential lengths of transfinite strings, we can classify them into the following natural hierarchy:
+
+\begin{itemize}
+    \item \textbf{Case 0:} $\lambda$ is a \emph{successor ordinal}, i.e.\ $\lambda = \gamma + 1$, but not necessarily a new cardinal.
+    \begin{itemize}
+        \item If $\gamma$ is finite, then $\lambda$ is also a finite cardinal and hence regular.
+        \item If $\gamma$ is infinite, then $\lambda$ is strictly larger as an ordinal, but $|\lambda| = |\gamma|$. Thus, $\lambda$ is not a new cardinal.
+    \end{itemize}
+
+    \item \textbf{Case 1:} $\lambda$ is a \emph{limit ordinal}, but not a new cardinal.
+    \begin{itemize}
+        \item An ordinal $\lambda$ is a \emph{limit ordinal} if and only if $\lambda \neq 0$ and $\lambda = \bigcup_{\alpha < \lambda} \alpha$.
+        \item May satisfy $|\lambda| = |\alpha|$ for some $\alpha < \lambda$, i.e. not necessarily an initial ordinal.
+        \item Example: $\omega \cdot 2$ is a limit ordinal with cardinality $\aleph_0$.
+    \end{itemize}
+
+    \item \textbf{Case 2:} $\lambda$ is a \emph{successor cardinal}, i.e.\ $\lambda = \kappa^+$ for some cardinal $\kappa$.
+    \begin{itemize}
+        \item Then $\lambda$ is an initial ordinal strictly greater in cardinality than $\kappa$.
+        \item $\lambda = \kappa^+ = \pset(\kappa)$, where $|\kappa| < |\lambda|$.
+    \end{itemize}
+
+    \item \textbf{Case 3:} $\lambda$ is a \emph{limit cardinal}, i.e.\ a cardinal with no immediate predecessor.
+    \begin{itemize}
+        \item $\lambda = \aleph_\alpha$ for some limit ordinal $\alpha$.
+        \item If $\mathrm{cf}(\lambda) = \lambda$, then $\lambda$ is regular; otherwise, singular.
+        \item Example: $\aleph_{\omega} = \sup \{\aleph_\alpha : \alpha < \omega \}$ is singular with $\mathrm{cf}(\aleph_\omega) = \omega$.
+    \end{itemize}
+
+    \item \textbf{Case 4:} $\lambda$ is an \emph{inaccessible cardinal}.
+    \begin{itemize}
+        \item $\lambda$ is regular, uncountable, and a strong limit: for all $\kappa < \lambda$, $2^\kappa < \lambda$.
+        \item Inaccessibles are limits of smaller regular cardinals, and not reachable by the usual set-theoretic operations.
+        \item Their existence is not provable in $ZF$, but follows from the assumption of an inaccessible cardinal.
+    \end{itemize}
+\end{itemize}
+
+
+This classification provides a systematic foundation for reasoning about the types of ordinals that can occur as transfinite string lengths. It also highlights the subtle difference between ordinal indexing and cardinal measurement:
+
+\begin{itemize}
+  \item Cofinality $\mathrm{cf}(\lambda)$ tells us the \emph{minimal size} of an unbounded subset of a limit ordinal $\lambda$.
+  \item Cardinality $|\lambda|$ measures the \emph{overall size} of $\lambda$.
+  \item Without full choice, these concepts are still definable for well-orderable sets and often coincide for strings indexed by ordinals.
+\end{itemize}
+
+So for the rest of this paper, we will use the term \textit{expected length} to indicate that:
+
+\begin{enumerate}
+    \item The length of a transfinite string is defined as an arbitrarily large cardinal (which can be viewed as initial ordinal, depending on the context);
+    \item Strings are naturally ordered not only by length as cardinality of the domain, but also by the ordinality of the domain, which can be further extended by the substring $\varepsilon$ relation;
+    \item The length can also be explicitly encoded as part of the string representation.
+\end{enumerate}
+
+To comment on the last point: one can imagine a general string encoding where the length is included alongside the string value—akin to metadata. For example, a set $A$ representing a string in \textit{flat} or \textit{kur} format can be re-encoded as an ordered pair $(A, \lambda)$, where $\lambda$ represents the length of the string. It is trivial to show that such representations, where sets are built from strings indexed by ordinals, can be modeled by a transitive structure.\footnote{This motivates the intriguing idea of constructing an inner model of ZFC using only string-encoded sets built from ordinals—a direction we intend to explore later in the paper.} In this setup, each set $A \in Ord$ can be mapped to $(A, \lambda)$, enriching the model with explicit length annotations.
+
+\subsection{Closed Unbounded Filters}
+
+To further refine our tools, we introduce \( \pset_\kappa(\lambda) \), a construct that provides a more nuanced way of handling subsets with restricted cardinalities.
+
+\begin{definition}[The $\kappa$-small subsets of $\lambda$]\label{def_kappa_small_subsets_of_lambda}
+    Let \( \kappa \) be a regular uncountable cardinal and there exists some set $A$, s.t. $|A| = \lambda $ and $ \lambda \geq \kappa$. Then, the set \( [\lambda]^{<\kappa} = \pset_\kappa(\lambda) \) is defined as the collection of all subsets of \( \lambda \) whose cardinalities are strictly less than \( \kappa \):
+    \[
+    \pset_\kappa(\lambda) = \{ X \subset \lambda : |X| < \kappa \}.
+    \]
+\end{definition}
+
+Here, \( |X| \) denotes the cardinality of the subset \( A \). The condition \( |X| < \kappa \) implies that there exists an injection from \( X \) into some cardinal smaller than \( \kappa \), but no bijection between \( X \) and \( \kappa \). The cardinality of $\pset_\kappa(\lambda)$ is $|A|^{<\kappa}$ \cite{jech2003set}.
+
+Now recall from \cite{jech2003set} that $\pset_\kappa(\lambda)$ helps with generalization from $(\kappa, <)$ to $(\pset_\kappa(\lambda), \subset)$. This permits definition of closed unbounded filters\footnote{See p.100-101 in \cite{jech2003set}} on $\pset_\kappa(\lambda)$. We will list several known facts about club filters on $\pset_\kappa(\lambda)$ without proof as lemma.
+
+\begin{lemma}[Properties of clubs on $\pset_\kappa(\lambda)$]\label{lemma_closed_unbounded_stationary}
+    Let \( A \) be a set and \( \pset_\kappa(A) \) the collection of subsets of \( A \) of cardinality less than \( \kappa \) ($|A| \geq \kappa$ see \textit{Definition \ref{def_kappa_small_subsets_of_lambda}}). The following definitions and results hold:
+    
+    \begin{enumerate}
+        \item \textbf{Unbounded Sets:} A set \( X \subseteq \pset_\kappa(A) \) is unbounded if for every \( x \in \pset_\kappa(A) \), there exists \( y \supseteq x \) such that \( y \in X \).
+        
+        \item \textbf{Closed Sets:} A set \( X \subseteq \pset_\kappa(A) \) is closed if for any chain \( x_0 \subseteq x_1 \subseteq \cdots \subseteq x_\xi \subseteq \cdots \) (for \( \xi < \alpha \) with \( \alpha < \kappa \)) of sets in \( X \), the union \( \bigcup_{\xi < \alpha} x_\xi \) is in \( X \).
+        
+        \item \textbf{Closed Unbounded Sets:} A set \( C \subseteq \pset_\kappa(A) \) is closed unbounded (club) if it is both closed and unbounded.
+        
+        \item \textbf{Stationary Sets:} A set \( S \subseteq \pset_\kappa(A) \) is stationary if \( S \cap C \neq \emptyset \) for every club set \( C \subseteq \pset_\kappa(A) \).
+        
+        \item \textbf{Club Filter:} The club filter on \( \pset_\kappa(A) \) is the filter generated by club sets.
+        
+        \item \textbf{Cardinality and Isomorphism:}
+        \begin{enumerate}
+            \item If \( |A| = |B| \), then \( \pset_\kappa(A) \) and \( \pset_\kappa(B) \) are isomorphic, and, club and stationary sets in \( \pset_\kappa(A) \) correspond to those in \( \pset_\kappa(B) \).
+            \item If \( |A| = \kappa \), then the set \( \kappa \subseteq \pset_\kappa(\kappa) \) is a club, and the club filter on \( \kappa \) is the restriction of the club filter on \( \pset_\kappa(\kappa) \).
+        \end{enumerate}
+
+        \item \textbf{\( \kappa \)-complete:} The club filter on \( \pset_\kappa(A) \) is \( \kappa \)-complete.
+    \end{enumerate}
+\end{lemma}
+
+Also let us recall\cite{jech2003set} the definition of the normal filter.
+
+\begin{definition}[Normal filter]\label{def_normal_filter}
+    Let \( \mathcal{F} \) be a filter on a cardinal \( \kappa \). The filter \( \mathcal{F} \) is \textit{normal} if it is closed under diagonal intersections:
+\begin{equation}\label{eq:normal_filter}
+    \text{If } X_\alpha \in \mathcal{F} \text{ for all } \alpha < \kappa, \text{ then } \bigtriangleup_{\alpha < \kappa} X_\alpha \in \mathcal{F}.
+\end{equation}
+\end{definition}
+
+The club filter is \( \kappa \)-complete and normal, and contains all complements of bounded sets\footnote{Again, please consult p.96 in \cite{jech2003set} for the proofs.}. It is the smallest such filter on \( \kappa \).
+
+\begin{lemma}\label{lemma_closed_unbounded_filter}
+    Let \(\kappa\) be a regular, uncountable cardinal, and let \(\mathcal{F}\) be a normal filter on \(\kappa\) that contains all final segments of the form 
+    \[
+    \{\alpha \in \kappa : \alpha_0 < \alpha < \kappa\}, 
+    \]
+    for some fixed \(\alpha_0 < \kappa\). Then \(\mathcal{F}\) contains all club subsets of \(\kappa\).
+\end{lemma}
+
+\subsection{Transfinite Strings}\label{subsection_transfinite_strings}
+
+So far, we have considered two representational conventions in Set Theory language for countable binary strings, namely $flat(\{0,1\}^\omega)$ and $kur(\{0,1\}^\omega)$. Recall that by \textit{Definition \ref{def_code_str}} strings are usually flat and conversion morphisms are idempotent, i.e. $flat(flat(s)) = flat(s)$ and $kur(kur(s)) = kur(s)$ where $s$ is some string. As for the $kur$ function, we mean that a string is represented by a transfinite pair—a pair that is nested transfinitely many times. Next, we will look at generalization of this idea for transfinite sequences. Furthermore, it turns out that if one can interpret both representations in set theory language as two different (unique) "coding types" bijective to $\{0,1\}$, then one can also encode some additional information on top of those types. 
+
+The central idea behind folding of replication schema\footnote{The idea of folding is exposed in \textit{Definition \ref{def_fold_rep_str}} and replication schema is a \textit{Lemma \ref{lemma_rep_schema}} about existence of the transitive model for replicata as a proper class. However, the concept of folding is to be covered much later in the paper.} is to abstract away from $\{0,1\}$ and look at sequences built up from $flat(s)$ and $kur(s)$ representations of a string $s$ as generalization of binary strings. Let us capture these ideas of encoding additional information with two kinds of string representation more formally.
+
+Recall, that through this section and in this paper in general, $V$ denotes a proper class of all sets and $Ord$ is a class of all ordinals (ordinal numbers).
+
+\begin{definition}[Coding base]\label{def_coding_base}
+    Assume the following:
+    \begin{itemize}
+        \item let \textit{pairing function} $\tau: V \times V \to V$ map sets $\forall a, b \in V$ to an ordered pair $(a, b)$ as defined in: 
+        
+            \[\tau(a, b) = \{\{a\}, \{a, b\}\} = (a, b) \]
+
+        where $\tau$ is a subclass defined on the proper class $V$ as a formula in Set Theory language (trivially by invoking Axiom of Pairing);
+        \item furthermore, since one can always index any ordered pair using \textit{binary index} $I_2 = \{ 0, 1\}, \{0,1\} \subset Ord$ for any two finite pairs $x = \tau(a, b) = (a, b)$ and $y = \tau(c, d) = (c, d)$ (where $\{a,b,c,d\} \subset V$), it means that there is always a trivial bijection such that $a \mapsto c$ and $b \mapsto d$ over the same indexes $x_0 = y_0$ and $x_1 = y_1$.
+    \end{itemize}
+    Then, the map $B: I_2 \to \{a, b\}$ from the binary index $I_2 = \{ 0, 1\}, \{0,1\} \subset Ord$ to the preimage of the pairing function $\tau(a, b)$ defined on sets $\forall a, b \in V$ is called a \textit{coding base}. For the sake of simplicity, we use the following notation to mean the same:
+    \begin{center}
+        if \( B(I_2) = \tau^{-1}(a, b) \), then \( B(0) = \tau(a, b)_{0} = a \) and \( B(1) = \tau(a, b)_{1} = b \)
+    \end{center}
+\end{definition}
+
+Next, we want to extend the \textit{Definition \ref{def_substr_seq} - \nameref{def_substr_seq}} to take $Ord$ as the index class: $I = Ord$. This gives the most general definition of any string $x$ as some function defined on ordinals or a transfinite sequence $(x_{\alpha})_{\alpha \in Ord}$, and such string is called \textit{flat representation} noted as $flat(x)$.
+
+\begin{definition}[Transfinite strings and substrings]\label{def_transfinite_strings}
+    Let $(x_{\alpha})_{\alpha \in Ord}$ be a transfinite sequence defined on all $Ord$ and range over $X$, then $x$ is a \textit{transfinite string}. For simplicity (and for the rest of the paper), we call such transfinite string $x$ simply \textit{string}. If $k : Ord \to Ord$ is a contiguous function\footnote{See \textit{Definition \ref{def_ord_contg}}}, then transfinite subsequence $(y_{\gamma})_{\gamma \in Ord} := (x_{k(\alpha)})_{\alpha}$ is a called a \textit{substring} $y$ of the \textit{string} $x$. We note this as $y \substr x$.
+\end{definition}
+
+Again, in case of defining the Replication Schema construct, we are mostly interested in and mean transfinite strings, when we talk about strings. Also, for most such strings (defined as transfinite sequences) we have each $x_\alpha \in ran(B)$ (for some coding base $B$).
+
+\begin{definition}[$B$-strings]\label{def_base_strings}
+    If $B$ is the coding base, then a string with range in set $B$ is called a $B\textit{-string}$.
+\end{definition}
+
+Before we can proceed to definition of $flat(x)$ and $kur(x)$ representations of string $x$, we would benefit from another notion derived from and defined over the class of all ordinals $Ord$.
+
+\begin{definition}[Partial ordinals]\label{def_part_ord}
+    Let $\lambda \in Ord$ and $\pset(\lambda)$ be set containing all subsets of ordinal $\lambda$. Then every element of $\pset(\lambda)$ is called \textit{partial ordinal} or simply \textit{partial}.
+\end{definition}
+
+\begin{lemma}[Bijectivity of partials and binary strings]\label{lemma_partials_strings_biject}
+    Assume the following:
+    \begin{itemize}
+        \item Let $\lambda \in Ord$ and $\pset(\lambda)$ be set containing all subsets (and hence partials) of ordinal $\lambda$.
+        \item $I_2 = \{ 0, 1\}, \{0,1\} \subset Ord$ is a binary index set.
+        \item For a given subset (partial) \( S \in \pset(\lambda) \), define the indicator function\footnote{Also see \textit{Definition \ref{def_fraenkel_cantor_morph}}} \( \chi_S(\eta) \) (where $\eta \in \lambda$) as:
+        \[
+            \chi_S(\eta) = \begin{cases} 
+            1 & \text{if } \eta \in S \\
+            0 & \text{if } \eta \notin S
+            \end{cases}
+        \]
+        \item Now, define function \( g: \pset(\lambda) \to \{0,1\}^\lambda \) such that for each partial $x \in \pset(\lambda)$ there exists a transfinite binary sequence $y: \lambda \to \{0,1\}$, which is a binary string.
+    \end{itemize}
+    Then, $g$ is bijective.
+\end{lemma}
+\begin{proof}
+    Sufficient to note that lemma is a special case of Cantor's Theorem but for subsets of ordinals. Specifically, one can explicitly define $g$ for all $\forall S \in \pset(\lambda)$ as $g(S) = \{(\eta, \chi_S(\eta)) : \forall \eta < \lambda \}$. 
+\end{proof}
+
+\begin{definition}[String Coding space]\label{def_coding_space}
+    The structure $(X, g, \lambda, B)$ is called $B$-string \textit{coding space} or just \textit{string space} iff the following is true:
+    \begin{enumerate}[label=(\roman*)]
+        \item $|\lambda|$ is the \textit{expected length} of every $B$-string in $X$, i.e. $X = \{x : |x| = |\lambda| \land dom(x) = \lambda\}$ (see \textit{Definition \ref{def_transfinite_string_length}});
+        \item $B$ is the coding base - binary\footnote{Certainly, considering larger $B$ allows for a much more general definitions, which we choose not to explore much at the moment.} case is defined as $B: I_2 \to \{a, b\}$ (see \textit{Definition \ref{def_coding_base}});
+        \item $g: \pset(\lambda) \times B \to V$ is a generation function that maps partials in $\pset(\lambda)$ to their respective string representation as sets using the coding base $B$;
+        \item $X \subseteq \{ g(S, B) : \forall S \in \pset(\lambda)\}$ is the resulting set of $B$-strings following specific representation.
+    \end{enumerate}
+\end{definition}
+
+We fix length of each string in the coding space as the cardinal $|\lambda|$ for some arbitrary large ordinal $\lambda \in Ord$. However, as explained in \textit{ subsection \ref{subsect_expected_length_of_strings} - \nameref{subsect_expected_length_of_strings}}, the "length" of the string may not necessarily be equal to the cardinality of a set, but rather encoded as meta information. This is especially the case if we use many levels of nesting for the encoding as in $kur$ representation. So it is good to fix this information as the part of the external structure - in our case the coding space itself. This is why such externally fixed string length is called the \textit{expected length}. Technically, we want to keep our definitions abstract enough but still required for different encoding "implementations" to work in the same way\footnote{For example, Kuratowski and flat encoding must be interchangeable on the high level of our set abstraction that we model}.
+
+Next, we define homomorphism and isomorphism notions.
+
+\begin{definition}[String space representation homomorphism]\label{def_string_homomorphism}
+    Let $(X, g, \lambda, B_x)$ and $(Y, h, \kappa, B_y)$ be two $B$-string coding spaces s.t. $|X| \leq |Y|$. Then function $f: X \to Y$ is called a $B$-string space representation homomorphism iff $\forall x \in X, \exists y \in Y: a \substr x \land b \substr y \land f(a) = b$.
+\end{definition}
+
+The above definition of homomorphism is very general as it tries to capture both structural and encoding similarity. Studying such complexity goes far beyond the main focus of the paper. We would be rather interested in much more at hand structural similarity.
+
+\begin{definition}[String space representation isomorphism]\label{def_string_isomorphism}
+    Let $(X, g, \lambda, B_x)$ and $(Y, h, \kappa, B_y)$ be two $B$-string coding spaces. Then function $f: X \to Y$ is called a $B$-string space representation isomorphism iff the following holds: 
+    \begin{enumerate}[label=(\roman*)]
+        \item $\lambda = \kappa$
+        \item $|B_x| = |B_y|$
+        \item $|X| = |Y|$, meaning that $f$ is bijective
+        \item $Y = f(X)$
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}[Canonical flat representation]\label{def_canonical_flat}
+    Let $(X, e, \lambda, B)$ and $(Y, h, \lambda, id(I_2))$ be two isomorphic $B$-string coding spaces with $f: X \to Y$ being the respective isomorphism. Let $id(I_2) = \tau^{-1}(0, 1)$ be the identity to binary index set $I_2 = \{0,1\}$ and the function $h(S, id(I_2)) = g(S)$, where $g$ is specified as in \textit{Lemma \ref{lemma_partials_strings_biject}}, with the same explicit binary encoding. Namely, $h$ explicitly maps every partial in $\pset(\lambda)$ to the set of tuples (using $\chi_S$):
+    
+    \[\forall S \in \pset(\lambda): h(S, id(I_2)) = g(S) = \{(\eta, \chi_S(\eta)) : \forall \eta < \lambda \} \]
+    
+    where $\chi_S$ is also defined as the indicator function in \textit{Lemma \ref{lemma_partials_strings_biject}}.
+
+    Then, the space $(Y, h, \lambda, id(\{0,1\}))$ is called the \textit{canonical flat representation} and function $f$ is called the \textit{canonical flat isomorphism}.
+\end{definition}
+
+Furthermore, if $|Y| = |\pset(\lambda)|$, we just have $Y = g(\pset(\lambda))$ as the string space for canonical flat representation.
+
+
+\begin{definition}[Canonical Kuratowski representation]\label{def_canonical_kur}
+    Let $(X, e, \lambda, B)$ and $(Y, h, \lambda, id(I_2))$ be two isomorphic $B$-string coding spaces with $f: X \to Y$ being the respective isomorphism. Similar to previous definition, we have the identity to binary index set $id(I_2)$ as coding base and $g$ is again defined as in \textit{Lemma \ref{lemma_partials_strings_biject}}. Let the function $h(S, id(I_2)) = k(g(S))$, where $k$ is recursively defined as in \textit{Definition \ref{def_kuratowski_morph}}, s.t. all $x_\alpha \in I_2, \alpha < \lambda$. 
+ 
+    Then, $h$ explicitly maps every partial in $\pset(\lambda)$ to the set of nested tuples (using transfinite Kuratowski notation):
+    
+    \[\forall S \in \pset(\lambda), \exists x = g(S): h(S, id(I_2)) = k(x_1,..,x_\lambda)  \]
+    
+    Furthermore, the space $(Y, h, \lambda, id(\{0,1\}))$ is called the \textit{canonical Kuratowski representation} and function $f$ is called the \textit{canonical Kuratowski isomorphism}.
+\end{definition}
+
+Let us also proof some special case lemma for binary code bases.
+
+\begin{lemma}[Isomorphic coding spaces]\label{lemma_isomorphic_coding_spaces}
+    Let $(X, g, \lambda, B_x)$ and $(Y, h, \kappa, B_y)$ be two $B$-string coding spaces such that $\lambda = \kappa, |B_x| = |B_y|, |X| = |Y|$. If $|X| = |\pset(\lambda)|$, then there exists isomorphism $f: X \to Y$ and two spaces are isomorphic.
+\end{lemma}
+\begin{proof}
+    Without loss of generality assume $B_x = B_y = id(I_2)$. Given that $|Y| = |X| = |\pset(\lambda)|$, we have $dom(g) = dom(h) = \pset(\lambda)$. Both $g$ and $h$ are generation functions and injective by definition of the string space. This implies that both $g: \pset(\lambda) \to X$ and $h: \pset(\lambda) \to Y$ are also bijective. Now consider the composition $f = h \circ  g^{-1}$, which will be the expected bijective $f: X \to Y$.
+\end{proof}
+
+\begin{corollary}
+    Let $A = (X, g, \lambda, id(I_2))$ and $B = (Y, h, \lambda, id(I_2))$ be the canonical flat and Kuratowski representations respectively, so that $|Y| = |X| = |\pset(\lambda)|$. Then, both $A$ and $B$ are isomorphic.
+\end{corollary}
+
+\begin{lemma}[Flat representation]\label{lemma_flat_representation}
+    Let $h: \pset(\lambda) \times B \to V$ be a generation function as in \textit{Definition \ref{def_canonical_flat}}.
+    Then, $B$-string coding space $(X, h, \lambda, B)$ has a \textit{flat representation} iff there exists a canonical flat string representation $(Y, h, \lambda, id(I_2))$ and the following holds: 
+    \begin{enumerate}[label=(\roman*)]
+        \item $X$ and $Y$ are isomorphic with $f: X \to Y$ being an isomorphism;
+        \item $Y = \{ h(S, id(I_2)): \forall S \in \pset(\lambda)\}$;
+        \item $X = \{ h(S, B): \forall S \in \pset(\lambda)\}$;
+        \item if coding base $B$ is replaced with $id(I_2)$, then $X^\prime = \{ h(S, id(I_2)): \forall S \in \pset(\lambda)\} = Y$
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    Follows from \textit{(iv)} and \textit{Lemma \ref{lemma_isomorphic_coding_spaces}}.
+\end{proof}
+
+A very similar lemma can be stated for the Kuratowski representation. The only thing that is different would be the generation function $h$ being defined as in \textit{Definition \ref{def_canonical_kur}}. We provide this lemma without the proof due to its similarity.
+
+\begin{lemma}[Kuratowski representation]\label{lemma_kur_representation}
+    Let $h: \pset(\lambda) \times B \to V$ be a generation function as in \textit{Definition \ref{def_canonical_kur}}.
+    Then, $B$-string coding space $(X, h, \lambda, B)$ has a \textit{Kuratowski representation} iff there exists a canonical Kuratowski string representation $(Y, h, \lambda, id(I_2))$ and the following holds: 
+    \begin{enumerate}[label=(\roman*)]
+        \item $X$ and $Y$ are isomorphic with $f: X \to Y$ being an isomorphism;
+        \item $Y = \{ h(S, id(I_2)): \forall S \in \pset(\lambda)\}$;
+        \item $X = \{ h(S, B): \forall S \in \pset(\lambda)\}$;
+        \item if coding base $B$ is replaced with $id(I_2)$, then $X^\prime = \{ h(S, id(I_2)): \forall S \in \pset(\lambda)\} = Y$
+    \end{enumerate}
+\end{lemma}
+
+Next, we need to define a replication operation.
+
+\begin{definition}[Replication Operation]\label{def_rep_op}
+    Let $X$ and $Y$ be two isomorphic coding spaces such that:
+    \begin{itemize}
+        \item $X$ is a part of the $flat$ representation space $(X, g, \lambda, B)$;
+        \item $Y$ is a part of the $kur$ representation space $(Y, h, \lambda, B)$;
+        \item $g$ is a $flat$ generation map (as in \textit{Definition \ref{def_canonical_flat}});
+        \item $h$ is a $kur$ generation map (as in \textit{Definition \ref{def_canonical_kur}});
+        \item $B$ is a coding base $B: \{0,1\} \to \{a, b\}$ with \( B(0) = \tau(a, b)_{0} = a \) and \( B(1) = \tau(a, b)_{1} = b \).
+    \end{itemize}
+    Then, \textit{replication operation} $\rset^{\{f,k\}}_\lambda(a,b)$ over two sets $a$ and $b$ is defined as a shorthand for either $X = \rset^f_\lambda(a,b)$ or $Y = \rset^k_\lambda(a,b)$, where $\{f,k\}$ are labels for $flat$ and $kur$ representations respectively.
+\end{definition}
+
+\begin{definition}[Replication Blueprint]\label{def_rep_blueprint}
+    Let $\lambda$ be a limit ordinal, then a canonical flat representation $(P, h, \lambda, id(I_2))$, where $|P| = |\pset(\lambda)|$,  is called a \textit{replication blueprint}.
+\end{definition}
+
+Furthermore, if one takes canonical flat representation $(P, h, \lambda, id(I_2))$ as blueprint, then one can observe that it is possible to arrange chains of isomorphisms if wired together between infinitely many coding spaces. Such chains, if defined over sequence of coding bases $B_{\varsigma(\gamma)}, \gamma \in Ord$, which is determined by $\varsigma \in P$ and encoded in particular way, can form sequences of replication code. 
+For example, if $\varsigma = \bos 001.. \eos$, then the corresponding sequence will be 
+    \[ 
+    \rset^{\{f,k\}}_\lambda(0, 1) \to \rset^{\{f,k\}}_\lambda(\rset^{\{f,k\}}_\lambda(0, 1), 1) \to \rset^{\{f,k\}}_\lambda(0, \rset^{\{f,k\}}_\lambda(\rset^{\{f,k\}}_\lambda(0, 1), 1)) \to \dots
+    \] 
+but same can be specified more formally (see the next \textit{Definition \ref{def_fold_rep_str}}). Also, it seems that one can manipulate the choice of $\{f,k\}$ labels which brings us one step closer to exposing the ideas of encoding additional information with two kinds of string representations as two types of coding spaces.
+
+Rather than representing a chain of $\rset^{\{f,k\}}_\lambda(a,b)$ isomorphisms as a chain of functions (and invoking the Replacement schema), we choose to fold each of such unique chains directly into a specific sequence or actually a string of isomorphisms. 
+
+\begin{definition}[Folding of Replication Isomorphisms into Strings]\label{def_fold_rep_str}
+    Assuming that:
+    \begin{itemize}
+        \item $B$ is a coding base (usually $id(I_2)$);
+        \item $\lambda \in Ord$ is the expected length and $P$ is a partially ordered index set (usually a coding space), where both $\lambda$ and $P$ are usually determined by the replication blueprint;
+        \item $x$ and $y$ are the respective $B$-strings from the index set $P$, where $|x| = |y| = \lambda$;
+        \item $\rset^{\{f,k\}}_\lambda(a,b)$ is replication operation over two sets $a$ and $b$;
+        \item $r: 0 \mapsto f, 1 \mapsto k$ is a helping map on $I_2$ (where $\{f,k\}$ are labels for $flat$ and $kur$ representations respectively).
+    \end{itemize}
+    Then, we say that one can \textit{fold} a chain of replication isomorphisms (each defined using $\rset^{\{f,k\}}_\lambda(a,b)$) into a corresponding sequence, namely, a \textit{replication string}. The resulting string can be mapped (using subindexes $x$ and $y$) one-to-one to a member of the collection $F_{x,y \in P}$ as the following transfinite induction\footnote{Here, $x$ is the "type" subindex and $y$ is the subindex for the isomorphism "sequential" code.}:
+    
+    \begin{itemize}
+        \item \textbf{Base case (when \( \alpha = 0 \)):}
+        \[
+            F_{x,y \in P}(0) = \rset^{r(x(0))}_\lambda(B(0), B(1))
+        \]
+        This means the domain of 0th isomorphism from the sequence is equivalent to the blueprint coding space $P$.
+    
+        \item \textbf{Successor ordinal \( \alpha + 1 \):} If \( \alpha \) is an ordinal, $\alpha < \lambda$ and \( F_{x,y \in P}(0) \) has been defined, then:
+        
+        \begin{align*}
+            F_{x,y \in P}(\alpha + 1)=\left\{
+                \begin{array}{ll}
+                \rset^{r(x(\alpha + 1))}_\lambda(F_{x,y \in P}(\alpha), B(1)), & \mbox{if $y(\alpha + 1) = 0$}\\
+                \rset^{r(x(\alpha + 1))}_\lambda(B(0), F_{x,y \in P}(\alpha)), & \mbox{otherwise}
+                \end{array}
+            \right.
+        \end{align*}
+
+        \item \textbf{Limit ordinal \( \lambda \):} If \( \lambda \) is a limit ordinal (i.e., there is no immediate predecessor to \( \lambda \)), then:
+        
+        \[
+            F_{x,y \in P}(\lambda) = \bigcup_{\alpha < \lambda} F_{x,y \in P}(\alpha).
+        \]
+        
+    \end{itemize}
+\end{definition}
+
+At the limit ordinal \(\lambda\), the union of the entire collection of isomorphism strings between coding spaces for a given blueprint yields a set. This set constitutes a coding space whose string representation has cardinality at least as large as that of the indexing set \(P\), as established above. However, this assertion demands further clarification and a more precise notation. We'll return to the subject of replication folding in later sections. It will remain central to exposing of the deeper interconnection between Large Cardinals and Replication Schema.
+
+We conclude this subsection with the reference to the \textit{\nameref{lemma_rep_schema} - Lemma \ref{lemma_rep_schema}}, which comes shortly after.
+
+\subsection{Transfinite Replicata}
+
+We now consolidate the key points about replication discussed earlier. The core idea of a \textit{replication scheme} is a generalization of the concept of \textit{replicata} (see \textit{Definition \ref{def_replicata}}), applied to \textit{\nameref{def_transfinite_strings}} (see \textit{Definition \ref{def_transfinite_strings}}) and later extended to string coding spaces. Although the definition of replicata is already broad—covering arbitrary ordinals $\kappa$ and $\lambda$—we aim to further generalize and validate it to ensure it fully accommodates transfinite strings as intended.
+
+\begin{definition}[Transfinite Replicata]\label{def_trans_replicata}
+    Assume:
+    \begin{enumerate}
+        \item $(X, g, \lambda, B)$ is $B$-string \textit{coding space} (see \textit{Definition \ref{def_coding_space}}), where:
+        \begin{enumerate}[label=(\roman*)]
+            \item $B$ is a coding base (usually $id(I_2)$);
+            \item $g: \pset(\lambda) \times B \to V$ is a generation function that maps subsets in $\pset(\lambda)$ to their respective string representation as sets using the coding base $B$ (usually $g = flat$);
+            \item $X \subseteq \{ g(S, B) : \forall S \in \pset(\lambda)\}$ is the resulting set of $B$-strings following specific representation (if $g$ is $flat$, then $X = [B]^{|\lambda|}$).
+        \end{enumerate}
+        \item $|\lambda|$ is the \textit{expected length} of every $B$-string in $X$, i.e. $X = \{x : |x| \leq |\lambda| \land dom(x) = \lambda \}$ (see \textit{Definition \ref{def_transfinite_string_length}}).
+        \item $\kappa \in Ord$ is the maximum \textit{replication degree}, s.t. $\kappa < \lambda$ and $|\kappa| = |\lambda|$.
+        \item If $B^\star \supset B$, then $Str(B^\star) = \{f : Ord \to B^\star \}$ is a proper class of all transfinite $B^\star$-strings with canonical ($flat$) representation, so that $Str_{|\lambda|}(B^\star) = \{\ s : |s| = |\lambda| \land s \in Str(B^\star)\}$ (by transfinite induction on $Ord$).
+        \item $\pi$ is the production function over the subset of transfinite strings $g(Str_{|\lambda|}(\Sigma^\star))$ (where $\Sigma^\star \supset B$ is an extended $\lambda$-SEF alphabet - see below), containing only syntactically valid $B$-string enumeration formulas or simply $\lambda$-SEFs.
+        \item Also, since SEFs are special kind of strings with extended alphabet, we say that if $s_x$ is a $\lambda$-SEF, then its length never exceeds the produced $\lambda$-string, i.e. $|s_x| \leq |\pi(s_x)|$.
+        \item $\lambda$-SEF is considered syntactically valid iff: 
+        \begin{itemize}
+            \item it is build over the alphabet $\Sigma^\star \supset \{B(0),B(1),(,)\}$, which is extended with ordinals $\alpha \leq \kappa$, that can be placed between doubled parentheses. For example, countable degree of replication in SEF $\bos (x) \eos$ becomes $\bos (\omega(x)\omega) \eos$, when translated into $\lambda$-SEF language, to indicate the \textit{transfinite replication degree}; but, then again, for simplicity and where it is clear from the context we keep abusing the exponential notation such as $\bos(x)^\alpha \eos$ to mean the degree of replication;
+            \item all parentheses are paired and ordinal indicates the degree of replication after the closing parenthesis\footnote{For example, if $y$ is a variable in SEF $x = \bos(y)^\kappa \eos$, then $\pi(x)$ is string where $y$ will be concatenated $\kappa$-many times.};
+            \item it is trivial to show that such notation allows to scan the $\Sigma^\star$ string of the potential formula and always find the correct pair which results in syntactical proof of every $\lambda$-SEF\footnote{As a side note, very early on, when contemplating the design of the SEF language we said that every syntactically valid formula or expression is arbitrary mapped to or evaluated as truth. For example, all elements of $dom(\pi)$ are valid and hence true. And, on the contrary, one can otherwise, say that if such language is $\lambda$-recognizable, then it is also $\lambda$-decidable, which is more of interest for the large theory of computability of infinite languages}.
+        \end{itemize}
+        \item $dom(\pi) = R^\lambda_\kappa$ is a set of equivalence class labels of $\lambda$-SEFs ($R^\lambda_\kappa \subset Str_{|\lambda|}$), where $\kappa$ is the greatest replication degree and the length of each $\lambda$-SEF $s_x \in R^\lambda_\kappa$ does not exceed $\lambda$, i.e. $|s_x| \leq |\lambda|$.
+        \item $ran(\pi) \subseteq X$ is a subset of transfinite $B$-strings of the coding space $X$.
+    \end{enumerate}
+    Then, we say that the space $(R^\lambda_\kappa, P_{\varepsilon}, \pi)$ is called \textit{transfinite replicata} or simply $\lambda$-replicata iff the following holds:
+    \begin{enumerate}[label=(\roman*)]
+        % perfect
+        \item String $x \in ran(\pi)$ is called \textit{perfectly $\lambda$-fair} iff $x$ does not contain any $\lambda$-substring $\nexists y \in ran(\pi): y \substr x$ that can be expressed as the concatenation of at least two identical substrings, i.e., $y = z \cdot z$ where $|y| = |\lambda|$.
+        % imperfect
+        \item Similarly, string $x \in ran(\pi)$ is called imperfectly $\lambda$-fair iff $x$ does not contain any $\lambda$-substring $\nexists y \in ran(\pi): y \substr x$ that can be expressed as the concatenation of $\kappa$-many substrings or, equivalently, to have a replication degree $\kappa \leq \lambda$, i.e., $y = (z)^\kappa$, where $|y| = |\lambda|$.
+        % unfair
+        \item String $x \in ran(\pi)$ is called $\lambda$-unfair iff it has fixed length $|x| = |\lambda|$ and is neither (perfectly or imperfectly) $\lambda$-fair\footnote{Note that all the lesser $\beta$-unfairs ($\forall \beta: \beta < \lambda)$ can still be substrings of both $\lambda$-unfair or imperfectly $\lambda$-fair.}
+        \item $P_{\varepsilon}$ is a \textit{transfinite substring partial order} (tspo) generalized from \textit{\nameref{def_po_substr_rep} - Definition \ref{def_po_substr_rep}} by considering transfinite strings of length $\lambda \geq \omega_1$ for kind partitions.
+    \end{enumerate}
+\end{definition}
+
+\begin{lemma}[Bijectivity of production in $\lambda$-replicata]\label{lemma_pi_biject_lambda_rep}
+    Let $(R^\lambda_\kappa, P_{\varepsilon}, \pi)$ be a $\lambda$-replicata, where $\kappa < \lambda$ is the maximum replication degree. Then, the production function $\pi$ is bijective.
+\end{lemma}
+\begin{proof}
+    To establish bijectivity of $\pi$, we analyze the cardinality of $R^\lambda_\kappa$ and the properties of $\pi$.
+
+    First, note that $R^\lambda_\kappa$ contains all $\lambda$-strings, i.e., all transfinite strings of length $\lambda$. Since the set of all subsets of $\lambda$, $\pset(\lambda)$, can be mapped to $\lambda$-strings (e.g., via indicator functions), it follows that $|R^\lambda_\kappa| \geq |\pset(\lambda)|$.
+
+    Next, observe that $\pi$ is injective by definition. For each $s_x \in R^\lambda_\kappa$, where $|s_x| \leq |\lambda|$, the production function maps $s_x$ to a unique string $x = \pi(s_x)$ of length $|x| = |\lambda|$. This ensures that no two distinct $\lambda$-SEFs in $R^\lambda_\kappa$ produce the same string under $\pi$.
+
+    Finally, since $R^\lambda_\kappa$ is constructed to represent all possible $\lambda$-strings, its cardinality cannot exceed $|\pset(\lambda)|$. Thus, $|R^\lambda_\kappa| = |\pset(\lambda)|$.
+
+    Combining these observations, $\pi$ is a bijection between $R^\lambda_\kappa$ and the set of $\lambda$-strings, as it is both injective and surjective. This completes the proof.
+\end{proof}
+
+Before we proceed with considering a respective model for $\lambda$-replicata, we need to review our axiomatic assumptions about Dependent Choice. For $\lambda < \omega_1$ it was sufficient to assume $DC$. That allowed us to construct an $\omega$-replicata in \textit{Lemma \ref{lemma_construct_replicata}} with countable replication (see \textit{Lemma \ref{lemma_count_rep}}). In general, a similar principle would be necessarily for constructing replicata if $\lambda \geq \omega_1$. In that sense, when we say $\lambda$-replicata is constructed it means we assume the necessary stronger version of Dependent Choice called $DC_\lambda$ (see \textit{Definition \ref{def_dck}}). The latter allows us to use $\lambda$-replication in $\lambda$-replicata (from $\lambda$-strings).
+
+Also note that the alternative definition of \textit{perfectly $\lambda$-fair} string is simply a special case of \textit{imperfectly $\lambda$-fair} strings for $k=2$. However, it is important to have the production function $\pi$ to behave as a bijection (see \textit{Lemma \ref{lemma_pi_biject_lambda_rep}}).
+
+Bijectivity of $\pi$ ensures the essential properties required for $\lambda$-replicata. This was demonstrated over the $\alpha$-tranches, where each $\alpha$-tranche corresponds to a new cardinality $|\alpha| = |\pset(\lambda)|$, built from the previous one. Replicata are defined to "exist" or "seat" on such cardinalities. Using transfinite induction, this was shown for each limit cardinal $\aleph_{\omega_\alpha} = \lambda$. Furthermore, the proof of \textit{Theorem \ref{lemma_pi_biject_lambda_rep}} depends on the tspo $P_{\varepsilon}$ being well-defined for every $\lambda$-replicata. To clarify this, we aim to construct a binary relation $\varepsilon$ on $P_{\varepsilon} \subseteq R^\lambda_\kappa$ and demonstrate that it forms a partial order (see \textit{Definition \ref{def_po}}). This will involve partitioning SEFs by their degree of replication, as outlined in \textit{Definition \ref{def_po_substr_rep}}. Before presenting this, we will introduce a lemma on well-founded partial orders to refine the definition and restrict tspo $P_{\varepsilon}$ for perfect $\lambda$-fairs to be strictly well-founded.
+
+\begin{lemma}[Well-Foundedness Under Finite Differences]\label{lemma_finite_diffs_wf}
+    Let $\lambda$ be a (possibly infinite) index set (e.g., $\lambda = \omega_1$).  
+    Let $A \subseteq \{0,1\}^\lambda$ be a set of $\lambda$-strings closed under "being almost disjoint" property as well as "being almost adjoint":
+    \begin{enumerate}
+    \item For all $x, y \in A$, the bitwise XOR $z = x \oplus y$ has a finite symmetric difference (see \textit{Lemma \ref{lemma_disjoint_to_adjoint}}) with z containing only the concatenation of $\bos(0)\eos$ (all-$0$) infinite substrings except for finitely many segments of ${0,1}$ mix-ins (i.e., $x \oplus y$ differs from the all-$0$ sequence in only finitely many coordinates).
+    \item $A$ contains all $x$ and $y$ for which $z = x \oplus y$ has a finite symmetric difference, as well as $x$ and $y$ for which $z = \neg(x \oplus y)$.
+    \end{enumerate}
+    Define a function $\mathrm{rank}\colon A \to \mathrm{Ord}$ (the class of all ordinals) by \emph{transfinite recursion}:
+    \begin{align*}
+        \mathrm{rank}(x) \;=\;
+        \min \bigl\{\,&
+            \alpha \;:\; \exists\, y \in A \text{ with } \mathrm{rank}(y) < \alpha \\
+            &\quad \text{and } (x \oplus y) \text{ is nonzero in only finitely many coordinates}
+        \bigr\}.
+    \end{align*}
+    Then the induced ordering $\prec$ on $A$ given by $x \prec y \;\Longleftrightarrow\; \mathrm{rank}(x) < \mathrm{rank}(y)$ is a well-founded partial order: there are no infinite descending chains with respect to $\prec$.
+\end{lemma}
+
+\begin{proof}
+    We establish two main claims:
+    \begin{enumerate}
+    \item \emph{Well-definedness of $\mathrm{rank}(x)$ by transfinite recursion.}
+    \item \emph{Well-foundedness of the induced partial order.}
+    \end{enumerate}
+    
+    \paragraph{(1) Well-definedness.}
+    We employ ordinal (transfinite) recursion. Suppose we are assigning $\mathrm{rank}(x)$
+    to each $x \in A$. At stage $\alpha$, we say
+    \begin{align*}
+        \mathrm{rank}(x) \;=\; \alpha
+        \quad\text{iff}\quad
+        &\alpha \text{ is the least ordinal for which there exists some } y \in A \\
+        &\text{with } \mathrm{rank}(y) < \alpha \text{ and } x \oplus y \text{ has finite symmetric difference}\\
+        &\text{ - finitely comparable binary representation of a natural}\\
+        &\text{ number uniquely corresponding to } y
+    \end{align*}
+
+    Because all ranks $\mathrm{rank}(y)$ for $y \in A$ are by definition assigned at earlier
+    stages (i.e., $<\alpha$), and ordinals are well-ordered, there is always a
+    \emph{least} $\alpha$ (if any) satisfying the stated property. The set of candidate $\alpha$
+    is nonempty (we can always take an ordinal larger than all $\mathrm{rank}(y)$ for
+    $y$ that differ from $x$ finitely). Thus $\mathrm{rank}(x)$ is assigned consistently
+    for every $x \in A$. This shows $\mathrm{rank}$ is \emph{well-defined}.
+    
+    \paragraph{(2) Well-foundedness.}
+    Consider the induced partial order defined by
+    \[
+      x \prec y \quad\Longleftrightarrow\quad \mathrm{rank}(x) < \mathrm{rank}(y).
+    \]
+    Suppose, for contradiction, that there is an infinite strictly descending chain
+    \[
+      x_0 \succ x_1 \succ x_2 \succ \cdots
+      \quad\Longrightarrow\quad
+      \mathrm{rank}(x_0) > \mathrm{rank}(x_1) > \mathrm{rank}(x_2) > \cdots.
+    \]
+    But an infinite strictly decreasing sequence of ordinals cannot exist, because
+    the class of ordinals is \emph{well-ordered by} $<$. Hence no such descending chain
+    can occur in $(A,\prec)$.
+    
+    Thus $(A,\prec)$ is \emph{well-founded}.
+\end{proof}
+
+\begin{lemma}[Almost adjoint (disjoint) $\lambda$-fair]\label{def_almost_addisjoint_lambda_fair}
+    Let $z = x \oplus y$, where $|x| = |y| = \lambda$. Then, $z$ is finite symmetric difference (or its inverse) iff $x$ and $y$ are both perfectly fair $\lambda$-strings.
+\end{lemma}
+\begin{proof}
+    Consider extending the definition of perfectly fair string to $\lambda \geq \omega$ and the proof follows.
+\end{proof}
+
+\begin{corollary}[Closure of perfectly $\lambda$-fairs]\label{corollary_closure_perfect_lambda_fairs}
+    Let $N$ be a model of $ZF+DC_\lambda$, s.t. $N \models (R^\lambda_\kappa, P_{\varepsilon}, \pi)$ to be a $\lambda$-replicata and $\kappa \leq \lambda^+$, then $S_{PF} \subset \pi(R^\lambda_\kappa)$ is closed under the property of being almost adjoint or almost disjoint.
+\end{corollary}
+
+
+
+It seems that it is possible to further refine the partial order relation on $P_{\varepsilon}$. One way of looking at it is that $\lambda$-fair strings have comparably rich structure, similar to $\lambda$-unfairs, as every $\lambda$-fair contains other $\lambda$-fair substrings that are intermixed or interleaved with smaller $\delta$-fair unless it is most $\lambda$-perfect (when it consists only of such $\delta < \lambda$ substrings). Another way is to think of interleaves in large $\lambda$-fair as form of partial order by reverse contiguity (see - \textit{Definition \ref{def_cmp_contiguity_bin_str}}). Clearly same principles are reflected in $\lambda$-unfair strings which are build from SEF formulas using a mix of $\lambda$-fair and $\delta$-fair (where $\delta < \lambda$), but simply have substrings with greater degree of replication. 
+
+Let us next define $P_{\xi}$ which acts as a restriction of $P_{\varepsilon}$ by behaving like $\prec$ in \textit{Lemma \ref{lemma_finite_diffs_wf} - \nameref{lemma_finite_diffs_wf}} on  $S_{PF} \subset \pi(R^\lambda_\kappa)$ for given $\lambda$-replicata.
+
+\begin{lemma}[Well-founded partial order on $\lambda$-replicata]\label{lemma_wf_po_lambda_rep}
+    Let $N$ be a model of $ZF+DC_\lambda$, s.t. $N \models (R^\lambda_\kappa, P_{\varepsilon}, \pi)$ to be a $\lambda$-replicata and $\kappa \leq \lambda^+$, then $P_{\xi} \subseteq P_{\varepsilon}$ is a well-defined partial order (tspo), which is built from $P_{\varepsilon}$, such that it is:
+    \begin{itemize}
+        \item $\lambda$-cc
+        \item well-founded
+    \end{itemize}
+\end{lemma}
+
+Note that the alternative approach to endowing $\lambda$-replicata with a well-founded partial order would be to restrict $P_{\varepsilon}$ with equivalence relation over the the corresponding ultrafilter $U_\alpha$. But for most purposes we will stick to our $P_{\xi}$ construction with well-foundedness provided by ranks over finite symmetrical difference and its inverse.
+
+The last point allows us to make a rather interesting observation. It is possible to define a well-founded replicata class on all ordinals that would have an isomorphic transitive model.
+
+\begin{definition}[Well-founded Replicata at Limit Cardinal]\label{def_wf_rep_limcard}
+    Let $\Lambda(\lambda) = (R^{<\lambda^+}_\lambda, P_{\xi}, \pi)$ be a shorthand for well-founded $\lambda$-replicata at the limit cardinal $\lambda$ with replication degree also $\kappa = \lambda$.
+\end{definition}
+
+\begin{definition}[Well-founded Replicata Class]\label{def_wf_rep_class}
+    If $N$ is a model of $ZF+DC_\lambda$, s.t. $N \models \Lambda(\lambda) \textit{ is a well-founded replicata}$ and $\lambda$ is a limit cardinal, then we call $\Lambda$ a well-founded replicata class defined on the transitive class of all ordinals $Ord$.
+\end{definition}
+
+
+\begin{lemma}[Transitive Collpase of Replicata Class]\label{lemma_mostowski_col_rep}
+    If $N$ is a model of $ZF+DC_\lambda$, s.t. $N \models \Lambda \textit{ is a well-founded replicata class}$, then there exists a transitive model $(M, \in)$ of $ZF+DC_\lambda$ isomorphic to tspo on $\Lambda$.
+\end{lemma}
+\begin{proof}
+    Since $\Lambda(\lambda) = (R^{<\lambda^+}_\lambda, P_{\varepsilon}, \pi)$ for each $\lambda \in Ord$, then one can extend tspo $P_{\varepsilon^\ast} = (\Lambda, \varepsilon^\ast)$ to be well-founded\footnote{Similar to p. 69 in \cite{jech2003set}.} on the whole replicata class $\Lambda$. There exists a transitive model $(M, \in)$ isomorphic to $(\Lambda, \varepsilon^\ast)$ by Mostowski Collapsing Theorem.
+\end{proof}
+
+Now a much stronger and succinct statement can be made about the replicata class. We are going to construct such class by putting together previous arguments.
+
+\begin{lemma}[Replication Schema]\label{lemma_rep_schema}
+    There exists a proper class of replicata $\Lambda$.
+\end{lemma}
+\begin{proof}
+    The lemma follows naturally if there exists such a $ZF+DC_\lambda$ model $N$ as in \textit{Definition \ref{def_wf_rep_class}}, where
+    $N \models \Lambda(\lambda) \textit{ is a replicata}$ and $\lambda \in Ord$ is a limit cardinal. Such a model exists for every such $\lambda$, so that:
+    
+    \[
+    \Lambda(\lambda) = (R^{<\lambda^+}_\lambda, P_{\varepsilon}, \pi)
+    \]
+    
+    from \textit{\nameref{lemma_mostowski_col_rep} - Lemma
+    \ref{lemma_mostowski_col_rep}}.
+    
+    Now, we aim to put all these replicata structures together and demonstrate how they jointly form a proper class $\Lambda$ while still exhibiting the defining properties of the replicata structure across all its elements.
+    
+    We define this class structure as:
+    
+    \[
+    \Lambda = (R_\Lambda, P_{\varepsilon^\ast}, \pi)
+    \]
+    
+    where:
+    
+    \[
+    R_\Lambda = \bigcup_{\forall \lambda \in Ord}{R^{<\lambda^+}_\lambda}
+    \]
+    
+    The construction proceeds as follows:
+    
+    \begin{enumerate}
+    \item \textbf{Proper Class Formation:} Since for each $\alpha \in Ord$, there exists a smallest limit cardinal $\lambda$ such
+    that $\alpha < \lambda$, we can associate a replicata structure
+    $\Lambda(\lambda)$ with each such $\lambda$. The union $R_\Lambda$
+    extends over all ordinals, ensuring that $\Lambda$ is not merely a set but a proper class, as it cannot be bounded by any set-sized collection.
+    
+    \item \textbf{Preservation of Replicata Properties:} The properties defining a replicata—such as well-foundedness, transitive substring partial ordering (tspo), and the existence of a suitable bijection $\pi$—must be shown to hold for the entire class $\Lambda$.
+    
+    \begin{itemize}
+    \item \textit{Well-Foundedness:} Since each $R^{<\lambda^+}_\lambda$ is well-founded by construction, and well-foundedness is preserved under unions of chains of well-founded structures, $R_\Lambda$ remains well-founded.
+    
+    \item \textit{tspo Preservation:} To demonstrate that $R_\Lambda$ preserves the tspo property, note that each tranche $R^{<\lambda^+}_\lambda$ satisfies tspo. Given the construction of $R_\Lambda$ as a union over $\lambda$-tranches, tspo is preserved globally, as no contradictions arise from the ordering relations defined on each tranche.
+    
+    \item \textit{Bijection $\pi$:} The bijection $\pi$ is defined tranche-wise. Since $\pi$ is trivially bijective per tranche and the tranches are disjointly indexed by distinct limit cardinals $\lambda$, the overall mapping $\pi$ remains bijective over $R_\Lambda$.
+    \end{itemize}
+    
+    \item \textbf{Closure Under Relevant Operations:} The class $\Lambda$ must be closed under operations relevant to its defining properties. By construction, each $\Lambda(\lambda)$ is closed under the operations defined in \textit{\nameref{lemma_mostowski_col_rep}}. The union $R_\Lambda$ inherits this closure, as all such operations are performed within each tranche and extend coherently over the entire union.
+    
+    \item \textbf{Proper Class Verification:} The final step is to confirm that $\Lambda$ is indeed a proper class. Assume for contradiction that $\Lambda$ is a set. Then $R_\Lambda$ would be bounded by some cardinal $\kappa$, contradicting the construction that for every ordinal $\alpha$, there exists a corresponding limit cardinal $\lambda > \alpha$. Hence, $\Lambda$ must be a proper class.
+    \end{enumerate}
+    
+    Therefore, the union of all replicata $\Lambda(\lambda)$ over all $\lambda \in Ord$ forms a proper class $\Lambda = (R_\Lambda, P_{\varepsilon^\ast}, \pi)$, completing the proof.
+\end{proof}
+
+\subsection{Nontrivial elementary embeddings}
+
+Consider the following lemma on relation between nontrivial elementary embedding and existence of normal measures quoted from \cite{jech2003set} without proof.
+
+\begin{lemma}[Nontrivial elementary embedding]\label{lemma_nontriv_elem_embedding}
+    Let \(j : V \to M\) be a nontrivial elementary embedding, let \(\kappa\) be 
+    the least ordinal moved, and let \(D\) be the ultrafilter on \(\kappa\) 
+    such that $ X \in D \quad \Longleftrightarrow \quad \kappa \in j(X) \quad (X \subset \kappa)$.
+    Let $j_D : V \to \mathrm{Ult}_D(V)$ be the canonical embedding of \(V\) into the ultrapower \(\mathrm{Ult}_D(V)\). 
+    Then there is an elementary embedding 
+    \[
+      k : \mathrm{Ult}_D(V) \to M
+    \]
+    such that \(k(j_D(a)) = j(a)\) for all \(a\). The following diagram commutes:
+    \[
+    \begin{tikzcd}[row sep=large, column sep=large]
+    V \arrow[rr, "j_D"] \arrow[dr, "j"'] 
+        & 
+        & \mathrm{Ult}_D(V) \arrow[dl, "k"] \\
+        & M &
+    \end{tikzcd}
+    \]
+\end{lemma}
+
+It is important to note that the above result relies on $D$ being a $\sigma$-complete ultrafilter. The symbol $\mathrm{Ult}$ denotes the transitive collapse\footnote{by the Mostowski Collapsing Theorem} of the ultrapower, and $\mathrm{Ult}_D(V)$ being an inner model. In fact, \cite{jech2003set} shows that if $j$ is a nontrivial elementary embedding of the universe, then there exists a (quasi) measurable cardinal, and vice versa. 
+
+On one hand, the construction of a $\kappa$-complete ultrafilter from an elementary embedding yields the above commutative diagram. Hence, for each normal measure $D = \{X \subset \kappa : \kappa \in j(X)\}$, there is always a corresponding $\kappa$-complete ultrafilter. Note that the measure $D = \{X \subset \kappa : \kappa \in j(X)\}$ defined from the elementary embedding is indeed normal: Let $f$ be a regressive function on some $X \in D$. Then $(jf)(\kappa) < \kappa$, and if $\gamma = (jf)(\kappa)$, then $f(\alpha) = \gamma$ for almost all $\alpha$.
+
+On the other hand, as evident from the above commutative diagram, if $\mathrm{Ult}_D(V)$ is an inner model, then there exists $j$ via $k$ — the nontrivial elementary embedding of the universe into $M$.
+
+\subsection{Inaccessible cardinals and Ultrafilters}
+
+Recall \cite{jech2003set}, that by definition, a (strongly) inaccessible cardinal $\kappa$ is an uncountable regular strong limit cardinal. This means, in particular, that $\kappa$ is a strong limit cardinal: for every $\lambda < \kappa$, we have $2^\lambda < \kappa$. In other words, not only does $\kappa$ have uncountable cofinality (making it regular), but also no "small" powerset can reach $\kappa$. Inaccessible cardinals are precisely those large cardinals with such strong limit properties.
+
+So far we have discussed (weak) limit cardinals that turned out to be quasi-large\footnote{Again, see \textit{Definition \ref{def_quasi_large_cardinal}}}. Interestingly enough we will now look into "progression" of how the world of quasi-large connects with the world of large cardinals. Namely, we want to look at what immediate consequences the assumption of an additional axiom will have for our previous results.
+
+Let $I$ be an axiom stating that $\textit{there exists an inaccessible cardinal}$. Again, we remind here several known and relevant results about inaccessible cardinals\footnote{See \textit{Inaccessibility of Inaccessible Cardinals} on p.167 in \cite{jech2003set}}:
+
+\begin{lemma}
+    The following holds true for $ZFC$:
+    \begin{itemize}
+        \item If $\kappa$ is an inaccessible cardinal, then $V_\kappa$ is a model of $ZFC$.
+        \item If $ZFC$ is consistent, then so is $ZFC + I$.
+    \end{itemize}
+\end{lemma}
+
+But most importantly it cannot be proved in $ZFC$ that inaccessible cardinals exist. It is consistent in $ZF$ (or $ZF + DC_\lambda$, or $ZF + UltrafilterTheorem$, etc.) that one has a cardinal $\kappa$ carrying a “normal, $\kappa$-complete ultrafilter,”\footnote{Also see \textit{Definition \ref{def_normal_measure}} in the upcoming subsection} yet $\kappa$ is not (and cannot be proved) to be strongly inaccessible in that model. Equivalently, a model of $ZF+DC_\lambda$ like $N$ can fail to satisfy the statement “There is an inaccessible cardinal” even while it has quasi-measurable cardinals. So one has to always assume an additional axiom in order to work with large cardinals. 
+
+Next, we make few observations about ultrafilters. Let $\lambda \in Ord$ be some large enough fixed limit cardinal, so that $\Lambda(\lambda)$ is a replicata in $N$. Until now, we may have guessed the possibility of existence of the ultrafilter on such replicata $\Lambda(\lambda)$ as indicated by the restricted form of \textit{Ultrafilter Theorem} to the case of $\lambda = \omega_1$ (see, respectively, result reference in \textit{Theorem \ref{theorem_pitx}} and the proof of the equivalent result in \textit{Lemma \ref{lemma_bpi_rw}}). Yet we did not attempt to explain neither how it can be "constructed", nor if \textit{Ultrafilter Theorem} can be shown in full.
+
+In fact, one of immediate corollaries of \textit{Lemma \ref{lemma_wf_po_lambda_rep}} is that tspo $P_{\varepsilon}$ implies significant amount of structure including the existence of ultrafilter $U$ on each $\lambda$-replicata.
+
+\begin{lemma}[Ultrafilter on replicata]\label{lemma_ultrafilter_on_replicata}
+    Let $N$ be a model of $ZF+DC_\lambda$ and $\lambda$ be a limit cardinal, s.t. $N \models \Lambda(\lambda) \text{ is a replicata}$. Then, $\Lambda(\lambda)$ carries a nontrivial ultrafilter $U$.
+\end{lemma}
+\begin{proof}
+    We start by invoking $\lambda$-fair determinacy (which can be generalized from \textit{Theorem \ref{theorem_kfair_determinacy}} and follows from $DC_\lambda$). This allows us to play games and choose between all kinds of $\lambda$-fair and $<\lambda$-fair.
+
+    Next, we construct the filter by identifying two disjoint sets:
+    \begin{enumerate}[label=(\roman*)]
+        \item \textbf{measure-one set}: let $X_1$ be the union of all $\lambda$-fair, $\lambda$-unfair and include $\delta$-fair: $\forall \delta < \lambda$ (which includes $\omega$-fair);
+        \item \textbf{measure-zero set}: let $X_0$ contain all finite unfair, s.t. $|X_0| = \aleph_0$.
+    \end{enumerate}
+
+    % TODO: clarify in detial why exactly $P_{\varepsilon}$ on $X_1$ is a filter by showing the properties of a filter
+    Observe that $X_1$ can be partially ordered by tspo $P_{\varepsilon} \supset X_1$ in such a way that it is a filter. In fact, if we take $U = X_1$, then it will be a maximum and nontrivial filter, since every set $x \notin X_1$ must be in $X_0$.
+\end{proof}
+
+\begin{corollary}[Ultrafilter Theorem]\label{corollary_ultrafilter_theorem}
+    Let $N$ be a model of $ZF+DC_\lambda$ and $\lambda$ be a limit cardinal. If $F$ is a filter on $X \subset \lambda$, then $\forall \lambda \in Ord$ filter $F$ can be extended to the ultrafilter $U \subseteq \lambda$ in model $N$.
+\end{corollary}
+\begin{proof}
+    Assume that $\forall \lambda \in Ord$ one can construct $\alpha$-tranches $\alpha < \lambda$ as in \textit{Lemma \ref{lemma_pi_biject_lambda_rep}}. Note that for each $\alpha$-tranche there is an ultrafilter $U_\alpha$ on $\pset_\lambda(\lambda)$ (by the \textit{Lemma \nameref{lemma_ultrafilter_on_replicata}}). Essentially, as long as one can pick $\lambda$ large enough to include (cover) $X \subset \lambda$, one can always extend a filter on $X$ to such ultrafilter.
+\end{proof}
+
+Evidently, even stronger claims about structure induced by tspo $P_{\varepsilon}$ can be made. Especially if we start to work in the context of a larger model. Let us suppose that $N^\ast$ is a model of $ZF+DC_\lambda+I$, which is formed as a natural (not elementary) extension of $N \models ZF+DC_\lambda$ that we have worked with so far, namely $N^\ast \models \Lambda \textit{ is a replicata class}$. Next, we will show the existence of a measurable cardinal in $N^\ast$.
+
+\begin{theorem}[$N^\ast$ implies measurable cardinals]\label{theorem_nast_measurable_card}
+    Let $N^\ast$ be a model of $ZF+DC_\lambda+I$, then $N^\ast \models \exists \text{ measurable cardinal}$.
+\end{theorem}
+\begin{proof}
+    By definition $N^\ast \models \Lambda \textit{ is a replicata class}$. Let $\Lambda(\lambda) \subset \Lambda$ be a replicata such that $\kappa = |\Lambda(\lambda)|$ is the smallest inaccessible cardinal. It follows from \textit{Lemma \nameref{lemma_ultrafilter_on_replicata}} that $\kappa$ carries a nontrivial ultrafilter $U$ (via respective bijection). Notably, such $U$ can also act as zero-one measure on the whole replicata set and specifically on $\kappa$. Then, the corresponding cardinal $\kappa$ must be a measurable cardinal (by \textit{Definition \ref{def_measurable_cardinal}}).
+\end{proof}
+
+\subsection{Fine and Normal Measures}
+
+Finally, we will touch upon the fine and normal measures on $\pset_\kappa(A)$ (see \textit{Definition \ref{def_kappa_small_subsets_of_lambda}}). Again, let \( A \) be a set of cardinality greater than or equal to \( \kappa \). Recall the following definitions and results from \cite{jech2003set}.
+
+\begin{definition}[Fine measure]\label{def_fine_measure}
+    For each \( x \in \pset_{\kappa}(A) \), let $\hat{x} = \{ y \in \pset_{\kappa}(A) : x \subset y \}$, and consider the filter on \( \pset_{\kappa}(A) \) generated by the sets \( \hat{x} \) for all \( x \in \pset_{\kappa}(A) \); that is, the filter
+    \begin{equation} \label{eq:subfine_filter}
+        \{ X \subset \pset_{\kappa}(A) : X \supset \hat{x} \text{ for some } x \in \pset_{\kappa}(A) \}.
+    \end{equation}
+    We call \( U \) a \emph{fine measure} on \( \pset_{\kappa}(A) \) if \( U \) is a \( \kappa \)-complete ultrafilter on \( \pset_{\kappa}(A) \) that extends the \( \kappa \)-complete filter \eqref{eq:subfine_filter}; i.e., \( \hat{x} \in U \) for all \( x \in \pset_{\kappa}(A) \).
+\end{definition}
+
+Note that if \( \kappa \) is a regular cardinal, then the filter \eqref{eq:subfine_filter} is \( \kappa \)-complete. 
+
+\begin{definition}[Strongly compact cardinal]\label{def_strongly_compact_cardinal}
+    An uncountable regular cardinal \( \kappa \) is \emph{strongly compact} if for any set \( S \), every \( \kappa \)-complete filter on \( S \) can be extended to a \( \kappa \)-complete ultrafilter on \( S \).
+\end{definition}
+
+\begin{lemma}
+    The following are equivalent for any regular cardinal \( \kappa \):
+    \begin{enumerate}
+        \item[(i)] For any set \( S \), every \( \kappa \)-complete filter on \( S \) can be extended to a \( \kappa \)-complete ultrafilter on \( S \).
+        \item[(ii)] For any \( A \) such that \( |A| \geq \kappa \), there exists a fine measure on \( \pset_{\kappa}(A) \).
+        \item[(iii)] The language \( L_{\kappa,\omega} \) satisfies the compactness theorem.
+    \end{enumerate}
+\end{lemma}
+
+\begin{definition}[Normal measure]\label{def_normal_measure}
+    A fine measure $U$ on $\pset_{\kappa}(A)$ is \textit{normal} if $f : \pset_{\kappa}(A) \to A$ is such that $f(x) \in x$ for almost all $x$, then $f$ is constant on a set in $U$.
+\end{definition}
+
+When we say "for almost all $x$", we mean for $x \in U$ (that is, a measure-one subset of $\pset_{\kappa}(A)$). Also, when we say "$f$ is constant on a set in $U$", we mean there exists some member $Y \in U$ on which $f$ takes a single constant value. It does not refer to being constant on each individual $x \in \pset_\kappa(A)$ (since each $x$ is itself a subset of $A$), nor does it require that $f$ is constant on every set in $U$. Rather, the requirement is that there is at least one "large" set $Y \in U$ (where “large” means $Y$ is in the ultrafilter $U$) such that for all $x \in Y$, $f(x) = \beta$ for some fixed $\beta \in A$. This is the essence of normality for a fine measure: any regressive function (one where $f(x) \in x$) must "collapse" to a constant value on a measure-one set.
+
+\begin{definition}[Supercompact cardinal]\label{def_supercompact_cardinal}
+    An uncountable cardinal \( \kappa \) is \emph{supercompact} if for every \( A \) such that \( |A| \geq \kappa \), there exists a normal measure on \( \pset_{\kappa}(A) \).
+\end{definition}
+
+We will also reference here an important characterization\footnote{See p.375 in \cite{jech2003set}} lemma for $\lambda$-supercompact cardinals.
+
+\begin{lemma}[Characterization of $\lambda$-supercompact]\label{lemma_char_lambda_supercompact}
+    Let $\lambda \geq \kappa$. A normal measure on $\pset_\kappa(\lambda)$ exists if and only if there exists an elementary embedding $j : V \to M$ such that
+        \begin{enumerate}[label=(\roman*)]
+            \item $j(\gamma) = \gamma \quad \text{for all } \gamma < \kappa$;
+            \item $j(\kappa) > \lambda$;
+            \item $M_\lambda \subset M$, i.e., every sequence $\langle a_\alpha : \alpha < \lambda \rangle$ of elements of $M$ is a member of $M$.
+        \end{enumerate}
+\end{lemma}
+
+A cardinal $\kappa$ is called \emph{$\lambda$-supercompact} if it satisfies \textit{Lemma \ref{lemma_char_lambda_supercompact}}.
+
+Next, since we have finished listing known definitions and results from \cite{jech2003set}, let us focus on showing that fine measure exists on each $\lambda$-replicata.
+
+\begin{theorem}[Fine measure on replicata]\label{theorem_fine_measure_on_replicata}
+    Let $N^\ast$ be a model of $ZF+DC_\lambda+I$. If $N^\ast \models \exists \text{ a replicata }\Lambda(\lambda)$, then $\Lambda(\lambda)$ carries a fine measure $D$.
+\end{theorem}
+\begin{proof}
+    Let $\delta, \gamma, \kappa$ be regular uncountable cardinals s.t. $\delta^+ \leq \kappa$. Also, let $\lambda$ be the smallest limit cardinal s.t. for some set $A$ (of cardinality $\gamma = |A|$), we have $\kappa \leq \gamma \leq \lambda$ and, respectively, $|\pset(\kappa)| \leq |\pset(A)| \leq |\pset(\lambda)|$, where $\kappa < \lambda$. By \textit{Definition \ref{def_wf_rep_limcard}}, we have that $\Lambda(\lambda) = (R^{<\lambda^+}_\lambda, P_{\varepsilon}, \pi)$ is a $\lambda$-replicata (as modeled by $N^\ast$). Following from \textit{Lemma \ref{lemma_ultrafilter_on_replicata}}, we have a non-trivial ultrafilter $U$ on $\Lambda(\lambda)$. We want to show that there exists $\kappa$-complete ultrafilter $D \subseteq U$, which is also a fine measure on $\pset_\kappa(A)$.
+
+    Recall that $R^{<\lambda^+}_\lambda$ is collection of "$<\lambda^+$"-strings with replication degree $\lambda$. It does mean that if one constructs a smaller sub-collection $R^{<\delta^+}_\delta$, then it can be arranged that those "$<\delta^+$"-strings are padded (with a constant, e.g. zero) to match the greater length of "$<\lambda^+$"-strings and illustrate the inclusion. Observe that such smaller replicata will have the following cardinality\footnote{Also see \textit{Corollary \ref{corollary_pset_at_limit_cardinal}}}: $|\Lambda(\delta)| = |R^{<\delta^+}_\delta| = |\pset_{\delta^+}(\delta)| = |\pset(\delta)|$. This allows to observe the following inclusion chain: 
+    
+    \begin{equation}\label{eq:pset_inc_chain}
+        \pset(\delta) \subseteq \pset_\kappa(\delta) \subset \pset_\kappa(\kappa) \subset \pset_\kappa(\gamma) \subset \pset_\kappa(\lambda) \subset \pset_{\lambda^+}(\lambda) \subseteq \pset(\lambda)
+    \end{equation}
+
+    Now let $F$ be a club filter generated by club sets on $\pset_\kappa(A)$. Following from \textit{Lemma \ref{lemma_closed_unbounded_stationary}}, such filter $F$ is $\kappa$-complete. Furthermore, assume $F$ is constructed as the \( \kappa \)-complete filter \eqref{eq:subfine_filter} in \textit{Definition \ref{def_fine_measure}}. Namely:
+
+    \[ F = \{ X \subset \pset_{\kappa}(A) : X \supset \hat{x} \land (\exists x) x \in \pset_{\kappa}(A) \} \]
+
+    where $\hat{x} = \{ y \in \pset_{\kappa}(A) : x \subset y \}$. The question presents itself if $F$ can be extended to some $\kappa$-complete ultrafilter $D$ on $\pset_\kappa(A)$.
+
+    Recall that substring relation is defined\footnote{See \textit{Definition \ref{def_transfinite_strings}}} as subsequence with additional structure (induced by concatenation or by contiguity), but, in an essence, $\substr$ is just a special kind of subset $\subset$ relation. Hence, one can try to construct a filter like $F$, but using strings and substrings and map them one-to-one to sets and subsets.
+
+    Consider for the moment the case that we actually ignore, when $A$ is a "smaller" set as in $|A| = \delta$ and $\kappa = \delta^+$. If $G$ is a non-trivial $\kappa$-complete ultrafilter on $R^{<\delta^+}_\delta$ (by \textit{Lemma \ref{lemma_ultrafilter_on_replicata}}), where $|R^{<\delta^+}_\delta| = |R^{<\kappa}_\delta| = |\pset_{\kappa}(\delta)|$, then $G$ would extend the above $F$. To show this, let us map $x \in \pset_{\kappa}(A)$ to perfect $\kappa$-string $s_x \in S_{PF}$. Then, $y$ becomes imperfect $\kappa$-string $s_y \in S_{IF}$ and $X$ becomes the corresponding unfair $\kappa$-string $s_X$ (from disjoint $S_{UF}$), which is not a club but contains other $\kappa$-fair strings (those $\kappa$-fair strings would correspond to closed and unbounded).
+
+    Finally, let us revisit the main case when $|A| > \delta$. It turns out that we have chain of ultrafilter extensions (as a consequence of the above powerset inclusion chain \eqref{eq:pset_inc_chain} for corresponding replicata): $G$ is extended by $D$ and $D$ is extended by $U$. We have $U$ as a non-trivial $\lambda$-complete ultrafilter on $R^{<\lambda^+}_\lambda$. The similar correspondence between the equivalence classes of SEFs for each replicata and club filter $F$ built with $\hat{x}$ holds also for $R^{\lambda}_{\lambda}$ and $\pset_{\lambda^+}(\lambda)$. Now one can invoke $DC_\lambda$ and select $\pset_{\kappa}(\lambda)$ as a subset of $\pset_{\lambda^+}(\lambda)$. Then, as long as one considers SEF $\kappa$-strings mapped from $\forall x: x \in \pset_{\kappa}(\lambda)$, one can get $D = \{s_Y : s_Y \in U \land |s_Y| < \kappa \land s_Y \supset s_X\}$, where $s_X$ is mapped from $X \in F$. By \textit{Definition \ref{def_fine_measure}}, $D$ is a fine measure on $\pset_\kappa(A)$.
+\end{proof}
+
+\begin{corollary}[Strongly compact cardinal]\label{corollary_strongly_compact}
+    $D$ is a fine measure on $\pset_\kappa(A)$ for all $A: |A| \geq \kappa$. Consequently, $N^\ast \models \exists \text{ strongly compact cardinal}$.
+\end{corollary}
+\begin{proof}
+    In the context of $N^\ast$, result follows from \textit{Theorem \ref{theorem_fine_measure_on_replicata}} when applied to the construct of $\alpha$-tranches as in \textit{Lemma \ref{lemma_pi_biject_lambda_rep}}.
+\end{proof}
+
+We would need a small technical lemma for the upcoming proof.
+
+\begin{lemma}[Inverse of perfectly $\lambda$-fair]\label{lemma_inv_pf}
+    Let $s_x$ and $s_y$ be two perfectly $\lambda$-fair strings. Then,
+    $s_x \land s_y = \bos(0)\eos$ iff $s_x = \neg s_y$.
+\end{lemma}
+\begin{proof}
+    Follows from \textit{Definition \ref{def_almost_adjoint_strings}}, as any $s_x$ and $s_y$ (by being perfectly $\lambda$-fair strings)must be closed under non-empty intersections as almost disjoint(adjoint) unless one is the inverse of the other.
+\end{proof}
+
+\begin{theorem}[Normal measure on replicata]\label{theorem_normal_measure_on_replicata}
+    Let $N^\ast$ be a model of $ZF+DC_\lambda+I$. If $N^\ast \models \exists \text{ a replicata }\Lambda(\lambda)$, then $\Lambda(\lambda)$ carries a normal measure $D$.
+\end{theorem}
+\begin{proof}
+    Let $N^\ast \models \Lambda(\lambda)$, s.t. $\Lambda(\lambda) = (R^{\lambda}_{\lambda}, P_\varepsilon, \pi)$ for some smallest limit cardinal $\lambda$ (which is large enough to contain $\Lambda(\lambda)$). We have a regular uncountable cardinal $\kappa < \lambda$, s.t. $D$ is a nontrivial $\kappa$-complete ultrafilter on $\pset_{\kappa}(\lambda)$ and fine measure as in \textit{Theorem \ref{theorem_fine_measure_on_replicata}}.
+
+    Use the one-to-one correspondence between the equivalence classes of SEFs for each replicata and sets in $\pset(\lambda)$ to define a bijective map $e: R^{\lambda}_{\lambda} \to \pset(\lambda)$ (since $|R^{\lambda}_{\lambda}| = |\pset(\lambda)|$). Also, one can invoke $DC_\lambda$ and select $\pset_{\kappa}(\lambda) \subset \pset(\lambda)$. Let $E = e^{-1}(\pset_{\kappa}(\lambda))$ be a subset of equivalence classes of SEFs, i.e. $E \subset R^{\lambda}_{\lambda}$
+
+    Again, recall that substring relation $\substr$ is just a special kind of subset $\subset$ (see \textit{Definition \ref{def_transfinite_strings}}). Let $U \supseteq D$ be the measure on $\pset(\lambda)$ constructed as in \textit{Lemma \ref{lemma_ultrafilter_on_replicata}}. We want show that normality (as specified in \textit{Definition \ref{def_normal_measure} - \nameref{def_normal_measure}}) on $U$ using the replicata structure, so that normality of $D$ follows. 
+
+    For convenience, to match the normality notation in definition, let $A = \lambda$. Also let $B$ be some subset of measure-one sets in $\pset_{\kappa}(A)$. We define a family of functions $F = \{ f_\alpha: \pset_{\kappa}(A) \to A \}$, where $\alpha \in I(F)$, and require that for each such function we have $f_\alpha (x) \in x$. Furthermore, by bijectivity of $e$ we have a proxy family $G = \{ g_\alpha : g_\alpha(e(x)) = e(f_\alpha(x)) \land \alpha \in I(F) \land \forall x \in B \}$. Essentially, $G$ contains $\kappa$-strings each being a substring of $\lambda$-string.
+
+\end{proof}
+
+\begin{corollary}[Supercompact cardinal]\label{corollary_supercompact}
+    $D$ is a normal measure on $\pset_\kappa(A)$ for all $A: |A| \geq \kappa$. Consequently, $N^\ast \models \exists \text{ supercompact cardinal}$.
+\end{corollary}
+
+\subsection{$N^\ast$ implies ${\sf MM^{++}}$}\label{subsection_nstar_model}
+
+Recall the definition for ${\sf MM^{++}}$ from \cite{aspero2021sf}.
+
+\begin{definition}[Martin's Maximum ${\sf ^{++}}$ (${\sf MM^{++}}$)]
+    Given a forcing \( P \) that preserves stationary subsets of \( \omega_1 \), a collection \(\{D_i : i < \omega_1\}\) of dense subsets of \( P \), and a collection \(\{\tau_i : i < \omega_1\}\) of \( P \)-names for stationary subsets of \( \omega_1 \), then there exists a filter \( g \subset P \) such that for every \( i < \omega_1 \):
+    \begin{enumerate}[label=(\roman*)]
+        \item \( g \cap D_i \neq \emptyset \) 
+        \item \( (\tau_i)_g = \{\xi < \omega_1 : \exists p \in g \text{ such that } p \Vdash_{P}  \xi \in \tau_i\} \) is stationary.
+    \end{enumerate}
+\end{definition}
+
+We can now state one of our main results that we intend to show more formally as a theorem.
+
+\begin{theorem}[${\sf MM^{++}}$ and Supercompactness]\label{theorem_nstar}
+Let $N^\ast$ be a sufficiently large model of $ZF+DC_\lambda+I$ such that it satisfies existence of a proper class of replicata $\Lambda$. Then, also the following holds in $N^\ast$:
+    \begin{enumerate}[label=(\roman*)]
+        \item $N^\ast \models \exists \text{ supercompact cardinal}$
+        \item $N^\ast \models {\sf MM^{++}}$
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    The construction of $N^\ast$ leads naturally to a key result regarding the large cardinal hierarchy and its consequences for forcing axioms. Specifically, we observe that the existence of a supercompact cardinal within $N^\ast$ (see \textit{Corollary \ref{corollary_supercompact}}) suffices to establish ${\sf MM^{++}}$, as originally formulated in \cite{aspero2021sf}.
+\end{proof}
+
+The supercompactness property within $N^\ast$ alone is sufficient to establish ${\sf MM^{++}}$. Thus, part \textit{(ii)} directly implies \textit{(i)}, rendering additional intermediate arguments redundant. This aligns with the established literature on large cardinal implications for forcing axioms (see \cite{aspero2021sf}).
+
+Although the above result superseded our prior approach, which involved demonstrating that an intermediate model $N$ (of $ZF+DC$) satisfies ${\sf MM^{++}}$, it remains of interest to revisit the original approach.
+The main motivation for such follow up will come from the fact $N^\ast$ requires much stronger additional axiomatic assumptions $DC_\lambda+I$ rather than $DC$. Even though it might be impossible to connect the world of large cardinals with forcing axioms without $I$ axiom.

@@ -1,0 +1,211 @@
+%\documentclass[sigconf,natbib=false]{acmart}
+% ---------------------------
+% \usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+% \babelprovide[import]{hebrew}
+%\babelprovide[onchar=fonts ids]{hebrew}
+% \babelfont[hebrew]{rm}[SlantedFont = SILEOT]{SILEOT.ttf}
+
+\usepackage{csquotes}
+% ---
+
+\usepackage{datetime}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[hyperref = true,
+  backref = true,
+  backend = bibtex,
+  style = nature,
+	sorting = none,
+]{biblatex}
+
+% FIXME:
+\usepackage{mathalpha}
+\usepackage{mathtools}
+% \usepackage{stix2}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+
+\usepackage{tikz-cd} % For commutative diagrams
+
+% https://mirror.foobar.to/CTAN/macros/latex/contrib/mathalpha/doc/mathalpha-doc.pdf
+% \DeclareMathAlphabet\mathbfcal{LS2}{stixcal}{b}{n}
+\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
+
+% ---------------------------
+\usepackage[shortlabels]{enumitem} 
+\usepackage{listings}
+\usepackage{color}
+\usepackage{appendix}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+
+%-----------------------------
+% sub-"enumerate" with enumitem
+\newlist{legal}{enumerate}{10}
+\setlist[legal]{label*=\arabic*.}
+%-----------------------------
+
+\date{\displaydate{date}}
+\date{\today\\v1.0.0}
+
+\definecolor{somegreen}{rgb}{0,0.6,0}
+\definecolor{somegray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{ 
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
+  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{somegreen},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  firstnumber=1000,                % start line enumeration with line 1000
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=C++,		               % the language of the code
+  morekeywords={*,...,contract,function,returns},            % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{somegray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,	                   % sets default tabsize to 2 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+\newtheoremstyle{mydef}
+{\topsep}{\topsep}%
+{}{}%i
+{\bfseries}{}
+{\newline}
+{%
+  \rule{\textwidth}{0.4pt}\\*%
+  \thmname{#1}~\thmnumber{#2}\thmnote{\ -\ #3}.\\*[-1.5ex]%
+  \rule{\textwidth}{0.4pt}}%
+
+\theoremstyle{mydef}
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{observation}{Observation}
+\newtheorem{principle}{Principle}
+\newtheorem*{example}{Example}
+\newtheorem*{remark}{Remark}
+\newtheorem*{axiom}{Axiom}
+
+% also see options for fonts in latex 
+% https://tex.stackexchange.com/questions/58098/what-are-all-the-font-styles-i-can-use-in-math-mode
+\newcommand*{\numberset}[1]{\mathbb{#1}} 
+\newcommand{\nat}{\numberset{N}}
+\newcommand{\integers}{\numberset{Z}}
+\newcommand{\rationals}{\numberset{Q}}
+\newcommand{\reals}{\numberset{R}}
+\newcommand{\cset}{\mathcal{C}}
+\newcommand{\bin}{\mathcal{B}}
+\newcommand{\cbin}{\numberset{B}}
+\newcommand{\pset}{\mathcal{P}}
+\newcommand{\yset}{\mathcal{Y}}
+\newcommand{\rset}{\mathcal{R}}
+\newcommand{\porder}{\mathbb{P}}
+\newcommand{\cont}{\mathfrak{c}}
+\newcommand{\mcar}{\mathfrak{m}}
+\newcommand{\cesef}{\mathrm{E}_{SEF}} % countable list of all labels of eq classes over all fin formulas
+\newcommand{\uesef}{\mathcal{E}_{SEF}} % uncountable list of all labels of eq classes over all infinite formulas
+\newcommand{\ufsef}{\mathcal{F}_{SEF}} % uncountable list of fair formulas
+\newcommand{\uusef}{\mathcal{U}_{SEF}} % uncountable list of unfair formulas
+\newcommand{\vsef}{\mathbb{S}} % syntactically valid SEFs
+\newcommand{\vhsef}{\mathbb{T}} % cumulative hierarchy syntactically valid SEFs
+
+\newcommand{\lsef}{L_{SEF}}  % countable list of all finite formulas
+\newcommand{\ulsef}{\mathcal{L}_{SEF}}  % uncountable list of all infinite (countable) formulas
+
+\newcommand{\psf}{\mathfrak{F}} % probability space: field of sets - events
+
+% model theory
+\newcommand{\lsign}{\mathbfcal{L}}  % L-signature or L language
+\newcommand{\Lf}{\mathbfcal{F}}  % Functions
+\newcommand{\Lr}{\mathbfcal{R}}  % Relations
+\newcommand{\Lc}{\mathbfcal{C}}  % Constants
+\newcommand{\LsT}{\mathbfcal{T}}  % L-theory
+\newcommand{\LsA}{\mathbfcal{A}}  % L-structure
+\newcommand{\LsB}{\mathbfcal{B}}  % L-structure
+\newcommand{\LsN}{\mathbfcal{N}}  % L-structure
+\newcommand{\LsM}{\mathbfcal{M}}  % L-structure
+\newcommand{\LsQ}{\mathbfcal{Q}}  % L-structure
+\newcommand{\LsV}{\mathbfcal{V}}  % L-structure
+\newcommand{\LsS}{\mathbfcal{S}}  % L-structure
+
+% for boolean lagebra signature
+\newcommand{\bF}{\textbf{0}}  % algebra structure
+\newcommand{\bT}{\textbf{1}}  % algebra structure
+
+\newcommand{\notimplies}{\;\not\!\!\!\implies}
+\newcommand{\substr}{\ \varepsilon\ }
+
+% some extended hebrew notation
+% \newcommand{\HebrewLetterAsMathSymbol}[1]{\text{\foreignlanguage{hebrew}{#1}}}
+% \newcommand{\hebhe}{\HebrewLetterAsMathSymbol{ה}} % 5
+% \newcommand{\hebvav}{\HebrewLetterAsMathSymbol{ו}} % 6
+% \newcommand{\hebzayin}{\HebrewLetterAsMathSymbol{ז}} % 7  
+% \newcommand{\hebchet}{\HebrewLetterAsMathSymbol{ח}} % 8
+% \newcommand{\hebtet}{\HebrewLetterAsMathSymbol{ט}} % 9
+% \newcommand{\hebtav}{\HebrewLetterAsMathSymbol{ת}} % 22
+
+
+% function restriction
+\newcommand\restr[2]{{% we make the whole thing an ordinary symbol
+  \left.\kern-\nulldelimiterspace % automatically resize the bar with \right
+  #1 % the function
+  \vphantom{\big|} % pretend it's a little taller at normal size
+  \right|_{#2} % this is the delimiter
+  }}
+
+% use quotes in math mode to define strings
+%\DeclareMathSymbol{\mlq}{\mathord}{operators}{"}
+%\DeclareMathSymbol{\mrq}{\mathord}{operators}{"}
+\newcommand{\bos}{\text{``}}
+\newcommand{\eos}{\text{''}}
+
+% complement
+\newcommand{\stcomp}[1]{{#1}^\complement}
+
+% bij 
+\newcommand\bij{\lhook\joinrel\twoheadrightarrow}
+
+% cupdot disjoint union UPDATE: defined by stix2
+\newcommand{\cupdot}{\mathbin{\mathaccent\cdot\cup}}
+\newcommand{\fdot}{\mathbin{\mathaccent\cdot F}} % uncomputable fair
+
+% Inserts \clearpage before \begin{appendices}
+\BeforeBeginEnvironment{appendices}{\clearpage}
+% Inserts \clearpage after \end{appendices}
+%\AfterEndEnvironment{appendices}{\clearpage}
+
+% Inserts \clearpage before every \section within appendices environment
+%\AtBeginEnvironment{appendices}{\pretocmd{\section}{\clearpage}{}{}}{}
+
+% doted curly wedge and vee
+\newcommand{\cdwedge}{\dot{\curlywedge}}
+\newcommand{\cdvee}{\dot{\curlyvee}}
+
+% nand
+\newcommand{\nand}{\barwedge}

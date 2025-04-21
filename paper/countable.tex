@@ -1,0 +1,104 @@
+\pagebreak
+\section{Countable case of CTA}
+
+\subsection{Infinite binary strings}
+
+So far we have looked at binary strings of finite length. Sets of such strings have been arranged as binary tables over which we run a context-depend transformation to produce an output binary string. Next we will see that sequences of $\{0,1\}$ can be considered to be rather ``large'' or unrestricted. For example, not only input and output binary strings, but also individual rows in such tables can be repeatedly padded by zeros or any other algorithmically printable patterns consisting of finite substrings. 
+
+Instead of trying to print all of the elements at once of any such cyclic binary string in a single infinite loop, it would be much more pragmatic to approximate the process by printing out only finite subparts of an infinite string that are accessed at particular indexes $\forall j \in J$. For example, when accessing the subsets or snapshots of the values to be printed out or when implementing a tape to store a value using Turing Machine (TM). In other words, those values can be reached and printed out within a certain computational time\footnote{or within other reasonable constraints depending on the needs of the respective computational model if it is different from the deterministic TM}. We will agree that such access is happening by means of a \textit{cursor} $b(j), \forall j \in J$ - a totally computable function that takes index as an input to return the desired value. We will also refer to such selective access of cyclic binary strings as \textit{algorithmic access}. 
+
+\begin{definition}If there exists an algorithm such as a cursor function $b(j), \forall j \in J$ that can \textit{access} some values of an infinite binary string by printing them out, we say about those values that they are \textit{algorithmically reachable}.\end{definition}
+
+Indeed, it is easy to construct a function that will map a sequence of natural numbers to a totally ordered set of binary strings. Such function will be merely a translation from each natural number into a binary format which are padded with zeros (or some repeatable pattern). This fact can be noted as one of the possible enumerations of any infinitely countable set of numbers\footnote{such countable set can be defined as a \textit{proper set} depending on the consistency needs of the logical foundation or computational framework, since we don't require infinitely countable set of binary strings to contain all possible variations of binary strings - see section \textit{4.4 Uncountable cardinalities}} by a list of binary strings with \textit{one-to-one} and \textit{onto} correspondence.
+
+\begin{lemma}If $\bin$ is an infinitely countable set of binary strings, then any enumeration of those strings produces an index set $I\subseteq \nat$, where $\kappa : I \to \bin$ is some particular enumeration of $\bin$.\end{lemma}
+
+To simplify the notation, the length of the individual string $b \in \bin$ is not restricted with any finite $n \in \nat$ and the infinite padding is assumed if needed for the algorithmic access of values such as $b(j), j \in J$. It is easy to show that any finite non-cyclic part of such string can be algorithmically accessed as well\footnote{as long as there is enough memory to store the unique finite substring or it can be produced algorithmically as with translation of any natural number into a binary format}. More formally this can be stated as following:
+
+\begin{definition}A string $b$ is called semi-open\footnote{as without end at least once} and infinitely countable on the left (right) or \textit{left-infinite} (respectively, \textit{right-infinite}), for short, iff there exists a bijective mapping $\alpha : \nat \to J$, such that any index $\forall j = \alpha(n), n \in \nat$ can access all values in $b$ as in $b(j) = b(\alpha(n))$ starting from the right bits towards countably many on the left side of the string (respectively, $\exists\, \sigma(n): \nat \to J$, which is bijective and can access values $b(\sigma(n)): n \in \nat$ starting from the left bits towards countably many on the right side of the string).\end{definition}
+
+
+\begin{definition}A string $b$ is called open and \textit{bi-infinite} iff it does not have a start and an end and is both left- and right-infinite.\end{definition}
+
+By choosing yet a different way to index or map values, one can consider equally infinite strings which would be closed, instead of being open. Obviously closed bi-infinite strings are similar up to isomorphism of a particular mapping to the open bi-infinite strings - a form, which we adopt through the rest of our discussion and without loss of any generality.
+
+\begin{lemma}Let $o$ be open bi-infinite, $c$ - closed bi-infinite and $l, r$ be respectively left- and right-infinite binary strings. It is easy to show that $c,l,o,r$ share the same cardinality equal to that of $|\nat|$ or countable cardinality.\end{lemma} 
+
+In order to show the last statement, it is enough to observe that $o$ can be indexed by some $J \subseteq \integers: |J| = |\integers| = |\nat|$.
+
+\subsection{Generalized Context Transformation Algorithm}\label{subsec_gcta}
+
+We will generalize CTA and apply it for a bi-infinite string $b: K \to \{0,1\}, K \subseteq \integers$  as an input. Let us start by considering a trivial case when $b$ has a form of $\bos..01010101..\eos$ sequence built by an infinite repetition of the $(01)$ pattern in both left and right directions. In order to produce the output string, we will apply the generalized context transformation algorithm (GCTA) by starting somewhere in the middle of $b$ and moving from left to right. Then we construct a GCTA table $T: (i,j) \to \{0,1\}$ with rows indexed by $i \in I, I \subseteq \nat$ and columns by $j \in J, J \subseteq \integers$.
+
+\begin{definition}Let $b$ be a bi-infinite binary string with the cursor pointing at some index $k \in K, K \subseteq \integers$ somewhere in the middle of the string. A context observed to the left of $k$ or a \textit{prefix} is a left-infinite string equal to $b$ and obtained by ignoring\footnote{cutting off} all the values after the cursor starting with k as in $\bos k, k+1, k+2, k+3, ..\eos$.\end{definition}
+
+The left-hand of the table $T(i,j), j < 0$ consists of left-infinite strings $\{cxt_i\}, i \in I$ in order to track the already observed prefixes in $b$ on the left. Let the cursor point at $k \in K, K \subseteq \integers$, so that we can access the values $\bos..,0 \leftarrow b(k-2), 1 \leftarrow b(k-1), 0 \leftarrow b(k), 1 \leftarrow b(k+1), 0 \leftarrow b(k+2),..\eos$ and so on. We can add a first entry into the left-hand part of the table which would be  $\bos..01010101\eos$. As we move the cursor to the next position towards right $1 \leftarrow b(k+1)$, the next prefix to add into the left-hand part of $T(i,j), j < 0$ would be $\bos..10101010\eos$. 
+
+The right-hand of the GCTA table would consists of right-infinite strings. Values of those strings would be state sequences tracked as 
+\begin{equation}s_{i,j + 1} \leftarrow S(j|cxt_i) \oplus b(k)\end{equation} 
+where $(i,j \geq 0), i \in I, j \in J$ are the indexes over the occurred transformations given the respective left-infinite context $cxt_i = (T(i, j): i \in I, j < 0)$. 
+
+\begin{lemma}If GCTA table can be built by traversing the input string $b$, then $\exists \mu: k \rightarrow (i,j)$, s.t. input string index $k \in K, K \subseteq \integers$ can be always mapped to GCTA table indexes $(i,j)$ by looking up the context $cxt_i$ on the left-hand of $T$ as well as tracking $j$ on the right-hand of $T$.\end{lemma}
+
+If no transformation has been tracked yet, then conveniently\footnote{and without loss of generality} values of the right-hand part of the context-table are assumed to be countably many times padded with zeros towards right. In particular, $T(i,0) \rightarrow 0, i \in I$ are initial states. As we have now added two prefixes to the left-hand of the GCTA table for the first time, the right-hand of the context table will reflect this with two states being updated in two rows: 
+
+\begin{enumerate}
+  \item for $0 \leftarrow b(k), \mu(k) \rightarrow (0,1):$ \\ update $s_{(i,j)} = s_{(0,1)} = s_{(0,0)} \oplus b(k) = 0$ \\ given $cxt_i=cxt_0=\bos..01010101\eos$
+  \item for $1 \leftarrow b(k+1), \mu(k+1) \rightarrow (1,1):$ \\ update $s_{(i,j)} = s_{(1,1)} =cxt{(1,0)} \oplus b(k+1) = 1$ \\ given $cxt_i=cxt_1=\bos..10101010\eos$
+\end{enumerate}
+
+The transformation can take place in the sense that one can produce an output string by knowing the position of the cursor $k$ and traversing the GCTA table, so that one looks up the prefix $cxt_i$ on the left-hand of the table and computes the $xor$ of $b(k)$ with the respective state $s_{i,j}, j \geq 0$ on the right-hand of the table. Every time the cursor continues to move over $b$ from left to right, the newly observed context gets switched and next bit will be produced as a $xor$ result to be appended to the bi-infinite output.
+
+It turns out that if we continue to iterate over the input string $b=\bos..01010101..\eos$, then no new left-infinite prefixes will be added to the left-hand of $T$. All the prefixes\footnote{the two of them} have been already observed. Also on the right-hand of the table there would be only a single non-zero entry $T(i,j) = s(i,j) = s(1,1) = 1$. The rest of states will continue to be zero. The reason for this is the memory property of the GCTA, which indicates a certain triviality of $b=\bos..01010101..\eos$ as being repetitive or \textit{cyclic} by construction.
+
+\begin{definition}Let $T: (i,j) \to \{0,1\}$ be a GCTA table for a bi-infinite input string $b$ with rows indexed by $i \in I, I \subseteq \nat$ and columns by $j \in J, J \subseteq \integers$. If rows on left-hand of the GCTA table, namely when $j < 0$, consist only of observed left-infinite prefixes of the input string $b$ obtained by scanning or traversing $b$ from left to right as well as if rows in the right-hand of the GCTA table, namely for $j >= 0$, consist only either of updated state values or unset placeholders, then such GCTA table $T(i,j)$ is called \textit{proper}.\end{definition}
+
+Earlier, we have also mentioned the idea that cyclic strings like $b=\bos..01010101..\eos$ can be generated by a repetitive pattern or a program loop. Let us state this more formally by using the above notion of GCTA table.
+
+
+\begin{definition}Let $b$ be a bi-infinite string. If one can show that $b$ consists only of a single repetitive pattern - a finite substring $s \subset b$ that can be printed by an infinite program loop, then we say that $b$ is a \textit{cyclic} bi-infinite string.\end{definition}
+
+\begin{theorem}Let $b$ be a bi-infinite input string and $T(i,j)$ be a proper GCTA table for $b$. A bi-infinite string $b$ is \textit{cyclic} iff $T(i,j)$ has a finite number of rows, i.e. $\exists e \in \nat : i <= e$\end{theorem}
+
+\begin{proof}Take any cyclic bi-infinite input string $b$. Since $b$ is cyclic it means that $b$ consists of some repetitive patterns, which are formed by some finite substring $s$. Now start scanning $b$ from left to right in order to produce desired GCTA table $T(i,j)$. While scanning, one would move the cursor $k$ over $b$ in a loop which would be equivalent to continuously popping values from $s$ and padding them on the right side to some $cxt_i = \bos..b(k-2),b(k-1),b(k)\eos$ shifting the cursor $k \leftarrow k + 1$. Each such padding operation will produce entries for the left hand of $T(i, j)$ table. Note that because $s$ is finite, $\exists e \in \nat : e = |s|$. It means that once we will reach the end of s, no new unique context row will be produced to be added to $T(i, j)$ left hand. Instead we will continue to advance the right hand column $j \leftarrow j + 1$ in order to append the state part of GCTA table with the observed states in form of right-infinite strings. Given that $s$ is finite, so would be the number of rows in $T(i,j) : i <= e$. The opposite is trivial. We can run the GCTA algorithm and produce the output in form of the cyclic string $b$.\end{proof}
+
+\begin{corollary}Let $b$ be a cyclic bi-infinite input string and $T(i,j)$ be a proper GCTA table for $b$. The number of rows in $T(i, j)$ will be not greater than the length of the repetitive substring $s \subset b$, i.e. $i <= e, |s| = e$.\end{corollary}
+
+\begin{proof}By definition of $b$ as cyclic string, there exists a finite substring $s \subset b, |s| = e, e \in \nat$ which is also a single repetitive pattern underlying s. Run GCTA scanning and observe the number of unique prefixes added to the left-hand of the $T(i, j)$. Notice that they start repeating themselves only after enumerating values in $s$ at least once.\end{proof}
+
+Let us consider another case of scanning a bi-infinite string $b$, that does not have a repetitive pattern.
+
+Let $b$ be a left-infinite string, printed out by an endless program loop. Each bit is passed from the binary conversion of the counting program, that can enumerate natural numbers and print out their values in binary format. Printing is done by padding individual bits of converted values from left to the right output part of $b$. By construction, string $b$ will never repeat itself meaning that left-handle of the GCTA table will contain infinitely many rows. This also means that after scanning of $b$ the right-hand of the GCTA table will have values updated only in the first column $j=0$. The rest of $j > 0$ will contain empty unset placeholders.
+
+\begin{definition}Let $b$ be a bi-infinite binary input string and $T(i,j), \forall i \in I, I \subseteq \nat, \forall j \in J, I \subset \integers$ be a proper GCTA table for $b$. If there exists no substring $s \subset b$ which can be printed out repeatedly to produce $b^\prime$, s.t. $b = b^\prime$, then $b$ is called \textit{non-cyclic} infinite binary string.\end{definition}
+
+Note, that if one replaces counting program to print out values of $b$ in the above definition to enumerate $\integers$ instead of $\nat$, one will print out non-cyclic bi-infinite string instead of left-infinite one.
+
+\begin{theorem}Let $b$ be a bi-infinite input string and $T(i,j)$ be a proper GCTA table for $b$. A bi-infinite string $b$ is \textit{non-cyclic} iff there are countably-many rows in $T(i,j)$ : $ i \in I, |I| = |\nat|$ and the right hand of $T(i,j)$ has only one column of state values filled in after scanning $b$.\end{theorem}
+
+
+In fact, GCTA table can be always built by traversing the input string $b$. Let's state this as a theorem.
+
+\begin{theorem}If $b$ is a bi-infinite input string, then $\exists \gamma: b \rightarrow T(i,j)$, where $T(i,j)$ is a proper GCTA table and $\gamma$ is a bijective mapping.\end{theorem}
+
+\begin{proof}Assume the opposite. One possibility is that $\exists b^\prime \neq b: \gamma(b) = \gamma(b^\prime) = T(i,j)$. Let $T(i,j)$ consists of all left-infinite prefixes of $b$. Then there must be a left-infinite prefix $cxt_p \in T(i,j<0)$ which is also a prefix of $b^\prime$ and is at most a single bit different from some prefix in $b$. However, this is not possible if $T(i,j)$ is a proper GCTA table. Another possibility is that $\exists T^\prime(i,j) = \gamma(b): T^\prime(i,j) \neq T(i,j)$, where $T(i,j)$ is a proper GCTA table for the bi-infinite input string $b$. Put cursor at some $k$ index in the middle of $b$ and cut the left-infinite part before that cursor $k$ as a first prefix to be added into $T(0,j<0)$ and into $T^\prime(0,j<0)$ at the same time. As we have seen left-hand sides of both tables will be equivalent. Then let us consider the right-hand parts and start updating the states in both tables. Observe that there is no difference between values $T(0,j>=0)$ and $T^\prime(0,j>=0)$ if GCTA is applied over the same $b$ and hence $\gamma$ is bijective.\end{proof}
+
+\begin{corollary}If $b$ is a bi-infinite input string and $T(i,j)=\gamma(b)$ is a proper GCTA table for $b$, then $\exists o$, which is a bi-infinite output string for $GCTA(b)$, such that there exists a reverse transformation $b=GCTA^{-1}(o)$ for every bi-infinite input and output combinations.\end{corollary}
+\begin{proof}Follows from bijectivity of CTA and $\gamma: b \bij T(i,j)$. Indeed, GCTA scheme is extended around CTA by defining similar direct and inverse transformation algorithms over bi-infinite input string facilitated by the proper GCTA table to produce a bi-infinite output string and to reverse the output back into the same input. Let's assume the later is false. That means that for any unique output $o = GCTA(b)$ there exists $\exists T^\prime(i,j)$, s.t. if the infinite extension of the inverse CTA is applied to it as $GCTA^{-1}$, then $GCTA^{-1}(o) = b^\prime, b^\prime \neq b$. However, since $T(i,j)$ is proper and $\gamma: b \bij T(i,j)$ is a bijective mapping, this leads to a contradiction. Hence, $GCTA^{-1}(o) = b$ since $T^\prime(i,j) = T(i,j)$ and both inputs $b^\prime = b$ are equal.\end{proof}
+
+\subsection{Beyond countable}
+
+The above observations introduce bi-infinite binary strings and tables for context-dependent transformations. They also provide insights into relations between these objects which are always restricted within countable cardinality of $|\nat|$.
+
+Each $T(i,j)=\gamma(b)$ has a generating property that by traversing the right-hand of $T(i,j<0)$ the GCTA can produce a corresponding output. In order to produce a bijective output $o$ a clear determinism needs to be followed. Every time the cursor $k$ is pointing at the input string $b$ is increased to $k + 1$, then: 
+
+\begin{enumerate}
+\item either \textit{the switch of the context} takes place: an existing $i$ row containing $cxt_i = \bos..b(k-2),b(k-1),b(k)\eos$ is selected or the new $i+1$ row is added to the table if such context has not been observed yet and is a different left-infinite string;
+\item $j$ is advanced to $j+1$ and updated. 
+\end{enumerate}
+
+An interesting aspect of that generating property is that sometimes one can produce a different output if the left-hand of $T(i,j)$ is substituted with the left-hand for a different input string $b^\prime \neq b$. One can also introduce a modification into the generating algorithm to produce more than one output string if all of the right-hand $T(i,j>0)$ is traversed. Later is possible if the left-hand remains algorithmically accessible in the same computation time. 
+
+Indeed, instead of continuously following the logic of switching between contexts when scanning an input string, one can choose to have the GCTA table as an algorithmically constructible starting point\footnote{not necessarily proper} and simply traverse the right-hand to output multiple strings for each corresponding $i$ row and $cxt_i$ in that row, so that each row is potentially a left-infinite part of a different bi-infinite output string. In other words, to run GCTA in parallel one need to keep track of multiple $j$ indexes in the above scheme. Each of them must be advanced and updated independently.
+
+The above also means that, there exists an access algorithm defining a map between every countable element of some infinite sequence on the left-hand of the GCTA table and strictly many more elements obtained by traversing and generating new corresponding elements from the right-hand of the GCTA table. The same can be stated more formally by defining a scheme of accessing values using \textit{general context generation algorithm} (GCGA). In order to do so, we would also require some more convenient tools to explain how the process of infinite binary strings enumeration can be organized.

@@ -1,0 +1,28 @@
+\section{Introduction}
+
+Traversing a binary string is a process that is trivial enough to imagine.  This is equivalent to enumerating some sequence of values. Each value can be either zero or one. The process of enumerating such values allows labeling each position with a number or an \textit{index}, so that we can always find out the value at certain position. A sequence of $\{0,1\}$ equipped with such indexing will then be a binary string, but the same can be stated more formally.
+
+\begin{definition}\label{def_binstr}
+    If the position of each value of some binary sequence can be enumerated by an index set $J\subseteq \nat$, so that each index can be mapped to the binary value at the respective position, then we call such mapping $b : J \to \{0, 1\}$ a binary string.
+\end{definition}
+
+Existence of the above mapping also means that the binary string $b$ has the same ``cardinality'' as its index set $J$. We call such ``cardinality'' \textit{the length of the binary string} and denote this as $|b| = |J|$. For example, if some string $b$ has the length $n\in \nat$, then this fact is noted as $|b| = n$ or with the lower subindex $b_n$.
+
+Sometimes we also use round bracket or double quote notation if we need to explicitly indicate which exact finite sequence of $\{0, 1\}$ does represent some concrete binary string. For example, the following notations of a binary string $b_n$ are equivalent and ordered by increasing brevity:
+
+\begin{itemize}
+    \item[$\backsim$] $(1,0,0,1,1,1,0,1,..,0,1,1)_n$
+    \item[$\backsim$] $\bos1,0,0,1,1,1,0,1,..,0,1,1\eos_n$
+    \item[$\backsim$] $\bos10011101..011\eos_n$
+    \item[$\backsim$] $10011101..011_n$
+\end{itemize}
+
+A set of binary strings that have the same length is denoted as $B_n = \{ b_n \in \big| n \in \nat \}$.
+
+\begin{definition}
+    Consider a set of binary strings $B_n$ of a finite length $n$ from $2^n$ of possible strings of that length, $\ s.t.\ |B_n| = 2^n$. We say that two strings $x_n \in B_n$ and $y_n \in B_n$ are \textit{equal} iff values in both strings are equal at each position $j$ as in $x_n(j) = y_n(j), \forall j \in J $, where $J$ is some index set shared by $x_n$ and $y_n$.
+\end{definition}
+
+By analogy of the opposite, the \textit{inequality} of $x_n,y_n \in B_n$ follows from $\exists j, j \in J: x_n(j) \neq y_n(j).$
+
+Given the above definitions we are going to look at binary strings of some finite length in the first part of the paper and consider context dependent transformation of their values called \textit{context transformation algorithm} (CTA). In the second part of the paper we will discuss CTA applications to more fundamental concepts such as cardinality of infinite binary strings. Some other generalizations of the CTA as well as listings of code are provided in appendix of this paper.

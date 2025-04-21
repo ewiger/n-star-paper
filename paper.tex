@@ -1,0 +1,57 @@
+% !BIB TS-program = biber
+% !BIB program = biber
+\title{From Context Transformation Algorithm \\ to $N^\ast$ model of Set Theory}
+\author{
+        Yauhen Yakimovich\footnote{Please see the end of the paper for Acknowledgements} \\ \href{mailto:yauhen.yakimovich.mail@gmail.com}{yauhen.yakimovich.mail@gmail.com}
+}
+
+
+\documentclass[english,a4paper,11pt,oneside]{article}
+
+% Many custom declarations and package usages
+\input{preambula.tex}
+
+\addbibresource{paper.bib}
+
+\begin{document}
+
+\selectlanguage{english}
+
+\begin{titlepage}
+  \clearpage\maketitle
+  \thispagestyle{empty}
+
+  \begin{abstract}
+    This paper proposes Set Theory models \( N \) of \( ZF + DC \) that explicitly decides the Continuum Hypothesis ($CH$) as well as \( N^\ast \) of \( ZF + DC_\lambda + I \) that implies the existence of \textit{supercompact cardinal}. The approach employs advanced and somewhat novel techniques from mathematical logic, including Boolean-valued models and String Enumeration Formulas (SEF) to build \textit{replicata} structures as used for the models. It follows that $CH$ becomes resolved for all instances of large enough models of \( ZF + DC \), providing a concrete solution to a longstanding open problem, so that Goedel's conjecture $2^{\aleph_0} = \aleph_2$ holds. Other results offer new insights into the structure of \( N^\ast \) and its implications for related mathematical theories, laying a foundation for further research on infinite sets.
+  \end{abstract}
+\end{titlepage}
+
+\pagebreak
+
+\tableofcontents
+
+\pagebreak
+
+\input{paper/preface.tex}
+
+\input{paper/intro.tex}
+
+\input{paper/finite.tex}
+
+\input{paper/countable.tex}
+
+\input{paper/enum_sef.tex}
+
+\input{paper/determinacy.tex}
+
+\input{paper/not_ch_model.tex}
+
+\input{paper/rep_schema.tex}
+
+\input{paper/st_for_sef.tex}
+
+\input{paper/conclusion.tex}
+
+\input{paper/appendix.tex}
+
+\end{document}

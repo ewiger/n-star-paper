@@ -1,0 +1,1408 @@
+\pagebreak
+\section{Accessibility, Choice and Fair Determinacy}\label{section_determinacy}
+
+\subsection{Computability of SEF languages}
+
+The results presented in \textit{Theorems 30-33} will require a number of clarifications to make sure that we can offer a proper interpretation for statements like $\uesef = \cesef \cupdot \ufsef \cupdot \lambda(\uusef)$. Indeed, the definition of a list of countable unfair formulas $\uusef \subset \ulsef$ as it has been introduced by applying c-slashing in $\textit{Theorem 30}$ still works well assuming $CH$ is true\footnote{and is sufficient for the proof as used in \textit{Theorem \ref{st_not_ch}}}. It was enough to consider the case that $|\uusef| > \aleph_0$, and c-slashing illustrates how such list can be succinctly constructed. However, given the new result of $\neg CH$ in \textit{Theorem \ref{st_not_ch}}, it becomes evident that in order to have a strict partitioning of $\uesef$ into $\ufsef \cupdot \lambda(\uusef)$ next to countable $\cesef$, the actual cardinalities of both $\ufsef$ and $\uusef$ have to be much bigger\footnote{than initially considered or constructed by c-slashing}. This means that we have to update our definitions, if they are to be strict enough and consistent with our newly learned understandings.
+
+\begin{definition}\label{def_all_strictly_unfair}
+  $\uusef \subset \ulsef$ is a list of all countable strictly unfair SEFs iff the following holds:
+  \begin{enumerate}
+    \item all formulas in $\uusef$ are of countable length $\forall \phi \in \uusef: |\phi| = \aleph_0$
+    \item all formulas in $\uusef$ have no replicator over empty string $\forall \phi \in \uusef: (k = \bos x \cdot y \cdot z\eos) \land (|\phi|_{k} > 0) \land (x = {(}) \land (|y|_{(} = |y|_{)} = 0) \land (|y| > 0) \land (z = {)})$
+    \item all formulas in $\uusef$ are strictly unfair - $\forall \phi \in \uusef: ( \phi = \bos x \cdot y\eos) \land \forall x,y: (1 \leq |x|_{(} \leq |y|_{)}) \land (|\phi|_{(} = |\phi|_{)})$.
+    \item if $g_\alpha \in G$ is some generating procedure\footnote{similar to c-slashing such as conditions A and B in \textit{Theorem 30}} from a family of all such procedures $G$ and $\alpha \in I(G), |I(G)| \leq \cont$ is an index set over it, s.t. $U_\alpha := g_\alpha(\cesef), g_\alpha \in G$, then $\uusef$ is closed under $\alpha$-indexed unions $\uusef := \bigcup_{\alpha \in I} U_\alpha$
+  \end{enumerate}
+  where $\bos x \cdot y\eos$ is a concatenation of two strings $\forall x,y: x,y \in \Sigma^\omega$ and $\Sigma := \{0,1,{(},{)}\}$\footnote{Also see \textit{Definition \ref{def_ulsef}}}
+\end{definition}
+
+A similar definition can be provided for $\ufsef$.
+
+\begin{definition}\label{def_all_strictly_fair}
+  $\ufsef \subset \ulsef$ is a list of all countable strictly fair SEFs iff the following holds:
+  \begin{enumerate}
+    \item all formulas in $\ufsef$ are of countable length $\forall \phi \in \ufsef: |\phi| = \aleph_0$
+    \item all formulas in $\ufsef$ are strictly fair $\forall \phi \in \ufsef: |\phi|_{(} = |\phi|_{)} = 0$
+    \item if $p_\alpha \in P$ is some generating procedure from a family of all such procedures $P$ and $\alpha \in I(P), |I(P)| < \cont$ is an index set over it, s.t. $F_\alpha := p_\alpha(\cesef), p_\alpha \in P$, then $\ufsef$ is closed under $\alpha$-indexed unions $\ufsef := \bigcup_{\alpha \in I} F_\alpha$
+  \end{enumerate}
+\end{definition}
+
+Given both definitions the partition statement $\uesef = \cesef \cupdot \ufsef \cupdot \lambda(\uusef)$ is consistent again\footnote{Otherwise we would fail to have exhaustive partition, only $\cesef \cupdot \ufsef \cupdot \lambda(\uusef) \subseteq \uesef$ }. We also avoid $\ufsef$ and $\uusef$ to be universal sets, thus escaping unnecessary set theoretical paradoxes. However, one can see that both definitions rely on a rather abstract requirement - to be \textit{closed under $\alpha$-indexed unions}, which is limited by the cardinality of the index set\footnote{Although the nature of $G$ and $P$ set generating families remains abstract, we assume that their cardinalities are not greater or even strictly less than that of the continuum}. Although mathematically concise, these definitions might not be computationally very practical.
+
+At this point we want to ask a very radical question -  to which extent we can attempt to reasonably enumerate $\ufsef$ and $\uusef$ lists of SEFs? And if exhaustive enumeration is not possible, can we attempt any practical procedure to approach this? Computational enumeration is the next possible proxy of using finite and semi-finite\footnote{countable} tools in our attempt to comprehend the nature of infinite.
+
+We proceed with clarification on computational strictness as a practical form of mathematical rigor. Going forward we accept \textit{Defintion 25} and \textit{Definition 26} only as definitions of \textit{strictly fair} and \textit{strictly unfair} countable binary strings.
+
+\begin{definition}
+  If $\ulsef$ is an infinite SEF language and $\phi \in \ulsef$ is a formula in this language, then $\phi$ is called \textit{non-strictly fair} iff there exists a finite prefix $\exists \varphi: |\phi|_\varphi = 1, |\varphi| \in \nat$, s.t. $|\varphi|_{(} = |\varphi|_{)} = 0$ at any countable moment of scanning time for the input $\phi$.
+\end{definition}
+
+In other words there exists no TM that can decide if $\phi$ is \textit{strictly fair} without stopping, which makes strict fairness undecidable. In the same manner we cannot check for strict unfairness of the countable formula or if such formula is strictly valid\footnote{e.g. has the right number of brackets}. But we can still design a recursive procedure\footnote{in a dovetailing fashion\cite{stackoverflow:5107312}} which is capable of yielding a finite prefix $\varphi: |\phi|_\varphi = 1$ at any moment of countable time\footnote{this pretty much reflects the ideas of computability of the $\omega$-regular expression} and run as a part of another bigger enumerative recursion. Such procedure will simultaneously check for non-strict fairness and unfairness\footnote{It does not mean that we intend to construct a proof in form of a program and let it run without stop. The result of such a program would still be an infinite enumeration. If we don't want to wait forever, our proof should be more resourceful}. It turns out that non-strict fairness may still be good enough for some of our purposes in proofs. Alternatively, strict fairness can be induced by construction\footnote{basically if we know a-priori that SEFs are strictly countable fair}.
+
+Finally, there is another specific case why non-strictness is useful. A generating procedure can be exotic enough, so that we have to deal with the formula of uncountable length $\phi \notin \ulsef : |\phi| > \aleph_0$\footnote{not by our choice but due to some abstract nature of the exotic computational model}. In this very special case relying on \textit{Defintion 35} still permits treating of the input as countable.
+
+\begin{lemma}
+  If $\ulsef$ is an infinite SEF language, then $\exists \phi \in \ulsef$ such that there exists no TM that can decide if $\phi$ is \textit{strictly fair}.
+\end{lemma}
+
+Assume we are in need of a strictly countable fair formula. Instead of trying to spend countable time to scan $\phi \in \ulsef$ for bracket symbols, an alternative approach would be to show that we can generate $\tau \in \ufsef$ such that absence of bracket symbols is guaranteed by the generating procedure itself. As long as SEF $\tau$ does not contain a single replicator (hence does not produce infinite output loops of finite patterns), it is strictly fair by definition.
+
+It turns out that the process of generating some strictly countable fair SEF $\phi \in \ulsef$ is closely related to the very concept of randomness. Given that we have a good definition of randomness at hand\footnote{such as Chaitin Omega number $\Omega_U$ mentioned in \cite{Calude2002ComputingAG}}, we can consider using it as generation procedure of $\phi \in \ulsef$. Chaitin Omega number $\Omega_U$ number is the halting probability of a universal Chaitin (self-delimiting Turing) machine. Every Omega number is both computably enumerable\footnote{abbreviated as c.e., meaning that it is in RE class}
+(the limit of a computable, increasing, converging sequence of rationals) and random (its binary expansion is an algorithmic random sequence).
+
+\begin{theorem}
+  Let $p \in \cbin$ be an infinite binary expansion (string) of some real number $x \in (0, 1)$, s.t. for some universal Chaitin machine $x = \Omega_U$. If $\exists \phi \in \ulsef$ is a countable SEF, s.t. $p = \pi(\phi)$, then $\phi$ is also a strictly countable fair SEF $\phi \in \ufsef$.
+\end{theorem}
+\begin{proof}
+  Chaitin Omega number $\Omega_U$ is defined using universal Chaitin machine $U$. s.t.
+
+  \[ \Omega_U = \sum_{ p \in \Pi\colon\ p \text{ halts} } 2^{-|p|}, \]
+
+  where $|p|$ is the length of the binary string $p$ and set $\Pi \subseteq \{0,1\}^\omega$ consists only of allowed\footnote{specially encoded} programs on $U$, so that each program is prefix-free (no string is a prefix of another string).
+
+  According to Kraft's inequality $\sum_{p \in \Pi} 2^{-|p|} \leq 1$, which shows that $\Omega_U$ is also the probability that program $p$ halts.
+
+  We know that $|p|$ is countable\footnote{by given and from the fact that each Chaitin Omega number is c.e.}. Now assume that $p$ is produced from a countable unfair SEF. In that case it will contain at least one replicator. But since each valid program $\forall p \in \Pi$ must be prefix-free and no string is a prefix of another string, p can not contain repetitive prefixes. Which means $p$ must be strictly fair.
+
+\end{proof}
+
+Alternatively, algorithmic randomness of $\Omega_U$ implies equal probability for zeros and ones to occur in $p$. Assume $p = \pi(\phi)$ and $\phi$ is countable unfair SEF, so that $p$ contains infinite repetitions of some finite "$(\tau)$" as a replicator (as by definition of strictly countable unfair SEF). Not only infinite repetitions of finite $\tau$ can change the distribution of probabilities to being non-random. It turns out that replicators can be well-compressed contradicting the algorithmic randomness of $\Omega_U$.
+
+In other words, every Chaitin Omega number is also a strictly countable fair SEF. However there are simpler approaches to encode countable binary string in prefix-free manner or without even finite substring repetitions. In that sense, the requirement for a countable string to be strictly fair is much weaker than algorithmic randomness.
+
+\begin{definition}
+  Consider a list $\mathcal{A}_\alpha$ of infinite sequences containing permutations of natural numbers (without repetitions), where $\alpha \in I$ is some index. Meaning that first entry of the list is $\mathcal{A}_1=(a_0,a_1,a_2,a_3,a_4,..)=(1,2,3,4,5,..)$, second is obtained as permutation of indexes as in $\mathcal{A}_1=(a_1,a_0,a_2,a_3,a_4,..)=(2,1,3,4,5,..)$ and so on. So that $\mathcal{A}$ contains infinitely many permutations of the infinite sequence with natural numbers\footnote{somewhat by analogy with Baire space in set theory, but no repetitions}.
+
+  Now if we can encode each entry of the list as SEFs $\Psi := \{\psi : \psi = encode(\mathcal{A}_\alpha)\}$ in such a form that we write only a short binary expansion\footnote{if $n \in \nat$ and SEF s := $\bos [n] \eos$, then its binary expansion $b := \pi(s) = \pi(\bos [n] \eos)$ has length at most $log(n)$, i.e. $|b| \leq log(n)$} of each natural number, then the result of such encoding can be rewritten as SEF $\psi : \psi \in \Psi, \Psi \subset \ulsef$, s.t. : $\psi := \bos ..[a_i][a_{i+1}][a_{i+2}].. \eos$, where $\mathcal{A}_\alpha=(..,a_i,a_{i+1},a_{i+2},..), i \in \nat $. Then such list of SEFs $\Psi$ is called SEF permutation list of natural numbers.
+\end{definition}
+
+\begin{lemma}
+  If $\Psi$ is a SEF permutation list of natural numbers, then $\Psi \subset \ufsef$ and each SEF $\forall \psi \in \Psi: \psi$ is strictly countable fair.
+\end{lemma}
+\begin{proof}
+  Proof is by construction. Each $\psi \in \Psi$ is encoded as prefix-free string and hence does not contain any replicators.
+\end{proof}
+
+Knowing that each SEF in $\Psi$ is strictly countable fair by construction and $|\Psi| = \aleph_0$, we can as well treat them as non-strictly fair as they don't need any actual computational check.
+We would now try to use them and construct an alternative proof for \textit{Theorem \ref{st_not_ch}}, but this time we will use lists of much finer cardinalities.
+
+
+In the alternative proof for $\neg CH$ case, we will not use c-slashing and its GCGA construction\footnote{as we did in \textit{Theorem \ref{st_not_ch}}}, but only re-use the configuration for continuous access scheme. It turns out that it can be sufficient to work with much finer sets.
+
+\begin{theorem}[Weaker-case Theorem for $\neg CH$ (WNCH)]\label{wt_not_ch}
+  If $\Psi \subset \ufsef, |\Psi| = \aleph_0$, then $\exists U^\prime_{SEF} \subset \uusef$, s.t. $|\Psi| < |U^\prime_{SEF}|$ and $\aleph_0 < |U^\prime_{SEF}| < \cont$.
+\end{theorem}
+\begin{proof}
+  Instead of computing binary expansions of SEFs, we would work with their values directly\footnote{to illustrate their computability in countable time} as arguments or references to the subset of the domain of the production function $\pi(\ulsef)$. We start by arranging a table with $\Psi$ as a list of countable fair formulas $\Psi \subset \ufsef, \ufsef \subset \ulsef$ on the $LH$.
+  \begin{enumerate}
+    \item Let $U_{SEF} \subset \uusef$ be the list of countable unfair that we want to access via value-states on the $RH$. The setting is as in continuous access scheme\footnote{see \textit{Definition 22} and \textit{Theorem 13} for finite $\lsef$ and $\delta = 1$}.
+    \item We did not apply any slashing on the $LH$, so $|\Psi| = \aleph_0$. This means we can choose any prefix $\psi \in \Psi$ in countable time and try to access values matched on the $RH$.
+    \item Next, for each $\forall \psi \in \Psi$ we will always iterate over the same list of all finite unfair formulas $\cesef$ which we have chosen to put on the $RH$ as value-states\footnote{notice that like this we still keep enumeration under the countable time in dovetailing fashion}.
+    \item As the result of employed algorithmic access we can approximate $U_{SEF} \subset \uusef$ for any $RH$ as SEF concatenation\footnote{see countable unfair from $A \cdot \overline{b}$ in concatenation table - fig. \ref{fig:concattab}}.
+    \item Assume that $|U_{SEF}| = |\Psi \times \cesef|$. Given the countable time of our access or the cardinalities in the product we get $|U_{SEF}| = \aleph_0$.
+    \item Now let us show that there exists an surjection $\nu: U^\prime_{SEF} \to U_{SEF}$, s.t. $U^\prime_{SEF} \subset \uusef$ and $U_{SEF} < U^\prime_{SEF}$\footnote{Alternative way to continue the proof would be to do binary expansion on the $RH$ and apply GCGA as in \textit{Theorem 10} to obtain a different $U^\prime_{SEF} = GCGA(U_{SEF})$. Like this we arrive at $\aleph_0 < |U^\prime_{SEF}|$. This binary expansion step we cannot do in countable time. But we can approximate it by partial access - eventually at a limit, somewhat similar how one would approximate computation of real or even Chaitin numbers}.
+    \item The surjection $\nu: U^\prime_{SEF} \to U_{SEF}$ can be constructed in countable time by taking every countable fair part $\psi \in \Psi$, and generating two formulas instead of one to construct the domain of $\nu$ $U^\prime_{SEF}$\footnote{alternative approach is to take original $\bos \psi \eos$ from $LH$ and wrap it into replicator ones $\bos (\psi) \eos$ and twice $\bos ((\psi)) \eos$}: take original $\phi \in U_{SEF}$ as is $\bos \phi \eos$ plus another one wrapped into a replicator $\bos (\phi) \eos$. Note that there always exists $\bos (\phi) \eos$ for every $\phi \in U_{SEF}$ since each $\phi$ has form of $A \cdot \overline{b}$. 
+    
+    \item To construct \( U^\prime_{SEF} \) with \( |U^\prime_{SEF}| > \aleph_0 \), we introduce a systematic method for generating new formulas. For each \( \phi \in U_{SEF} \), apply a replicative process that generates exponentially many variants. Specifically, for any \( \phi \), construct formulas \( \phi_n \) for \( n \in \mathbb{N} \) by appending a sequence \( 1^n \cdot 0 \) as a suffix, where \( 1^n \) is a repetition of \( 1 \) \( n \)-times followed by \( 0 \). This ensures a countably infinite family of new formulas is generated for each \( \phi \), effectively multiplying the cardinality.
+    
+    \item Since the above step produces exponentially many new formulas for each \( \phi \), the cardinality of \( U^\prime_{SEF} \) exceeds \( \aleph_0 \) while still being enumerable within the constraints of \( \aleph_0 \)-time dovetailing. Importantly, this replication method retains a bijection with \( \mathbb{N} \times \mathbb{N} \) on  the $RH$, confirming that we do not break the requirement of computability in countable time\footnote{as we don't expand the table}.
+
+    \item Again, note that we cannot print out in countable time\footnote{only approximate a countable fragment via partial algorithmic access} all the new $RH$ list $U^\prime_{SEF}$ as we arrive at $|U_{SEF}| < |U^\prime_{SEF}|$ and $\aleph_0 < |U^\prime_{SEF}|$.
+    \item Since $|\ulsef| = \cont$ (see \textit{Theorem 24}) and $U^\prime_{SEF} \subset \uusef \subset \ulsef $, we observe that $|U^\prime_{SEF}| \leq \cont$. We can show that $|U^\prime_{SEF}| \neq \cont$ by construction from $U^\prime_{SEF} \cap \ufsef = \emptyset, \ufsef \subset \ulsef$. Hence, $\aleph_0 < |U^\prime_{SEF}| < \cont$.
+  \end{enumerate}
+\end{proof}
+
+The above proof is a simplified version of previous $\neg CH$ case\footnote{without relying on results in \textit{Theorem 10}, c-slashing and (disjoint) equivalence classes in complete cover of $\uesef$ partition, but we may still require the choice function to be able to index over all reals which may imply ZF+AC\cite{jech2003set}}. We also argue that this proof is algorithmically accessible in countable time\footnote{Unfortunately we don't provide a formal proof for showing that the \textit{Theorem 37} can be achieved also computationally by running on $\omega$-automaton or similar (non-DC) TM formalism. But one not very straight-forward way to show this would be to use Church-Turing thesis to identify pointwise equivalent program or formula as a point on $x \in \reals$. Then show that $x$ is c.e.}. We have mentioned earlier that continuum access schema is undecidable and in fact it allows only partial access to continuum unless shown how it can be properly implemented\footnote{for example, by assuming }. So we benefit only from a similar table-like setting with LH and RH listings rather than using CAS fully.
+
+\begin{corollary}
+  If $\ufsef$ is a list of all strictly countable fair SEFs and $\uusef$ is a list of all strictly countable unfair SEFs, then $|\ufsef| < |\uusef|$
+\end{corollary}
+\begin{proof}
+  Show that there exists an injection $\nu: \ufsef \to \uusef$, similar as in previous theorem. Inequality is strict since $\ufsef \cap \uusef = \emptyset$.
+\end{proof}
+
+We wanted to dedicate some final remarks in this subsection to enumeration of finite SEFs in $\cesef$ (see fig. \ref{fig:sefseq}). As pointed out earlier in \textit{Theorem 12}  $\lsef$ is a regular language since it can be recognized by a regular expression.
+
+Indeed, replication operators used in unfair SEFs can be rewritten as $\omega$-regular expressions. As long SEFs are of finite length, they can be recognized by a regular expression themselves. From Chomsky hierarchy we know that regular languages are subset of almost all other languages in the hierarchy\footnote{can be accepted by a Finite State Machine (FSM)}. We also know that each $\omega$-regular language can be accepted by a Linear Bounded Automata (LBA).
+
+Still, as mentioned in subsection \textit{Equivalence classes of SEFs}, we are not sure if there exists an efficient algorithm for $\cesef$ enumeration. To produce initial results (as shown in fig. \ref{fig:sefseq}) we had to apply a lot of heuristics and formula reductions. It becomes obvious rather quickly that part of the enumeration task to find minimum regular expressions can be as difficult as PSPACE-complete\footnote{Just as the problem of finding an equivalent or minimal FSM, equivalence problem for regular expressions is known to be PSPACE-complete\cite{Sipser05introcompther}}.
+
+\subsection{The Paradox of Finality}
+
+Up to this point, our exploration has predominantly centered on the computational approach to infinity. In the subsequent subsection, we will pivot our attention to the foundational principles of Set Theory when discussing infinity. Specifically, we aim to explore how the concept of infinite collections of strings, which we have treated computationally, translates into Set Theory. What does it mean to formalize these collections as sets? How will this shift change our understanding of infinity?
+
+Before introducing the theorem, it is important to address a key distinction between how we think about infinite sets in a computational sense versus within Set Theory. In a computational or algorithmic framework, infinite sets are often treated as though they are always dynamically constructed, such as through iterative processes like string concatenation. However, this approach can lead to paradoxes when self-referencing or circular dependencies are involved. For example, attempting to define a self-referencing mapping like $\mu: \ulsef \times \uusef \to \uusef$ — where SEF denotes String Enumeration Formula (see \textit{\ref{sec_sef} - \nameref{sec_sef}}) — results in contradictions if we assume these infinite sets are always dynamically constructed. Such constructions are never "final" but remain perpetually "under construction," leading to inconsistencies. In contrast, Set Theory finalizes these sets through a static, step-by-step cumulative hierarchy $V$, as defined in Zermelo-Fraenkel ($ZF$) Set Theory (see \textit{\ref{subsect_expected_length_of_strings} - \nameref{subsect_expected_length_of_strings}}).
+
+The \textit{finality paradox} arises when sets reference each other circularly. Both sets attempt to construct subsets of each other simultaneously, leading to confusion about whether the sets are well-defined. For instance, if we restrict the mapping to a small subset of SEFs, it avoids contradiction by becoming an identity mapping. This simplification reveals the limitations of the dynamic approach, which remains perpetually "under construction" and cannot guarantee well-definedness in the presence of circular references.
+
+In contrast, Set Theory adopts a fundamentally different perspective. Sets are not constructed dynamically, contrary to how the running programs might behave, but are instead defined to exist axiomatically. In this framework, sets are fully established and governed by the rules of Zermelo-Fraenkel ($ZF$) Set Theory from the very beginning. This avoids the paradoxes of self-reference and circular dependencies that arise in computational models, ensuring that infinite sets are rigorously and consistently defined.
+
+This axiomatic approach allows us to rigorously define infinite sets and discuss them without falling into contradictions. Sets, like any mathematical objects, are constructed using axioms. This simple yet the central idea is a corner stone of Set Theory (and arguably the whole of mathematics). 
+
+\begin{theorem}[Axiomatic Existence]
+  If a set $X$ exists \footnote{For example, within the framework of Zermelo-Fraenkel ($ZF$) Set Theory—see the next subsection for an explanation of how the axiom of choice or alternative weaker conditions relate to this theorem}, then it is a member of the cumulative hierarchy $V$, which is a proper class encompassing all sets in $ZF$. Formally, if $\exists X: X \in V$, then $X$ is a set in $ZF$. 
+\end{theorem} 
+
+The cumulative hierarchy $V$ is constructed in stages\footnote{Also see \textit{\ref{subsect_expected_length_of_strings} - \nameref{subsect_expected_length_of_strings}}}, indexed by ordinal numbers. Each stage, $V_\alpha$, consists of all sets that can be formed from sets in earlier stages. Starting with the empty set at $V_0$​, the hierarchy builds successively larger collections of sets using operations such as forming power sets and unions. The entire hierarchy $V$ is the union of all these stages and represents the "universe" of all sets that can exist within $ZF$. This structure ensures that every set is grounded in a well-defined and logically consistent framework.
+
+\begin{proof} This follows directly from the axioms of Zermelo-Fraenkel Set Theory \cite{kunen1980set, jech2003set}. Specifically, the Axiom of Foundation ensures that every set is contained within a well-defined stage of the cumulative hierarchy $V$. Additionally, the Axiom of Replacement guarantees that sets constructed via definable functions remain within $V$. Consequently, any set $X$ that exists according to $ZF$ is necessarily an element of $V$. \end{proof}
+
+Another way to interpret the above statement is to emphasize that sets are not dynamically constructed or accessed through a computational process but instead already exist axiomatically within the universe of sets. This means that when we refer to a set, we are not invoking a process of step-by-step construction, as might be done in a computational framework. Instead, the set is fully established and exists independently of any procedural creation. The purpose of stating this is to underscore the absence of an "on-the-fly" construction process for sets, which distinguishes the axiomatic nature of set existence in $ZF$ from any computational model\footnote{This should also not be confused with constructing sets that are used for the inner models of $ZF$}.
+
+Equivalent statements hold in other axiomatic set theories, such as Neumann-Bernays-Gödel ($NBG$) or Morse-Kelley ($MK$) Set Theory. Ultimately, it is a matter of relative consistency of the model and the encoding of formulas. Usually, everything, including formulas, can be encoded as sets. Depending on the need, some statements can be represented as Boolean-valued algebras or mapped from binary strings into sets. One can imagine this as referencing a set from an infinite library, where each book represents a set already defined by the Set Theory axioms.
+
+
+\subsection{Importance of choice}\label{subsect_importance_of_choice}
+
+Recall the definition of terms \textit{choice function}, \textit{well-ordering} and the related theorem as according to \cite{jech2003set}.
+
+\begin{axiom}[Axiom of Choice (AC)]
+  Every family of nonempty sets has a \textit{choice function}.
+\end{axiom}
+
+If $S$ is a family of sets and $\emptyset \notin S$, then a \textit{choice function} for $S$ is a function
+$c$ on $S$ such that $c(X) \in X$ for every $X \in S$\footnote{or equivalently, when using $S =(X_i)_{i \in I}$, where $I$ is some index set, $c(X_i) \mapsto X_i, \forall i \in I$}.
+
+\begin{definition}[Well-Ordering]
+  A linear ordering $<$ of a set $P$ is a \textit{well-ordering} if every nonempty subset of $P$ has a least element\footnote{such "least" element also can be called "first"}.
+\end{definition}
+
+\begin{theorem}[Zermelo's Well-Ordering Theorem (WOT)]
+  Every set can be well-ordered.
+\end{theorem}
+
+The question of well-ordering of continuous line of reals is intimately interwoven with the CH\footnote{This is also one of the reasons why D. Hilbert has linked both questions in his statement of the famous first problem\cite{herrlich2006ac}.}. Today we know that:
+\begin{enumerate}
+  \item $AC \Longleftrightarrow WOT$
+  \item $CH$ is independent of $ZFC$
+  \item $AC$ is independent of $ZF$
+\end{enumerate}
+
+In fact, well-ordering of sets is something that cannot be shown in ZF alone. Both statements in (1) are equivalent since it can be shown \cite{herrlich2006ac} that $AC$ and $WOT$ imply each other\footnote{Also see Hartogs's Theorem and \cite{Gillman2002}}. Furthermore, even relying on weaker statements\cite{jech2003set} such as CUT requires the use of at least some weaker version of choice axiom in addition to ZF.
+
+\begin{axiom}[Axiom of Countable Choice (CC)]
+  For each sequence $(X_n)_{n \in \nat}$ of non–empty sets $X_n$, the product set $\prod_{n \in \nat}
+    X_n$ is non–empty\footnote{Note that, here or in general - given some index set $I$, the elements of the product set $\prod_{i \in I} X_i$ are choice functions $(x_i)_{i \in I}$, namely, functions $x: I \to \bigcup_{i \in I} X_i$ pointing from index to each element of $(X_n)$ - i.e. satisfying $x(i) = x_i \in X_i$ for each $i \in I$\cite{herrlich2006ac}}.
+\end{axiom}
+
+\begin{theorem}[Countable Union Theorem (CUT)]
+  The union of a countable family of countable sets is countable.
+\end{theorem}
+
+Specifically, using CC implies CUT\footnote{Please see p. 23 as well as \textit{Diagram 2.21.} on p. 18 in \cite{herrlich2006ac}}. "It turns out that the Axiom of Choice is independent of the other axioms of set theory and that many mathematical theorems are unprovable in ZF without AC"\cite{jech2003set}.
+
+Let us consider yet another candidate for a weaker choice condition, which we would also apply later. In order to obtain a notion of such a choice axiom, we will require a definition of the relaxed binary relation.
+
+\begin{definition}
+  if $K$ is a binary \textit{consensus}\footnote{as \textit{to agree on something}} relation on a nonempty class $X$, and if for every $x \in X$ there exists $y \in X$ s.t. $xKy$, then the following holds true for $K$:
+  \begin{enumerate}
+    \item \textit{irreflexivity} - $\forall x \in X: \neg (xKx) $
+    \item \textit{symmetry} - $\forall x,y \in X:  xKy \rightarrow yKx$
+          \\ and inversely, $\forall x,y \in X:  \neg (xKy) \rightarrow \neg (yKx)$
+    \item \textit{transitivity} - $\forall x,y,z \in X:  xKy \land yKz  \rightarrow xKz$
+          \\ and inversely, $\forall x,y,z \in X:  \neg (xKy) \land \neg (yKz)  \rightarrow \neg (xKz)$
+  \end{enumerate}
+\end{definition}
+
+Going forward we will mostly use $\between$ as the notation for consensus relation on classes and sets. The above definition is almost similar to the equivalence relation except for reflexivity. At first look, consensus relation seems intensional by being defined on the class. However, after a closer look, consensus is clearly extensional in terms of $\epsilon$-relation. In fact, it is able to form quotient sets just like its dual under the compliment. Obviously there must be a simple explanation for this. Our newly defined relation is also known as "is not equal to" binary relation, so that $\thicksim = \between^\complement$\footnote{where notation $X^\complement$ means that $X^\complement$ is a complement of set $X$}.
+
+\begin{axiom}[Consensus By Choice (CB)]
+  Every family of nonempty sets has a consensus relation.
+\end{axiom}
+
+In simple words, by assuming CB - we can index any nonempty set $X$, so that the only information we learn about $X$ is that it contains some subsets without any additional knowledge of how to order them. At first, it seems tautological with the membership relation, but it is sufficient to index sets of greater cardinality such as $|X| > \aleph_0$. The best way to do this is to break $X$ into quotient sets $[X] = X/\between$ which can behave almost similar or dual to equivalence classes. With the aim of proving consistency, such quotients can be described by formulas as consensus classes. Now let us still check if our newly obtained notion CB is indeed a strictly weaker condition than AC.
+
+\begin{lemma}
+  Equivalent are:
+  \begin{enumerate}
+    \item $AC$
+    \item $WOT$
+    \item $CB$
+  \end{enumerate}
+\end{lemma}
+\begin{proof}
+  We will proceed as following:
+  \begin{enumerate}
+    \item we know that $AC \Longleftrightarrow WOT$
+    \item show that $WOT \implies CB$
+    \item show that $CB \implies WOT$
+  \end{enumerate}
+  $WOT \implies CB$: Assuming WOT, there is a well-ordering $<$ of $X$. One can define a relation $K \subset X \times X$ s.t. it is an equivalence relation $\thicksim$ on $X$ (when $S_i, S_j \in X, \forall i,j \in I$ and $\between = \thicksim^\complement$ so that $S_i \neq S_j \implies S_i \between S_j$).
+
+  $CB \implies WOT$: Assuming CB, we have a consensus relation $\between$ on set $X$ and can define quotient sets $[X] = X/\between$, then $\forall i,j \in I: \exists S_i, S_j \in [X]$, s.t. $S_i \between S_j \implies S_i \neq S_j$. Like this one can define cardinality $|X| = |I|$ by using the fact that we know of all unique subsets of $X$. Finally, we can define a well-order relation $K \subset X \times X$ by applying trichotomy on $X$. Like that $\forall i,j \in I: \exists S_i, S_j \in [X]$, s.t. $|S_i| < |S_j| \implies S_{i}K S_{j}$. In fact, we can do so for all sets (or on those, where consensus relation is provided). Hence, all such sets can be well-ordered.
+\end{proof}
+
+Note that in the above proof we eventually relied on the definition of cardinality in the broader sense by using equivalence classes. This permitted existence of indexing sets and injections, which allowed to use the Law of Trichotomy. The law is usually defined for linear order, stating that exactly one of the conditions is true: $a < b$, $a = b$ or $a < b$. It was shown by Hartog in 1915 \cite{Gillman2002} that applying trichotomy to alephs implies $AC$. So, unsurprisingly, $CB \Longleftrightarrow AC$. There exists enough of known alternative forms of $AC$\footnote{According to \cite{herrlich2006ac, howard1998consequences} there is a list of 383 such “forms”. Unfortunately, the consequence of either keeping or leaving out AC can lead directly towards various forms of \textit{disaster} (to quote \cite{herrlich2006ac}).}.
+
+Thanks to Goedel's work on Constructible Sets\footnote{\textit{Theorem 13.18} in \cite{jech2003set}} we know that $CH$ holds in the inner model of $ZFC$ in $ZF$ $(V=L)$. Although, even assuming consistency of ZFC, Goedel's Second Incompleteness Theorem (GSIT) shows that $Con(ZFC)$ is unprovable in $ZFC$. And, thanks to P. Cohen's method of forcing, we know about (2) independence of $CH$ from $ZFC$ and (3) independence of $AC$ from $ZF$. Which means that $AC$ and $CH$ cannot be proven by means of $ZF$ alone.
+
+Following intuition outlined in \cite{herrlich2006ac}, another way of looking at $CH$ is that it is a much stronger condition than $AC$. Let us also recall related definitions.
+\begin{definition}[Generalized Continuum Hypothesis (GCH)]
+  $GCH$, states that for infinite cardinals $\mathfrak{a}$ and $\mathfrak{b}$ the inequalities $\mathfrak{a} \leq \mathfrak{b} < 2^\mathfrak{a}$ imply $\mathfrak{a} = \mathfrak{b}$.
+\end{definition}
+\begin{definition}[Aleph–Hypothesis (AH)]
+  $AH$, states that $2^{\aleph_\alpha} = \aleph_{\alpha+1}$ for each ordinal $\alpha$.
+\end{definition}
+
+Note that $GCH \implies AC$, $AH \implies AC$ and $GCH \Longleftarrow AH$. But as we discussed earlier through this paper $\neg CH \implies \neg ( GCH \land AH)$\footnote{although $CH$ is not equivalent to $AH$}.
+
+Lastly, we only touched briefly on the implications of employing the axiom of choice\footnote{We warmly encourage the reader to delve into the intricacies of the consequences of the axiom of choice in \cite{Jech1973AboutTA,Howard1998ConsequencesOT,Blass2005HowardPA}}. Fully exploring this would indeed be a monumental task on its own. Instead, our focus will now shift to another, yet crucial principle for this paper called \textit{dependent choice}.
+
+\subsection{Dependent choice}
+
+Let us consider two definitions of the axiom of the \textit{dependent choice}. First one would be in the fashion of category theory \cite{nlab:dependent_choice}. Note that in the original definition due to \cite{nlab:dependent_choice} the domain of the sequence are natural numbers. But we slightly adjust it by saying that, without loss of generality, we do understand $DC$ in the way that the length of the resulting sequence is at most $\aleph_0$ and hence use ordinals as the index set of the sequence\footnote{Not to be lost in nomenclature, but we rely on the definition of alephs that $\aleph_0 = \omega$, thus the index set $I$ can explicitly exceed the ordinality, but not the cardinality of the domain of natural numbers}.
+
+\begin{definition}[Dependent Choice]\label{def_dc}
+  A relation $R: X \to Y$ is total iff every element of $X$ is related to at least one element of $Y$. If $X$ is a nonempty set and $R$ is a total binary relation on $X$, then there exists a sequence $x: I \to X$, s.t. $\forall \alpha \in I: (x_\alpha, x_{\alpha+1}) \in R, I \subset Ord, |I| = \aleph_0$.
+\end{definition}
+
+It is called dependent choice because the available choices for $x_{\alpha+1}$ depend on the choice of $x_\alpha$ made at the previous stage. It is strictly weaker than $AC$, but strictly stronger than $CC$. 
+
+The second one would be more generic and due to \cite{asper2020}. 
+
+\begin{definition}[Dependent Choice ($DC_\kappa$)]\label{def_dck}
+Let $\kappa$ be an infinite cardinal. We denote by $DC_\kappa$ the following statement:
+  Every $\kappa$-closed tree without maximal elements has a chain of order type $\kappa$. We use $DC_{<\kappa}$ to abbreviate $\lambda < \kappa,DC_\lambda$, and for $\kappa = \aleph_0$ we simply write $DC$.
+\end{definition}
+
+Both definitions are equivalent if $\kappa = \aleph_0$. This also follows from the next lemma \cite{asper2020,jech2003set}.
+\begin{lemma}
+  The following is equivalent:
+  \begin{enumerate}
+    \item DC.
+    \item Every pruned tree with $\omega$ levels has a branch.
+    \item The Löwenheim–Skolem theorem for countable languages: every structure
+    in a countable language has a countable elementary submodel.
+    \item For every $\alpha \geq \omega$ and every countable $A \subseteq V_\alpha$ there is a countable elementary submodel $M$ of $V_\alpha$ such that $A \subseteq M$.
+    \item For every $\alpha \geq \omega$ there is a countable elementary submodel \mbox{$M \prec (V_\alpha,\in)$}.
+  \end{enumerate}
+\end{lemma}
+
+Note that to better understand points (4) and (5) and the details about $V_\alpha$ please see in \cite{asper2020} \textit{Definition 2.1} of Hereditary sets $H(\kappa)$ and their properties, including relation to Von Neuemann Cummulative hierarchy $V_\kappa$. Namely, $H(\kappa)$ is a transitive set of height $\kappa$ and when $\kappa$ is a strong limit cardinal, then $H(\kappa) = V_\kappa$.
+
+Next to $CC$, among other basic consequences of $DC$ we have: $CUT$, the regularity of $\omega_1$, etc\footnote{See \textit{Theorems 3.2 and 3.3} in \cite{asper2020}. Also consult \cite{Jech1973AboutTA, Howard1998ConsequencesOT} for further reading on the $DC$ consequences.}.
+
+Now let us propose a new axiom but very similar in spirit with $DC$ using subsequences.
+
+\begin{definition}[Subsequence]\label{def_sub_seq}
+  Let $I$ be an index set and $k: I \to I$ an increasing function. If $(x_\alpha)_{\alpha \in I}$ is a sequence with range over $X$, i.e. $x: I \to X$, then another sequence $(y_\gamma)_{\gamma \in I}$ defined by $y_\gamma := x_{k(\alpha)}$ is called a subsequence. Moreover, if the index set is clear from the context we just write $(x_{\alpha})_\alpha$ for sequences.
+\end{definition}
+
+
+Thus, one can also write $(x_{k(\alpha)})_{\alpha}$ to denote the subsequence of $(x_{\alpha})_{\alpha}$.  This is great, but we also want such subsequences to be more restricted and not to have any gaps, so that we can match them with our definition of a string. To achieve this, we want the function $k$ to map to a \textit{contiguous} subset of the index set $I$.
+
+Let's clarify the notion of "contiguous"\footnote{Not to be confused with contiguity of sequence of measures in probability theory.} for ordinals $Ord$\footnote{Obviously for natural numbers it will be the same.}. 
+
+\begin{definition}[Ordinal contiguity]\label{def_ord_contg}
+  If $I \subset Ord$ is an ordinal, then a subset $J \subseteq I$ is contiguous if for every $\alpha, \beta \in J$ with $\alpha < \beta$, all the ordinals between $\alpha$ and $\beta$ are also in $J$.
+\end{definition}
+
+With this in mind, we can define a function $k : I \to I$ to be contiguous if its range is a contiguous subset of $I$.
+
+\begin{definition}[Contiguous function (on ordinals)]\label{def_contg_fun}
+Let $k: I \to I$ be an increasing function. The function $k$ is called \textit{contiguous} in $I$ if the range of $k$, $ran(k)$, is a contiguous subset of $I$. That is, for every $\alpha, \beta \in ran(k)$ with $\alpha < \beta$, all the ordinals (or natural numbers, if $I = \nat$) between $\alpha$ and $\beta$ are also in $ran(k)$.
+\end{definition}
+
+\begin{observation}
+  Note that "contiguous" and "dense" are not the same, although they might seem related in some contexts. Let's clarify the distinction:
+  \begin{itemize}
+    \item \textbf{Contiguous}:
+    \begin{itemize}
+      \item As defined above, a function $k:I \to I$ is contiguous if its range is a contiguous subset of $I$. This means that if $\alpha$ and $\beta$ are in the range of $k$ and $\alpha < \beta$, then every element between $\alpha$ and $\beta$ is also in the range of $k$.
+      \item In the context of natural numbers, this means that there are no "gaps" in the sequence. For instance, the subsets $\{1,2,3\}$ and $\{4,5,6,7\}$ are contiguous, but $\{1,3,4\}$ is not.
+    \end{itemize}
+    \item \textbf{Dense}:
+    \begin{itemize}
+      \item  A set $S$ is dense in a topological space $T$ if every point in $T$ is either in $S$ or is a limit point of $S$. In simpler terms, between any two distinct points of $S$, there is another point of $S$.
+      \item In the context of the real numbers $\mathbb{R}$, the rational numbers $\mathbb{Q}$ are dense because between any two real numbers, there exists a rational number. This illustrates the concept of density by showing that no matter how close two real numbers are, a rational number can always be found between them.
+    \end{itemize}
+  \end{itemize}
+
+  For instance, the rational numbers $\mathbb{Q}$ are dense in the real numbers $\reals$ because between any two rational numbers, there's another rational number. However, the rational numbers are not contiguous in $\reals$ because there are "gaps" (i.e., irrational numbers) between them. 
+  
+  One hand there are special topologies when any interval (or more generally, any connected subset) is trivially dense in itself. For example, the interval $[1,2]$ is dense in the topological space that consists of just the interval $[1,2]$ because between any two points in this space, there are points of the interval itself. So, in that particular case, the provided notion of \textit{contiguity} can be seen as strictly stronger than the property of being only \textit{dense}. 
+  
+  But on the other hand and in general, this is not true. Meaning that \textit{contiguous} and \textit{dense} do not necessarily imply each other. For example, contiguous or every (topologically) connected interval in $\reals$ is not necessarily dense in $\reals$ itself.
+\end{observation}
+
+\begin{definition}[Strings and substrings from sequences]\label{def_substr_seq}
+  Let $(x_{\alpha})_{\alpha \in I}$ be a sequence with index set $I$ and range over $X$. In this context we will also refer to this sequence simply as \textit{string} $x$. If $k : I \to I$ is a contiguous function, then subsequence $(y_{\gamma})_{\gamma \in I} := (x_{k(\alpha)})_{\alpha}$ is a called a \textit{substring} $y$ of the \textit{string} $x$. We note this as $y \substr x$.
+\end{definition}
+
+Later we plan to define a much more detailed theory around notions of a string and substring\footnote{Namely, see String Theory in \textit{Definition \ref{def_ExtStrTheory}}}. But for now the following additional definitions will suffice.
+
+\begin{definition}[Concatenation of strings from sequences]\label{def_concat_seq}
+  Let \(x = (x_{\alpha})_{\alpha \in I}\) and \(y = (y_{\beta})_{\beta \in J}\) be two strings with index sets \(I\) and \(J\) respectively. The concatenation of \(x\) and \(y\), denoted by \(x \cdot y\), is the string \(z = (z_{\gamma})_{\gamma \in K}\) where \(K = I \cup \{ \sup(I) + \beta \mid \beta \in J \}\).
+
+  Specifically, for each \(\gamma \in K\):
+  \[
+  z_{\gamma} = 
+  \begin{cases} 
+      x_{\alpha} & \text{if } \gamma = \alpha \text{ for some } \alpha \in I \\
+      y_{\beta} & \text{if } \gamma = \sup(I) + \beta \text{ for some } \beta \in J 
+  \end{cases}
+  \]
+
+  In this definition, \( \sup(I) \) represents the supremum of the index set \(I\). The term \( \sup(I) + \beta \) ensures that the indices of the concatenated string \(z\) are unique and ordered.
+\end{definition}
+
+\begin{definition}[Substring counting in sequences]\label{def_subcount_seq}
+  Let \(x = (x_{\alpha})_{\alpha \in I}\) be a string and \(y = (y_{\beta})_{\beta \in J}\) be a substring. The count of occurrences of \(y\) in \(x\) is denoted by \(|x|_y\). Formally, \(|x|_y\) is the number of distinct contiguous functions \(k: J \to I\) such that for all \(\beta \in J\), \(y_{\beta} = x_{k(\beta)}\).
+\end{definition}
+
+Note that, by the definition of contiguity, \(k\) is inherently order-preserving; that is, if \(\beta_1 < \beta_2\), then \(k(\beta_1) < k(\beta_2)\). In the above definition, \(y\) does not have to appear contiguously in \(x\). However, if \(y\) is contiguously repeated in \(x\) at least twice and up to countably many times, we can define such behavior with a replication operator.
+
+\begin{definition}[Replication of strings]\label{def_repstr_seq}
+  We call $\alpha \in Ord$ the order of replication in the following sense. Let $z$ be contiguously repeating subsequence (substring) in $y$, so that $y$ is a periodic sequence with period $z$. Then, $y = \bos(z)^\alpha\eos$, where $\bos(z)^\alpha\eos$ is called replicator, iff $|y|_z = \alpha$.
+\end{definition}
+
+Note that if the order of replication is at least countable, and it is informative enough for the discussion, then we abuse the notation by simply writing $y = \bos(z)\eos$, assuming that omitted $\alpha \geq \omega$.
+
+Finally, we come to our new axiom.
+
+\begin{definition}[Countable Aperiodicity (\(CA\))]\label{def_ca}
+  Let \(X\) be a nonempty set and \(R\) be a total binary relation on \(X\). Given a countable index set \(I \subset Ord\) with \(|I| = \aleph_0\), there exists a sequence \(x: I \to X\) such that:
+  \begin{enumerate}
+      \item For all \(\alpha \in I\) with \(\alpha + 1 \in I\), \((x_\alpha, x_{\alpha+1}) \in R\).
+      \item For any contiguous subsequence \(y: J \to X\) (with \(J \subset I\)) of the form \(y = (x_{k(\alpha)})_{\alpha \in J}\), where \(k : J \to I\) is a contiguous index mapping, there does not exist another contiguous subsequence \(z: K \to X\) (with \(K \subset J\)) such that \(y\) can be expressed as a countable concatenation of \(z\).
+  \end{enumerate}
+  We say that $x$ is \textit{countably aperiodical} or \textit{fair}.
+\end{definition}
+
+In the context of the \(SEF\) theory, when sequences are interpreted as strings, the \(CA\) axiom posits the existence of a sequence (or equivalently, a string) \( (x_\alpha)_\alpha \) that does not contain any replicator \( y = \bos(z)\eos \). Basically, if \( X = \{0,1\} \), the \(CA\) axiom implies the statement: \textit{"There exists a fair countable binary string of at least $\omega$ length"}.
+
+\begin{definition}[Fair String]\label{def_fair_string_seq}
+  A countable string \(x\) is \textit{fair} if no substring \(y\) of \(x\) can be expressed as a countable repetition of another substring \(z\).
+\end{definition}
+  
+\begin{definition}[Unfair String]\label{def_unfair_string_seq}
+  A countable string \(x\) is \textit{unfair} if it isn't fair. A fair string contains no unfair substrings.
+\end{definition}
+
+It should be emphasized that the presence of $CA$ may initially appear superfluous if one assumes that fair strings can be inherently formulated solely within the $ZF$ axioms. However, this assumption is not completely accurate. Indeed, $CA$ being equivalent to $DC$ clarifies the crucial role and significance of $DC$ in the theoretical development concerning fair countable sequences.
+
+\begin{theorem}[$DC \Longleftrightarrow CC + CA \Longleftrightarrow GCTA(x)$]\label{theorem_dc_ca_gcta_equivalence}
+  The following statements are equivalent:
+  \begin{enumerate}
+    \item $DC$
+    \item $CC + CA$
+    \item $GCTA(x)$: GCTA table can be constructed by scanning a fair binary input string $x$.
+  \end{enumerate}
+\end{theorem}
+\begin{proof}
+  (1) $\to$ (2): $DC$ is known \cite{herrlich2006ac} to be strictly stronger than $CC$. Observe that $CA$ is semantically equivalent to the statement that "there exists a fair string of at least $\omega$ length". To prove by contradiction we assume the opposite. Then, we play a game that decides between whether a countable binary string $x$ is fair or not. It turns out, that $DC$ implies that such a game is always determined and one of the players has always a winning strategy. Hence, $CA$ follows from the \textit{Corollary \ref{corollary_fair_determinacy}} and $DC \implies CA$.
+  \\
+  (2) $\to$ (3): Recall that left hand (LH) of the GCTA table is a list or a matrix of infinite contexts. The table does not have a fixed start, so we pick some arbitrary index $j \in \integers$ and copy the left part of the countable string as a first element of the string. Rows are called transformation contexts and indexed with $i \in \integers$. For each row (or for each next context entry) the value of the string is obtained by a shifting the previous row by a single bit to the left and appending one bit (at $j+i$) to the right. This constructs a list of countably many shifted and copied strings based on the input string $x$. Such process is called scanning\footnote{This is discussed in greater detail earlier in the paper, starting with \textit{Generalized Context Transformation Algorithm - Subsection \ref{subsec_gcta}}}. It is clear that the construction process invokes $CC$. Now, given that fair string exists as follows from (2), we can pick $x$ to be a fair string and have that $CC + CA \implies GCTA(x)$.
+  \\
+  (3) $\to$ (1): Recall that by \textit{Definition \ref{def_dc}} the $DC$ axiom implies existence of total binary relation $R$, s.t. $\forall \alpha < \omega_1: (x_\alpha, x_{\alpha+1}) \in R$. Observe that if $x$ is a fair string, then $GCTA(x)$ will represent such $R$. Indeed, the construction of the main table (LH) is already described in the previous step called the scanning process. If one adds binary representation of the row index for each row on the right hand (RH) as finite binary string, then one can map each context on the LH to $x_{\alpha}$ and each state on the RH to $x_{\alpha+1}$. Like this $GCTA(x) \implies DC$.
+\end{proof}
+
+To clarify the last point of the above proof, here we have worked with $GCTA(x)$ with height $\kappa = \omega$, rather than $GCGA(x)$ when the height of the table in "expanded configuration" (post-generation, when new rows are added to the table) is at least $\kappa = \omega_1$. In that sense and even intuitively\footnote{Please illustrations in \textit{Continuum access scheme - Subsection \ref{subsec_cas}}}, $GCTA(x)$ resembles and is equivalent to $DC_\omega$, when $expanded(GCGA(x))$ is equivalent to $DC_{\omega_1}$.
+
+As we wrap up this subsection, we present a pivotal lemma that sets a proper accord on the discussion of the existence of fair strings.
+
+\begin{lemma}[Uncountability of fairs]\label{lemma_uncountfair_seq}
+  Let \( F \) be a large enough family of pairwise distinct fair strings, i.e. $F = \{x : x \in \{0,1\}^\omega 
+  \land x$ is fair $\}$. Then, there exists a subset of \( F \) with uncountable cardinality, i.e., \( \exists F' \subseteq F: |F'| > \aleph_0 \).
+\end{lemma}
+\begin{proof}
+ Assume $ZF + DC$. Construct $GCTA(x)$ table $T$ (LH side) by scanning a fair input string $x$ (as described in the proof of the \textit{Theorem \ref{theorem_dc_ca_gcta_equivalence}}). We complete the proof by applying cantor diagonal argument (slashing) to produce $x^\prime$ and observe that: 
+  \begin{enumerate}
+    \item $x^\prime$ is also fair (by being almost adjoint\footnote{See \textit{Definition \ref{lemma_disjoint_to_adjoint}}} with countably many shifted copies of $x$)
+    \item $x^\prime$ is not present in the table $T$ $\implies$ $F' = T \cup \{x^\prime\}$ and $|F'| > \aleph_0$
+  \end{enumerate}
+\end{proof}
+
+Alternatively, one can proceed with the following ending of the above proof. Choose countable binary string $y$ as a single column for the $RH$, s.t. there is only finite number of arbitrary distributed ones $|y|_1 < \omega$. Use $T$ as an input parameter for $GCGA$ algorithm. Basically, here we describe a setup for \textit{c-slashing} (see \textit{Continuo Cantor Argument - Subsection \ref{subsec_cslash}}), which can be noted as $T^\prime := [T]|y$, where $T^\prime$ will be an $expanded(T)$ and $T$ is a $GCGA(x)$ table. If $F' = T^\prime$, then the rest of the proof follows. 
+
+Curiously enough, a related but slightly different and more general construction than obtained $T^\prime$ is called \textit{Ulam matrix} (for example see \cite{jech2003set} for the definition of the concept and a proof of \textit{Ulam Theorem} in $ZFC$). We will revisit this observation much later in the paper.
+
+\subsection{Partial Order by Reverse Contiguity}
+
+
+We will expand on the idea of contiguity by defining a partial order\footnote{See \textit{Definition \ref{def_po}}} over a set of countable binary strings. This approach aims to categorize strings based on their structural properties, especially focusing on the notion of fairness and repetitiveness in their composition.
+
+\begin{definition}[Perfectly Fair String]\label{def_pef_fair_str}
+  A countable binary string $x$ is called \textit{perfectly fair} if it does not contain any countable substring $y$ that can be expressed as the concatenation of at least two identical substrings, i.e., $\nexists y : y = z \cdot z$ where $|y| = \aleph_0$.
+\end{definition}
+
+This definition captures the essence of a perfectly fair string as one that avoids any form of infinitely repetitive substructure.
+
+One can immediately think of the category of all the other countable strings which are still fair but not perfectly fair.
+
+\begin{definition}[Imperfectly Fair String]\label{def_imp_fair_str}
+  A countable fair string is called \textit{imperfect} if it is not perfectly fair.
+\end{definition}
+  
+Provision of the above subcategories will come handy in getting a deeper understanding of how to construct an internal partial order within fair countable strings by using the same idea of contiguity. 
+
+Given these definitions, it is evident that a perfectly fair string is significantly less contiguous than any imperfect string. This is primarily because any imperfect string will inherently possess a more repetitive structure, consisting of substrings that repeat themselves, are adjacent, or are closely aligned. This leads us to further scrutinize the interplay between repetition and proximity of substrings.
+
+We can assert that a string $y = x \cdot z \cdot x$ is less contiguous than a string $w = x \cdot x$, or even more so than $v = x \cdot x \cdot z$. This highlights our interest in repetitive or similar occurrences of substrings being more tightly or closely intertwined. Here by being more contiguous we literally mean that for any SEF variations build from combination of countable infinite string segments $x,z$, for example such as $y = x \cdot z \cdot x$ or $y = x \cdot x \cdot z$ or $y = z \cdot x \cdot x$, we have that any contained (potentially non-repetitive or fair) segment $z$ tends to be smaller, i.e. $|z| \to min$. Such a notion can be effectively captured by defining it as a partial order, which necessitates additional definitions for SEF kind.
+
+\begin{definition}[Partition of SEFs by kind]\label{def_part_sef_kind}
+  Let $x$ be a countable binary string and $s_x$ a corresponding String Enumeration Formula (SEF), such that $\pi(s_x) = x$. The \textit{SEF kind} of string is defined as follows:
+  \begin{enumerate}
+    \item \textit{Unfair Finite (UF)}: SEF has finite length $|s_x| < \aleph_0$ and $x$ does not contain any (perfectly or imperfectly) fair substring;
+    \item \textit{Perfectly Fair (PF)}: SEF has countable length $|s_x| = \aleph_0$ and $x$ is perfectly fair\footnote{see \textit{Definition \ref{def_pef_fair_str}}};
+    \item \textit{Imperfectly Fair (IF)}: SEF has countable length $|s_x| = \aleph_0$ and $x$ is imperfectly fair\footnote{see \textit{Definition \ref{def_imp_fair_str}}};
+    \item \textit{Unfair Countable (UC)}: SEF has countable length $|s_x| = \aleph_0$ and $x$ contains at least one fair substring.
+  \end{enumerate}
+  Briefly, we can also note this as $kind(s_x) := \{UF, PF, IF, UC\}$.
+\end{definition}
+  
+The introduction of the above four SEF kinds - Unfair Finite (UF), Perfectly Fair (PF), Imperfectly Fair (IF), and Unfair Countable (UC) - enables a refined classification of countable binary strings based on the length of the corresponding SEF and presence of infinite repetitions. This classification is key in establishing partial order within infinite countable strings, which we will define for each countable binary string $x$ by looking at its preimage $\pi^{-1}(x)$ and applying the concept of contiguity.
+
+Contiguity here will also quantify the adjacency of repetitive substrings within a binary string. This metric aids in capturing inner partial order that reflects the intricacy of infinite string patterns up to a perfectly fair string, going beyond mere length. The partial order is thus defined by the balance between repetition and uniqueness in a string's structure, offering a structured approach to categorizing infinite binary sequences. 
+
+To sum up, comparing countable binary strings by contiguity can be done by implying length, repetition and adjacency of similar (repetitive) segments. Let us state this more precisely.
+
+\begin{definition}[Partial Comparison by Contiguity]\label{def_cmp_contiguity_bin_str}
+  Let us assume the following:
+  \begin{enumerate}[label=(\roman*)]
+    \item $ZF$ and $CC$;
+    \item $x$ and $y$ be two at most countable binary strings, s.t. $|x| \leq \aleph_0$ and $|y| \leq \aleph_0$;
+    \item $\pi(s_x) = x$ and $\pi(s_y) = y$, where $s_x$ and $s_y$ are corresponding SEFs preimages for $x, y$;
+    \item $P := \{0, 1, 2, 3\}$ is a set of partial order (p.o.) comparison results;
+    \item if $|x|_a \geq 2$, then there exists a function $\mu: \{0,1\}^\omega \times \{0,1\}^\omega \to Ord$ that finds all adjacency segments $Adj_{a}(x)$ as any substrings between two closest occurrences of substring $a$, measures the length of those arbitrary connecting segments and is mapped to the lower bound $\mu(a, x) \mapsto q$ of any found length, i.e. $|q| \leq |k|: \forall k \in Adj_{a}(x)$ or to the shortest adjacency.
+    \item there exists a function that can compare ordinals defined as $cmp: Ord \times Ord \to P$, specifically meaning that for any $\alpha, \beta \in Ord$ we have:
+    \begin{enumerate}
+      \item $cmp(\alpha, \beta) = 3$ iff $\alpha > \beta$
+      \item $cmp(\alpha, \beta) = 2$ iff $\alpha = \beta$
+      \item $cmp(\alpha, \beta) = 1$ iff $\alpha < \beta$
+      \item $cmp(\alpha, \beta)$ is never equal to $0$ which means \textit{incomparable}
+    \end{enumerate}
+    \item there exists a function $\rho: \{0,1\}^\omega \times \{0,1\}^\omega \to P$, where $ran(\rho)$ can be respectively interpreted as: 
+    \begin{enumerate}
+      \item $\rho(x, y) = 3$ iff $x > y$
+      \item $\rho(x, y) = 2$ iff $x = y$
+      \item $\rho(x, y) = 1$ iff $x < y$
+      \item $\rho(x, y) = 0$ iff both strings $x$ and $y$ are \textit{incomparable}
+    \end{enumerate}
+  \end{enumerate}
+  Furthermore, the last function $\rho$ can be used to define p.o. by comparing any two at most countable binary strings $x,y$ according to the following scheme or algorithm\footnote{if the step concludes the mapping or the result of the function, then other steps are ignored}:
+  \begin{enumerate}
+    \item \textbf{by trivial equivalence}: if $x = y$, then map $\rho(x,y)$ to $2$;
+    \item \textbf{by length}: 
+      \begin{enumerate}
+        \item if $|x| \neq |y|$, then map $\rho(x,y)$ to $cmp(|x|,|y|)$;
+        \item if $|s_x| \neq |s_y|$, then map $\rho(x,y)$ to $cmp(|s_x|,|s_y|)$;
+      \end{enumerate}
+    \item \textbf{by the kind of the corresponding SEF}: 
+      if $kind(s_x) \neq kind(s_y)$, then we map the kind of each SEF to the following linear order $UF < PF < IF < UC$, so that $\rho(x,y) \to \{1, 3\}$ accordingly; otherwise:
+      \begin{enumerate}
+        \item if $kind(s_x) = kind(s_y) = UF$, then we map both $s_x, s_y$ SEFs to the reverse of the linear order (so that $\bos (0)\eos$ is the formula for the most contiguous and $\bos (1)\eos$ for the second most contiguous countable binary string) as enumerated by SEF equivalence classes\footnote{as discussed in subsection \textit{Equivalence classes of SEFs} and end of subsection \textit{Computability of SEF languages}, each SEF is a part of the equivalence class, all of which can be enumerated and hence linearly ordered given that $|\cesef| = \aleph_0$ - also see fig. \ref{fig:sefseq}}, so that $\rho(x,y) \to \{1, 3\}$ accordingly;
+        \item if $kind(s_x) = kind(s_y) = PF$, then map $\rho(x,y)$ to $0$\footnote{we are interested only in infinite contiguity and thus ignore finite repetitions of finite substrings};
+        \item if $kind(s_x) = kind(s_y) = IF$, find two substrings $a$ and $b$, s.t. $|x|_a = \alpha$ and $|y|_b = \beta$ with the highest counts of occurrence\footnote{here and further, higher bound is meant} $\alpha, \beta$ respectively, then: 
+        \begin{enumerate}
+          \item if $\alpha \neq \beta$, then map $\rho(x,y)$ to $cmp(\alpha,\beta)$;
+          \item if $\alpha = \beta$ and $\alpha + \beta \geq 4$, then check for shortest adjacency and map $\rho(x,y)$ to $cmp(\mu(a, x), \mu(b, y))$ iff $\mu(a, x) \neq \mu(b, y)$;
+          \item otherwise, map $\rho(x,y)$ to $0$\footnote{again, this can be further refined, but we ignore finite repetitions};
+        \end{enumerate}
+        \item if $kind(s_x) = kind(s_y) = UC$, firstly - reduce $s_x$ and $s_y$ SEFs to $s^\prime_x$ and $s^\prime_y$ by replacing any fair string with the next unique unseen finite binary string that becomes a reference to the replaced infinite fair string\footnote{Basically, if all finite strings in the SEF formula can be mapped to ordinals, so that some $\sigma \in Ord$ is the maximum ordinal, then the first occurrence of a fair string will be replaced by the binary representation of $\sigma + 1$ reference and so on. However, it also means that second and following occurrences of the same fair will get the same reference, so fairs do not get "anonymized"}, secondly - find two first fair substrings\footnote{e.g. first occurrence in the left to right search with maximum replication order} $a$ and $b$, s.t. $|x|_a = \alpha$ and $|y|_b = \beta$ with the highest counts of occurrence $\alpha, \beta$ respectively, then:
+        \begin{enumerate}
+          % by "greatest" sef
+          \item if $r := \rho(\pi(s^\prime_x)$ and $\pi(s^\prime_y)), r \in \{1, 3\}$, then map $\rho(x,y)$ to $r$;
+          % sefs are equal
+          % by "greatest" order
+          \item if $kind(\pi^{-1}(a)) = kind(\pi^{-1}(b))$ and $\alpha \neq \beta$, then map $\rho(x,y)$ to $cmp(\alpha,\beta)$;
+          % by "greatest" fair
+          \item if $r := \rho(a, b)$ and $r \in \{1, 3\}$, then map $\rho(x,y)$ to $r$;
+          \item remove all occurrences of $a$ from $x$ as $x^\prime$ and $b$ from $y$ as $y^\prime$ and find $r := \rho(x^\prime, y^\prime)$, then proceed by rule - if $r = 2$ return $0$, otherwise return $r$;
+          \item finally\footnote{we reached the countable depth of recursion, although this step should never get reached after exhausting all fairs in previous step, so it is more of a dead code rather than a "safety net"}, map $\rho(x,y)$ to $0$.
+        \end{enumerate}
+      \end{enumerate}
+  \end{enumerate}
+\end{definition}
+
+
+It is immediately obvious that the above definition can be helpful in defining partial order. Nonetheless, we will come back to exploring the notion of contiguity in greater detail only in section \textit{\ref{sec_st_sef} \nameref{sec_st_sef}}.
+
+
+
+
+
+\subsection{Perfect and Fair Games}
+
+\begin{theorem}[Perfect Determinacy]\label{theorem_perfect_determinacy}
+  A game that decides between whether a countable binary string $x$ is perfectly fair or not is determined. 
+\end{theorem}
+\begin{proof}
+  We assume $ZF+DC$. The proof goes like this. Both players need to provide a finite number $n \in \nat$ each turn. They can do so by benefitting from applying $DC$ every time a new element of the sequence needs to be generated. A number from a previous step is remembered and used to make a dependent choice. This guarantees that one can always make a choice of a new number. It's a game of perfect information. Both players keep track of every finite number translated into binary and appended to a countable binary string $x$ that has been observed so far\footnote{Since this is a transfinite game the string has countable length}. Player I wins if the countable binary string is not perfectly fair, otherwise Player II claims the win. i.e. if $x$ is perfectly fair. There is a round for every natural number $n \in \nat$, and after all rounds are played (meaning that both players have the opportunity to move). We want to show that at least one of the players has a wining strategy. 
+  
+  Player II strategy is straightforward. He needs to avoid a situation when the observed sequence has a subsequence $y \substr x$ that can be represented as a concatenation of at most two similar subsequences $y = z \cdot z$. However, it seems that Player I does not stand a chance. No matter, what adjustments are introduced by Player I in the original number provided by $DC$, unfortunately for him, Player II can always choose his moves carefully to avoid countable duplication by concatenation. For example, Player I has played some $m \in \nat$. Then, player II can check if the number that he has picked to play for the same round e.g. $m^\prime \in \nat$  will make him lose. To avoid this, player II can imagine appending the number to the end of $x$, right after finite $\{0,1\}^{\lceil log2(m) \rceil}$ sequence of player I, as another finite $\{0,1\}^{\lceil log2(m^\prime) \rceil}$ sequence to see if this will form a period $z$ and lead to $y \substr x$ containing a contiguous duplication, i.e. $z \cdot z = y$. This means, Player II can always counterplay moves by player I by providing a different number (either by applying binary inverse or by adding another number provided by DC, etc.). In conclusion, after all countably many rounds are played, Player II has always a winning strategy and game is determined.
+\end{proof}
+
+\begin{theorem}[k-degree Fair Determinacy]\label{theorem_kfair_determinacy}
+  A game to decide if a fair string $x$ with degree of replication $k < \omega$ is determined.
+\end{theorem}
+\begin{proof}
+  The proof extends on the previous result which is a special case of $k = 2$. In the previous proof of \textit{Theorem \ref{theorem_perfect_determinacy}} we have showed that a contiguous repetition of at least two countable binary substrings is enough to decide that the string in question is not perfectly fair, i.e. $z \cdot z \substr x$. Let's rewrite this as $z \cdot z = (z)^{2}$, so that the degree of replication is exactly $k = 2$. Now we are interested in showing determinacy for more general case when $(z)^{k} \substr x, k < \omega$.
+
+  The game and winning condition as similar as for the proof for $k = 2$. For clarity, we also assume that the game is rational, i.e. both player will try their best to win and not give up until both have participated in at least countably many rounds. We know from the previous proof, that player II has a wining strategy for $k=2$. This time in order to win, player II needs a slight adjustment to his previous approach. Initially both players follow a joined strategy in an effort to form a $(z)^{k}$ period as a substring of $x$, where $k \in \nat$ is a finite number. However, as soon as $\exists y: y \substr x$ with $k$ replication degree, player II follows the similar strategy as for $k=2$, essentially preventing player I from winning by forming $x$ with any higher replication degree that can exceeds $k$ (on every round player II plays). Player II has always a winning strategy and game is determined.
+\end{proof}
+
+\begin{corollary}[Fair Determinacy]\label{corollary_fair_determinacy}
+  A game that decides between whether a countable binary string $x$ is fair or not is determined. 
+\end{corollary}
+\begin{proof}
+  By definition, countable fair string should never have a substring $\exists y: y \substr x$ with a countable replication degree. The proof follows directly from \textit{Theorem \ref{theorem_kfair_determinacy}} when $k < \omega$. 
+\end{proof}
+
+
+
+\subsection{Filters, Ideals and Partitions of the Continuum}\label{subsec_filters}
+
+In this paper we have talked about two prominent ways of how to think about the continuum\footnote{There are of course infinitely more ways of how to think about continuum including the real line, $[0,1]$ interval, set of all functions $\{ f: \nat \to \{0,1\}\}$, etc.}. The first one would be to think about the continuum as a powerset of natural numbers with cardinality $|\pset(\nat)| = 2^{\aleph_0} = \cont$. The other one, would be a collection of all countable binary strings $\cbin$, which has the same cardinality as the Cantor Set\footnote{See \textit{Lemma \ref{lemma_cardinality_can}}} and also equals to $|\cbin| = 2^{\aleph_0} = \cont$. Let us have a closer look on how one can define a poset on such collection of strings $\cbin$, which will give us enough structure such as filters and ideals.  
+
+
+In order to recall the necessary definitions for filters, we will break down the comparison between filters on sets and filters on posets\footnote{specifically, as used in general forcing models and principles such as Martin's Axiom \cite{jech2003set}}. The definitions are in fact quite similar, as they both reflect a kind of "closure" property. The difference comes directly from the nature of the underlying structures we want to consider: \textit{sets} versus \textit{posets}.
+
+\begin{definition}[Filter on sets]\label{def_filter_sets}
+    $F$ is a filter on set X iff the following holds:
+    \begin{enumerate}
+        \item If $A, B \subset X$ and $A, B \in F$, then $A \cap B \in F$ (Closed under intersection)
+        \item If $A, B \subset X$, $A \in F$ and $A \subset B$, then $B \in F$ (Closed under supersets)
+        \item The empty set is not in F: $\emptyset \notin F$
+    \end{enumerate}
+\end{definition}
+
+
+\begin{definition}[Filter on posets (Order Filter)]\label{def_filter_posets}
+    $F$ is a filter on poset $(P, \leq)$ iff the following holds:
+    \begin{enumerate}
+        \item If $p,q \in F$, there is some $r \in F$ such that $r \leq p$ and $r \leq q$ (Closed under "meets")
+        \item If $p \in F$, $q \in P$ and $p \leq q$, then $q \in F$. (Closed upwards)
+        \item $F$ is not empty.
+    \end{enumerate}
+\end{definition}
+
+Let us provide similar definitions, but now for ideals. We will again use unions and subsets for sets, and joins and downward closure for posets.
+
+\begin{definition}[Ideal on Sets]\label{def_ideal_sets}
+An ideal $I$ on a set $X$ is defined as follows:
+\begin{enumerate}
+\item If $A,B \in I$, then $A \cup B \in I$ (Closed under union).
+\item If $A \in I$ and $B \subset A$, then $B \in I$ (Closed under subsets).
+\item The whole set $X$ is not in $I$: $X \notin I$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[Ideal on Posets (Order Ideal)]\label{def_ideal_posets}
+An ideal $I$ on a poset $(P,\leq)$ is defined as follows:
+\begin{enumerate}
+\item If $p,q \in I$, there is some $r \in I$ such that $p \leq r$ and $q \leq r$ (Closed under "joins").
+\item If $p \in I$, $q \in P$ and $q \leq p$, then $q \in I$ (Closed downwards).
+\item $I$ is not empty.
+\end{enumerate}
+\end{definition}
+
+Ultrafilter is a dual of prime ideal. A filter (ideal) that contains a finite set is called \textit{principal}. Conversely, a filter (ideal) that contains only infinite sets is called \textit{non-principal}.
+
+
+Given that both the set of all binary strings $\cbin$ and the powerset of natural numbers have the same cardinality $|\cbin| = |\pset(\nat)| = \cont$, there exists a bijection between them (by definition). This is tactically interesting for us, since, if one can define a partial order or poset on $\cbin$, then whatever structures and properties (like filters and ideals above) one can show to exists for the poset on $\cbin$, it can be derived to exists on other instances of sets with continuum cardinality via such bijection.
+
+Let $(\cbin, \leq)$ be such poset. Our idea would be that $(\cbin, \leq)$ can be defined with either contiguity or substring relation. Moreover, one relation can be seen as an extension for the other, as they both are complementary. But in order to show this we are still missing an important component, which would be a set of labels of equivalence classes of string enumeration formulas\footnote{also abbreviated as SEFs as understood and discussed much earlier in the paper in \textit{Theorem \ref{th_sef_eqcls_cont_car}}, but also in \textit{Theorem \ref{th_count_enum_eqcls}} }. Given that all of such formula are constructed using string replication we will define such structure more explicitly. 
+
+\begin{definition}[Replicata]\label{def_replicata}
+  Let $\kappa, \lambda$ be ordinals, $\kappa < \lambda$ and $|\kappa| = |\lambda|$. Then, $R^\lambda_\kappa$ be a label set of equivalence classes of SEFs ($|\lambda|$-length strings over alphabet $\Sigma^\star \supset \{0,1,(,)\}$). Also let $\{0,1\}^{|\lambda|}$ be a set of infinite ($\lambda$-length) binary strings and $\pi: R^\lambda_\kappa \to \{0,1\}^{|\lambda|}$ a production function evaluating each formula to its replicator-free form $\{0,1\}^{|\lambda|}$. Finally, let $P \subseteq R^\lambda_\kappa$ be some partial order\footnote{It is assumed that $P$ comes with the binary relation, which we sometimes omit to specify - see comments below the \textit{Definition \ref{def_po}}} on the label set. We call $(R^\lambda_\kappa, P, \pi)$ structure a \textit{replicata} (or a replicated space) with replication degree $\kappa$.
+\end{definition}
+
+The length of SEFs in $dom(\pi) = R^\lambda_\kappa$ is $|\lambda|$. We want $\pi$ to be defined as bijection, hence the length of $\{0,1\}$ strings in $ran(\pi)$ also equals to $|\lambda|$. In this section of the paper we will be interested in a countable case when $\omega \leq \lambda < \omega_1$. So, for convenience, when $\lambda$ is omitted in the above notation, we assume $|\lambda| = \aleph_0$ to actually mean length\footnote{Equally, every time when we write $\{0,1\}^{\omega}$ we actually mean $\{0,1\}^{|\omega|}$ or $\{0,1\}^{<\omega_1}$. i.e. we always assume $CUT$}, or, in other words, we implicitly invoke countable union theorem, so that the union of countable strings is again a string of length $\lambda$ within $\omega \leq \lambda < \omega_1$ and $R^{<\omega_1}_\kappa = R_\kappa$. Also, for the rest of the section the other most frequent case of interested is countable $|\kappa|$. Hence, we imagine fixing some arbitrary large countable ordinal $\kappa < \lambda < \omega_1$ and write $dom(\pi) = R_{<\omega_1}$ and respectively $ran(\pi) = \{0,1\}^{<\omega_1} = \cbin$ (meaning the same fixed ordinal $\kappa$ for $dom(\pi)$ and $ran(\pi)$), i.e. $\pi: R_{<\omega_1} \to \cbin$. 
+
+We will abuse notation for SEFs according to our convenience. We assume that alphabet $\Sigma^\star$ is extended with polynomial notation, very much in line how we worked with SEFs in the course of last subsections. For example, we will continue to use small Latin letters to note variables that can reference other formulas and exponents in the replication operator as shorthand for replication degree. 
+
+Now, we need to clarify about bijectivity of $\pi$. Note that unfair countable (UC) SEFs still can be mapped one-to-one to the production image of $\pi(s_x) = x$ as long as we can represent and match the unfair finite substrings of the SEF $s_x$ in preimage. Hence, the proof in \textit{Theorem \ref{th_sef_eqcls_cont_car}} can be extended, so that bijectivity of $\pi$ holds also when we use the shortest SEFs as labels to mark equivalence classes $[s_x]$ for $s_x \in S_{UC}$\footnote{rather than replicator-free identity}.
+
+\begin{lemma}[Bijectivity of $\pi$]\label{lemma_biject_pi}
+  If $(R_{<\omega_1}, P, \pi)$ is a replicata, then production $\pi$ is well-defined and always bijective, i.e. $|R_{<\omega_1}| = |\cbin|$.
+\end{lemma}
+\begin{proof}
+  Assume $ZF + CC$. If $x = \pi(s_x)$, then $kind(s_x) := \{UF, PF, IF, UC\}$ (by \textit{Definition \ref{def_part_sef_kind}}) determines the kind of $s_x$ essentially helping to partition $R_{<\omega_1}$ into disjoint classes $R_{<\omega_1} = S_{UF} \cupdot S_{PF} \cupdot S_{IF} \cupdot S_{UC}$.
+  
+  If $(R_{<\omega_1}, P, \pi)$ is a replicata, defined from labels of SEF equivalence classes, then by definition $[s_x] = \{\varphi \in R_{<\omega_1}: \pi(\varphi) = \pi(s_x) \}$ is an equivalence class of formulas that point to the same image ($\pi$ is constant). Recall that the label $s_x$ is either chosen to be the shortest SEF $s_x: |s_x| = min(\{|\varphi|: \varphi \in [s_x]\})$ for unfair finite strings (since there are countably many unfair finite SEFs $|S_{UF}| = \aleph_0$ - \textit{Theorem \ref{th_count_enum_eqcls}}), or is equal to the image $x = \pi(s_x)$ iff $x$ is a fair string ($s_x \in S_{PF} \lor s_x \in S_{IF}$). Again, labeling is based on the idea that one can always pick the shortest label for the equivalence class of unfair finite (assuming CC). Fair SEFs are labeled "as is" by their production image (identity). Finally, unfair countable (UC) strings are essentially a combination of countably many strings as concatenation of both unfair finite and fair (countable). So also for $s_x \in S_{UC}$ one can pick a much "shorter" SEF by abbreviating unfair finite subparts. Although such SEF will remain countable $|s_x| = \aleph_0$ due to fair substrings, i.e. $\exists y: y \substr x \land (s_y \in S_{PF} \lor s_y \in S_{IF}) \in \implies |s_y| = \aleph_0 = |s_x|$.
+
+  To complete the proof, we want to argue that $\pi$ can be well-defined. This can follow from showing first that $kind(s_x) := \{UF, PF, IF, UC\}$ can partition $R_{<\omega_1}$. All four kinds are disjoint by definition. Let us determine $kind(s_x)$ according to exclusive logical steps, so that one and only one of the following is true:
+  \begin{enumerate}
+    \item it is determined that $s_x \in S_{UF}$ iff one can check that $s_x \in S_{UF}$ by applying CC to go through the list of all finite SEFs;
+    \item it is determined whether $s_x \in S_{PF}$ - follows from \textit{Theorem \ref{theorem_perfect_determinacy}};
+    \item it is determined that $s_x \in S_{IF}$ iff $s_x \notin S_{PF}$ and $s_x$ is fair (follows from \textit{Corollary \ref{corollary_fair_determinacy}});
+    \item otherwise, $s_x \in S_{UC}$.
+  \end{enumerate}
+  Production $\pi$ is naturally defined for $S_{UF}$ (by evaluating replicators as countable concatenation of finite substrings between parenthesis - see \textit{Definition \ref{def_repstr_seq}}). It is also defined for all fairs as identity. Finally, $S_{UC}$ is discussed above. Now that we can differentiate between kinds of SEFs, well-definition of $\pi$ follows. This also means that for each label $s_x$ of the equivalence class $<s_x>$ we have one-to-one correspondence with the binary image $x \in \cbin$ (by construction of $R_{<\omega_1}$). Hence, $\pi$ is bijective.
+\end{proof}
+
+\begin{lemma}[Partition of $R_{<\omega_1}$]\label{lemma_part_replicata}
+  If $(R_{<\omega_1}, P, \pi)$ is a replicata, then $R_{<\omega_1}$ can be partitioned into $m \geq 2, m \in \nat$ pairwise disjoint subsets. Meaning that there exists a partition function $f: R_{<\omega_1} \to \{1, .., m\}$.
+\end{lemma}
+\begin{proof}
+  Follows directly from \textit{Lemma \ref{lemma_biject_pi}}, where we show that $kind(s_x)$ is determined for $m \leq 4$ (assuming one can join classes to show partition of $R_{<\omega_1}$ into ${2, 3}$ disjoint subsets). For other cases when $m \geq 5$, one can pick $k = m - 3$ and extend $kind(s_x)$ definition, with up to countably many $k$-degree fair classes of SEFs - see \textit{Theorem \ref{theorem_kfair_determinacy}}.  
+\end{proof}
+
+It will be appropriate to review our recent observations regarding \textit{fair determinacy} and the \textit{partition of $R_{<\omega_1}$} in greater detail. These findings seem noteworthy and will play a significant role in the subsequent sections of this paper. One of the way of doing so is in the context of some known combinatorial results\footnote{See p.133 in \cite{halbeisen2012}} about \textit{colouring infinite graphs and the Prime Ideal Theorem}. For some $n \in \nat$ consider the following statement: 
+
+\paragraph{$P_n:$} If $G$ is a graph such that every finite subgraph of $G$ is $n$-colourable, \indent \indent then $G$ itself is $n$-colourable.
+\\
+
+The following implications are provable in $ZF$ without $AC$\footnote{Set Theory without the Axiom of Choice}:
+  \[ PIT \implies P_{n+1} \implies P_{n} \implies C(\infty, n), C(\infty,2) \implies P_2 \]
+
+Surprisingly, L{\"a}uchli showed in \cite{Luchli1971ColoringIG} that $P_3$ implies $PIT$, and consequently, for all $n \geq 3$, the equivalence $P_n \implies PIT$ is provable in $ZF$ without $AC$.
+
+Recall that PIT stands for \textit{Prime Ideal Theorem}. It is a well-known and powerful choice principle (weaker than $AC$), which we did not cover yet:
+
+\begin{theorem}[Prime Ideal Theorem (PIT) for Boolean algebras]\label{theorem_pit_bool}
+  If $I$ is an ideal in a Boolean algebra\footnote{See \textit{Definition \ref{def_ba}}}, then $I$ can be extended to a prime ideal.
+\end{theorem}
+
+Sometimes seemingly related but essentially equivalent statement can be called \textit{Boolean Prime Ideal} (BPI)\footnote{Meaning that $PIT \Longleftrightarrow  BPI$ - see \textit{lemma \ref{lemma_eq_bpi}}} may be employed to establish numerous fundamental theorems in set theory without requiring the full axiom of choice \cite{karagila2020zornian}.
+
+\begin{lemma}\label{lemma_eq_bpi}
+  The following are equivalent\footnote{This and next lemma are almost literally taken from\cite{karagila2020zornian}, which is a great brief introduction on the matter of "choice" next to \cite{herrlich2006ac} and \cite{Jech1973AboutTA}}:
+  \begin{enumerate}
+      \item every non-empty Boolean algebra has a prime ideal ($BPI$).
+      \item If $\{X_i \mid i \in I\}$ is a family of compact Hausdorff spaces, then $\prod_{i\in I} X_i$ is a compact Hausdorff space.
+      \item For every $I$, $\{0, 1\}^I$ is compact, where $\{0, 1\}$ is the discrete space with two elements.
+      \item The compactness theorem for first-order logic.
+      \item The completeness theorem for first-order logic.
+      \item If $R$ is a commutative ring with a unit, then every ideal is contained in a prime ideal ($PIT$ for commutative rings).
+  \end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+  The following are consequences of BPI. None of these statements is provable in $ZF$ alone, and none of them imply $BPI$:
+\begin{enumerate}
+    \item Hahn-Banach theorem.
+    \item Every set can be linearly ordered\footnote{Weaker form of the full axiom of choice, when sets that are not necessarily well-orderable or even countable}.
+    \item There exists a non-measurable set.
+    \item The Banach-Tarski paradox.
+    \item There is a finitely additive probability measure on $\mathcal{P}(\mathbb{N})$ which vanishes on singletons.
+    \item If a vector space has a basis, then every two bases have the same cardinality.
+    \item Every two algebraic closures of a field $F$ are isomorphic.
+\end{enumerate}
+\end{lemma}
+
+$PIT$ can be considered as an attractive path to extend the framework of $ZF+DC$, since $PIT$ and $DC$ are in fact independent of each other. To further quote \cite{karagila2020zornian}:
+
+\begin{quote}
+  It is worth to mention that $BPI$ is consistent with the statement "There is an infinite set of real
+  numbers which does not have a countably infinite subset". The latter is a contradiction to $DC$, and
+  therefore we cannot prove $DC$ in $ZF + BPI$. In the other direction it is consistent with $ZF + DC$ that
+  every set is Lebesgue measurable, in which case $BPI$ fails, and therefore we cannot prove $BPI$ from
+  $ZF + DC$. So these two principles are indeed independent. Moreover, while $ZF + DC + BPI$ seems
+  to be sufficient to prove a lot of results of interest, this theory still cannot prove the axiom of choice
+  in full.
+\end{quote}
+
+
+Let us reiterate the result by L{\"a}uchli showed in \cite{Luchli1971ColoringIG} based on combinatorics of graph coloring in greater detail. The result offers a technical combinatorial connection between Boolean algebras, graph theory, and set theory and implies $PIT$ within the framework of $ZF$ without $AC$. It shows that certain properties of graphs constructed from Boolean algebras can provide insights into algebraic structures within these algebras, such as existence of prime ideals.
+
+\begin{theorem}[$P_3 \implies PIT$]\label{theorem_laeuchli}
+  In set theory without AC, there exists a function $G$ that maps each Boolean algebra $B$ to a graph $G(B)$, satisfying the following properties:
+  \begin{enumerate}
+      \item If $G(B)$ is 3-colorable, then there exists a prime ideal in $B$.
+      \item Every finite subgraph of $G(B)$ is 3-colorable.
+  \end{enumerate}  
+\end{theorem}
+
+The proof of this theorem relies on a combinatorial lemma on finite graphs. This lemma involves techniques from graph theory to establish properties related to colorability and structure within the graphs $G(B)$. Rather than presenting the entire proof\footnote{For the actual proof please see the original paper \cite{Luchli1971ColoringIG}}, we will discuss the key notions behind the theorem to see how this result can be applied to the replicata $R_{<\omega_1}$.
+
+\begin{enumerate}
+    \item \textbf{Graph Construction (Function $G$):}
+    \begin{itemize}
+        \item For each Boolean algebra $B$, the function $G$ assigns a graph $G(B)$.
+        \item This function $G$ establishes a correspondence between Boolean algebras and graphs.
+    \end{itemize}
+    
+    \item \textbf{Colorability of $G(B)$:}
+    \begin{itemize}
+        \item The graph $G(B)$ constructed from a Boolean algebra $B$ satisfies a particular property: it is 3-colorable.
+        \item This means that the vertices of $G(B)$ can be colored with three colors in such a way that no two adjacent vertices have the same color.
+    \end{itemize}
+    
+    \item \textbf{Connection to Prime Ideals:}
+    \begin{itemize}
+        \item The theorem establishes a connection between the colorability of $G(B)$ and the existence of prime ideals in $B$.
+        \item Specifically, if $G(B)$ is 3-colorable, then there exists a prime ideal in $B$.
+        \item This connection implies that certain properties of the graph $G(B)$ correspond to algebraic properties within the Boolean algebra $B$.
+    \end{itemize}
+    
+    \item \textbf{Finite Subgraphs:}
+    \begin{itemize}
+        \item The theorem also guarantees that every finite subgraph of $G(B)$ is 3-colorable.
+        \item This property ensures that the colorability of $G(B)$ extends to all possible finite configurations of vertices and edges within the graph.
+    \end{itemize}
+\end{enumerate}
+
+We don't necessarily need to show full $PIT$ in most general sense, that it holds for every set. In fact, we just have mentioned above that - it would be impossible to achieve in $ZF + DC$ due to independence of $BPI$ and $DC$. But, as it will turn out later, for our purposes a much weaker statement will suffice. The statement is based on \textit{Theorem 5.15} in \cite{halbeisen2012} but also true for the above \textit{lemma \ref{lemma_eq_bpi}}, again with restriction to a single set $X$.
+
+\begin{theorem}[Restricted Prime Ideal Theorem $BPI(X)$]\label{theorem_pitx}
+  If $B$ be a Boolean algebra on infinite set $X$, s.t. $B = (X,\land,\lor,\neg,\bf{0}, \bf{1})$, then the following statements are equivalent:
+  \begin{enumerate}
+    \item $PIT(X)$: if $I$ is an ideal in a Boolean algebra $B$, then $I$ can be extended to a \textit{prime ideal}.
+    \item $UltrafilterTheorem(X)$: if $F$ is a filter over set $X$, then $F$ can be extended to an \textit{ultrafilter}.
+    \item Consistency principle on $X$: for every binary mess $M$ (set of binary functions defined on finite subsets of $X$) on $X$, there exists a binary function $f$ on $X$ which is consistent with $M$.
+    \item Compactness theorem for propositional logic on $X$: Let $\Sigma$ be a set of formulae for Propositional logic, $X \subseteq \Sigma$ be a set of Propositional variables and function $f$ a \textit{realization} of Propositional logic (a map from all formulas to two-valued Boolean algebra $f: \Sigma \to (\{0,1\},+,\cdot,-,\bf{0},\bf{1})$). If every finite subset of $\Sigma$ is satisfiable, then also $\Sigma$ is satisfiable\footnote{See \cite{halbeisen2012} for exact definitions of mapping formulas to $\bf{1}$ to be satisfiable}.  
+    \item $BPI(X)$: Boolean algebra $B$ has a prime ideal.
+  \end{enumerate}
+\end{theorem}
+
+Given the restriction to a single set $X$, it is enough to show at least one of the statements in \textit{Theorem \ref{theorem_pitx}} and the rest of the argument chain, including $BPI(X) \implies PIT(X)$, will follow from the more general proof \textit{Theorem 5.15} in \cite{halbeisen2012}. The above restricted formulation allows us to show the special case we aimed at:
+
+\begin{lemma}[Boolean Prime Ideal on $B(P(R_{<\omega_1}))$]\label{lemma_bpi_rw}
+  $BPI(R_{<\omega_1})$
+\end{lemma}
+\begin{proof}
+  Assume $ZF+DC$. We want to show that if $(R_{<\omega_1}, P, \pi)$ is a replicata and $B$ is a corresponding Boolean algebra on set $R_w$, then we can show $PIT(R_{<\omega_1})$. We will do so in two steps:
+  \begin{enumerate}[label=(\roman*)]
+    \item There exists a Boolean algebra $B$ formed from SEFs in $R_{<\omega_1}$.
+    \item $G(B)$ can be 3-colored.
+  \end{enumerate}
+  
+  (i) We want to show that $B$ is a Boolean algebra on $R_{<\omega_1}$. We start by letting $B^* = (X,\lor,\land,\neg,\bf{0},\bf{1})$ be a Boolean algebra on set $X$ and $X = \pi(R_{<\omega_1})$, consisting of $\{0,1\}^\omega$ strings ($\pi$ is bijective - \textit{lemma \ref{lemma_biject_pi}}). Boolean logical operators can be defined directly\footnote{Or from universal logical gate NAND - see \textit{lemma \ref{lemma_nand_universality}}} as so-called boolean bitwise operations (see \textit{Definition \ref{def_bw_ops}}) - on the index by index bases for a pair of sequences representing strings $\forall x,y \in X$:
+  \begin{itemize}
+    \item $x \lor y := z$, s.t. $\forall i \in \nat: z(i) = x(i) \lor y(i)$
+    \item $x \land y := z$, s.t. $\forall i \in \nat: z(i) = x(i) \land y(i)$ 
+    \item $\neg x  := z$, s.t. $\forall i \in \nat: z(i) = \neg x(i)$ 
+    \item $\bf{0} := \pi(\bos (0) \eos) $
+    \item $\bf{1} := \pi(\bos (1) \eos) $
+  \end{itemize}
+  The above definitions allows extending $B^*$ from two-valued Boolean algebra. Technically, we assume that $B$ is isomorphic to the Boolean algebra $B^*$ and can be defined directly on SEFs, s.t. $B = (\pi^{-1}({0,1}^\omega),\lor,\land,\neg,\bf{0},\bf{1})$. For the detailed proof that $B^*$ is a Boolean algebra on binary ${0,1}^\omega$ strings see \textit{Theorem \ref{theorem_ba_strings}}.
+
+  (ii) Let us show that $G(B)$ can be 3-colored. By \textit{Lemma \ref{lemma_part_replicata}}, there exists a partition of $R_{<\omega_1}$, s.t. $R_{<\omega_1} = S_{UF} \cupdot S_{FC} \cupdot S_{UC}$, where $S_{FC} = S_{PF} \cupdot S_{IF}$ are all fair countable SEFs (see \textit{Definition \ref{def_part_sef_kind}}). Here we employ \textit{fair determinacy} (\textit{Corollary \ref{corollary_fair_determinacy}}) abbreviating as $FD$ to decide whether $\forall s_x \in B: FD(s_x) \implies s_x \in S_{UF} \lor s_x \in S_{FC} \lor s_x \in S_{UC}$. Let $G(B) = (V, E)$, specifically vertices are equal to the elements of Boolean algebra $V = B$. So, essentially, we configure countable binary strings to be vertices of $G(B)$. Since $pi$ and $G(B)$ are bijective, one can color any vertex of $v \in V$ that correspond to pairwise disjoint $\{S_{UF}, S_{FC}, S_{UC}\}$ into $\{red, green, blue\}$ respectively. Now it remains to show that $G$ is connected and there are no edges which are connecting vertices of the same color, i.e. $\forall i,j \in I(V): (v_i,v_j) \in E \land c(v_i) \neq c(v_j)$, where $c: V \to \{red, green, blue\}$ is a coloring function. To do this, we connect edges by the following rules:
+  \begin{enumerate}[label=(\alph*)]
+    \item each $u \in S_{UC}$ can be mapped into the template formula $\phi \in S_{UF}$, so that one or countably many finite binary substrings are replaced by $x_1,..,x_n$ variables
+    \item if $v \in S_{UF}$ is such a template $v \leftarrow \phi(x_1, .., x_n)$ (equivalence modulo substitution of concrete $x_1,..,x_n, n \in \nat$ with exact finite binary strings) that can be used to generate $u \in S_{UC}$ by replacing (substituted) $x_1,..,x_n, n \in \nat$ variables of $\phi$ with some $y_1,..,y_n \in Y, Y \subseteq S_{FC}$, then we connect those vertices with the edge $(v, u) \in E$
+    \item furthermore, if $w \in S_{FC}$ can be substituted as one of the above variables $x_1,..,x_n, n \in \nat$ for some $v \leftarrow \phi(x_1, .., x_n)$ so that $w = y_i$ and $\phi(y_1, .., y_n) \in S_{UC}$, then we connect those vertices with the edge $(w, v) \in E$
+  \end{enumerate}
+  To show that there are, indeed, no edges connecting the same colors (by the above construction) it is enough to recall that $R_{<\omega_1}$ consists of the equivalence class labels and every SEF $s_x \in R_{<\omega_1}$ is a unique label of the whole class $[s_x]$, s.t. $\pi(\varphi) = x : \varphi \in [s_x]$. For instance, this also means that there is a bijection between every $v$ and $\phi$ if $v \in S_{UF}$ is substitution template $v \leftarrow \phi(x_1, .., x_n)$. Also $x_1, .., x_n$ variables can be matched one-to-one to the $n \in \nat$ finite substrings of the unfair finite SEF $v$. There are cycles in $G(B)$, but there are no edges between the vertices of the same color and between any $(w, u): w \in S_{FC} \land u \in S_{UC}$. Finally, observe that vertices belonging to $S_{UF}$ and $S_{UC}$ as well as the other subset of vertices belonging $S_{UF}$ and $S_{FC}$ individually form two bipartite subgraphs, which can be joined over vertices belonging to $S_{UF}$ together into a 3-colored graph $G$. Hence, if $G(B)$ is constructed in the above way, then it can be 3-colored.
+  
+  Finally, the proof follows by applying result from \textit{Theorem \ref{theorem_laeuchli}} (that can be restricted to any X): $G(B)$ can be 3-colored $\implies PIT(R_{<\omega_1})$. And according to \textit{Theorem \ref{theorem_pitx}}, $PIT(R_{<\omega_1}) \Longleftrightarrow BPI(R_{<\omega_1})$.
+\end{proof}
+
+
+
+\subsection{Smaller and bigger cardinals}
+
+According to the preceding \textit{Theorem \ref{theorem_pitx}} we have that 
+
+\[ PIT(R_{<\omega_1}) \implies Ultrafilter(R_{<\omega_1}) \]
+
+This consequence warrants further investigation. But before exploring its potential applications, let us carefully examine the underlying properties and structure of prime ideals on $R_{<\omega_1}$, given that we already know quite a lot about what SEFs constituting $R_{<\omega_1}$ are and how they are constructed. We will do so in this subsection. We will also touch on the topic of \textit{large cardinal axioms}.
+
+In particular, we would be interested in how can we define a \textit{non-principal} ideal $I$ on $R_{<\omega_1}$ (that can be extended to a non-principal prime ideal). We start with a subset of perfectly fair SEFs $S_{PF} \subset S_{FC} \subset R_{<\omega_1}$. Let us resume the narrative from few subsections earlier by coming back to \textit{lemma \ref{lemma_uncountfair_seq}} about the uncountability of fairs\footnote{For brevity, we often shorten and say just \textit{fairs} instead of \textit{fair strings}. Again, recall that a fair string is simply a string with a corresponding fair formula.}. Our next goal is to reiterate the previous proof to see if we can say more about the structure of fairs $S_{FC}$ and the cardinality of its partition $S_{FC} = S_{PF} \cupdot S_{IF}$.
+
+
+We begin by offering a definition for almost disjoint countable binary strings derived from the definition of almost disjoint sets in \cite{jech2003set}.
+
+\begin{definition}[Almost disjoint strings]\label{def_almost_disjoint_strings}
+  Let $x$ and $y$ be countable binary strings that can be seen as characteristic functions corresponding\footnote{For instance, by morphism provided in \textit{Definition \ref{def_fraenkel_cantor_morph}}} to respective sets $X$ and $Y$. We say that the pair $(x, y)$ consists of \textit{almost disjoint} strings iff intersection $X \cap Y$ is finite.
+\end{definition}
+
+\begin{lemma}[Finite symmetrical difference]\label{lemma_disjoint_to_adjoint}
+  Let $x$ and $y$ be countable binary strings. If the following is true: 
+  \begin{itemize}
+    \item $z = x \oplus y$ is a XOR operation on countable binary strings (symmetrical difference)
+    \item $z$ can be written in form $\bos a_0(0)a_1..(0)a_n(0)a_{n+1} \eos : n \in \nat$ called \textit{finite symmetrical difference} (where each $a_n$ is some non-empty finite binary substring of $z$ except $a_0$ and $a_{n+1}$, which can be optionally empty)
+  \end{itemize}
+  Then, both pairs $(\neg x, y)$ and $(x, \neg y)$ are almost disjoint.
+\end{lemma}
+\begin{proof}
+  Our goal is to show $(\neg x, y)$ and $(x, \neg y)$ form almost disjoint pairs.
+  
+  \begin{enumerate}
+    \item \textbf{XOR Operation}: The operation $x \oplus y$ yields a binary string $z$ marking positions where $x$ and $y$ differ, i.e., $z_i = 1$ iff $x_i \neq y_i$. A finite symmetrical difference implies $z$ contains a finite number of 1s, demarcating a finite set of positions where $x$ and $y$ diverge.
+
+    \item \textbf{Almost Disjoint Strings}: By definition, strings $x$ and $y$ are almost disjoint if their corresponding sets, interpreted via their characteristic functions, have a finite intersection.
+    \begin{enumerate}
+      \item For $(\neg x, y)$: The intersection of interest consists of positions where $\neg x$ and $y$ both have 1s, which occur where $x$ has 0s and $y$ has 1s. Given $z$ is finitely bounded, the subset of positions contributing to this intersection is finite, satisfying the almost disjoint criterion.
+      \item For $(x, \neg y)$: Analogously, we consider positions where $x$ has 1s and $\neg y$ has 1s, equating to positions where $y$ has 0s. The finiteness of $z$ ensures this intersection is also finite.
+    \end{enumerate}
+  \end{enumerate}
+
+  Given the finite nature of $z = x \oplus y$, it follows directly that both $(\neg x, y)$ and $(x, \neg y)$ exhibit finite intersections in their corresponding sets, thus qualifying as almost disjoint pairs. This satisfies the lemma's statement by leveraging the definition of almost disjoint strings and the characteristics of the XOR operation. 
+\end{proof}
+
+As it is evident from the previous lemma, it might be handy to define a concept that is congruent to almost disjoint strings.
+
+\begin{definition}[Almost adjoint strings]\label{def_almost_adjoint_strings}
+  Let $x$ and $y$ be countable binary strings. If both pairs $(\neg x,y)$ and $(x, \neg y)$ — formed by negating one element in each pair — are almost disjoint, then we term $(x,y)$ as \textit{almost adjoint} strings. 
+\end{definition}
+
+There is a natural corollary from \textit{lemma \ref{lemma_disjoint_to_adjoint}}.
+
+\begin{corollary}
+  If $z = x \oplus y$ can be written in the form of finite symmetrical difference, then the pair $(x,y)$ consists of two almost adjoint strings.
+\end{corollary}
+\begin{proof}
+  Follows directly from \textit{Lemma \ref{lemma_disjoint_to_adjoint}} and \textit{Definition \ref{def_almost_adjoint_strings}}.
+\end{proof}
+
+
+
+\begin{lemma}[Uncountability of perfect fairs]\label{lemma_uncount_pf}
+  There exists a subset of perfectly fair strings $I_{PF} \subset S_{PF}$, s.t. $|I_{PF}| > \aleph_0$.
+\end{lemma}
+\begin{proof}
+  Assume $ZF + DC$. Let $x \in S_{PF}$ be a perfectly fair countable binary string. Construct a $GCTA(x)$ table $T$ similar to the proof of \textit{Lemma \ref{lemma_uncountfair_seq}}. Observe that the rest of argument in that proof also holds for perfectly fair $x$ instead of just fair string.
+\end{proof}
+
+\pagebreak
+
+\begin{lemma}[XOR closure of $S_{UF}$]\label{lemma_xorcls_uf}
+  Let $(R_{<\omega_1}, P, \pi)$ be a replicata with $S_{UF} \subset R_{<\omega_1}$ being a set of all unfair finite formulas, which are labels of the respective equivalence classes under $\pi$. Then, $S_{UF}$ is closed under XOR:
+
+  \[ \forall s_x,s_y \in S_{UF}: s_z = s_x \oplus s_y \implies s_z \in S_{UF} \] 
+\end{lemma}
+\begin{proof}
+  We show this in several steps: 
+  \begin{enumerate}[label=(\roman*)]
+    \item Let us recall construction of unfair finite SEF equivalence classes $S_{UF}$ as explained not only in \textit{Definition \ref{def_part_sef_kind}} but also much earlier in the paper in subsection \textit{\nameref{subsection_eqcls_of_sefs}} as well as enumeration of the initial segment in fig. \ref{fig:sefseq}\footnote{see subsection \textit{Labels of the finite SEF equivalence classes} in Appendix}. Specifically, there are countably many unfair finite SEF equivalence classes $|S_{UF}| = \aleph_0$ as according to \textit{Theorem \ref{th_count_enum_eqcls}}. This follows from the fact that by construction $\forall s \in S_{UF}: |s| < m, m \in \nat $, i.e. each label of the SEF equivalence class is the shortest formula (from that class) of finite length.
+    \item One of the issues we have is that XOR is not well-defined for SEFs, which are strings built up using $\{0,1,(,)\}$ symbols. So we need to explain what we mean by XOR for SEF. By \textit{Lemma \ref{lemma_biject_pi}} production $\pi$ is bijective when the domain is restricted to labels of the equivalence classes $[s_x]$. In general, without such restriction $\pi$ is surjective and several different forumals can be evaluated into the same countable binary string in $ran(\pi)$. But since we can meaningfully define XOR rather for two countable binary strings (than for two SEFs), when we say $s_z = s_x \oplus s_y$ we actually mean that we first compute $z = \pi(s_x) \oplus \pi(s_y)$ and then obtain $s_z = \pi^{-1}(z)$, s.t. $s_z$ is actually the shortest formula or a label of $[s_z]$ equivalence class. 
+    \item By definition $s_z$ is unfair finite iff $z = \pi(s_z)$ contains a countable repetition of a finite binary substring. Pick $u \substr x$ and $v \substr y$ as such finite strings from both XOR operands in $z = x \oplus y$, so that indexes of their countable repetitions overlap. Note that no matter how nested are parentheses in formulas $s_x$ and $s_y$, it is always possible to pick such finite substrings by looking at the formula from left to right even if $|s_x| \neq |s_y|$. For example, consider partial order defined on $S_{UF}$ by substring relation on the formulas. It becomes obvious that $\forall x \in S_{UF}, \exists u = \{0,1\}^n: |u| = n, n \in \nat \land  \bos (u) \eos \substr x$. So, there are always some finite binary substrings strings $u, v$, which (also and as well if concatenated countably many times) will be part of respective $\pi(x)$ and $\pi(y)$ (again, see fig. \ref{fig:sefseq}). This means that we can reduce our question to simply showing that $\bos (u)\eos  \oplus \bos (v) \eos$ is unfair finite. The latter is as trivial as $\bos (w) \eos  = \bos (u) \eos \oplus \bos (v) \eos$ iff $w = u^{\prime} \oplus v^{\prime}$, where operands are selected to match their finite length by adding missing symbols through repetition\footnote{Alternatively, one can remove extra symbols to match the length.}: $u^\prime \substr \bos (u) \eos, v^\prime \substr \bos (v) \eos: |u^{\prime}| = |v^{\prime}|$. Such alignment of finite length is possible by perfectly matching the periods of both strings (see \textit{lemma \ref{lemma_align_rep_str}}).
+  \end{enumerate}
+\end{proof}
+
+\begin{lemma}[Alignment of Repeated Binary Strings]\label{lemma_align_rep_str}
+  Consider two non-empty binary strings \(x\) and \(y\) with lengths \(n\) and \(m\) respectively, where \(n, m \in \nat\). There exists a length, common to both, at which the periodic repetition of \(x\) and \(y\) results in their perfect alignment.
+\end{lemma}
+\begin{proof}
+  Given two non-empty binary strings \(x\) and \(y\) with lengths \(n\) and \(m\), respectively, we aim to show that there exists a common length where periodic repetitions of both strings align perfectly.
+
+  The least common multiple (LCM) of two numbers \(n\) and \(m\), denoted \(\operatorname{lcm}(n, m)\), is the smallest positive integer that is divisible by both \(n\) and \(m\). According to the definition of LCM:
+  \[
+  \operatorname{lcm}(n, m) = n \cdot i = m \cdot j \quad \text{for some } i, j \in \mathbb{N}.
+  \]
+  This relationship means that \(\operatorname{lcm}(n, m)\) is a multiple of both \(n\) and \(m\). Therefore, if both \(x\) and \(y\) are repeated indefinitely to create strings of length \(\operatorname{lcm}(n, m)\), \(x\) will have completed exactly \(i\) cycles and \(y\) will have completed \(j\) cycles.
+
+  Thus, by construction, every character in the infinitely repeated string for \(x\) at positions \(k\cdot n\) (for any \(k\)) aligns with the corresponding characters in the infinitely repeated string for \(y\) at positions \(k\cdot m\), ensuring perfect alignment at all these positions. Hence, \(\operatorname{lcm}(n, m)\) serves as the required common length for perfect alignment of the periodic repetitions of \(x\) and \(y\).
+\end{proof}
+
+
+\begin{corollary}[Unfair-Finite Boolean Algebra]\label{corollary_uf_ba}
+  Let $(R_{<\omega_1}, P, \pi)$ be a replicata with $S_{UF} \subset R_{<\omega_1}$ being a set of all unfair-finite formulas and $B_{UF} = \pi(S_{UF})$. Then, 
+  \[ (B_{UF}, \lor, \land, \neg, \bf{0}, \bf{1}) \]
+  is a Boolean algebra.
+\end{corollary}
+\begin{proof}
+  % TODO: wrong proof - fix me.. XOR is not a universal gate.
+  Follows from similar arguments as above regarding XOR closure of $S_{UF}$. Knowing XOR properties (Closure, Associativity, Commutativity, Identity Element, Inverse Element, Distributivity)  one can define OR, AND, NOT operations on countable binary strings $\forall x,y \in B_{UF}$ similar to how $\lor, \land, \neg$ are defined\footnote{Recall that if NOT operation is defined one can also derive OR and AND from $x \oplus y = (x \land \neg y) \lor (\neg x \land y)$.} for $B^{*}$ in \textit{lemma \ref{lemma_bpi_rw}}. 
+  
+  Next, reiterate the argument (as in the previous proof) that it is enough to show closure on a limited part of any unfair finite formula. Replace $\oplus$ with any of the $\lor, \land, \neg$ operations in the statement:  $\bos (w) \eos  = \bos (u) \eos \oplus \bos (v) \eos$ iff $w = u^{\prime} \oplus v^{\prime}$, where $u^{\prime}$ and $v^{\prime}$ are perfectly aligned (see \textit{lemma \ref{lemma_align_rep_str}}). Observe that such statement will hold for all three operations: $\lor, \land, \neg$.
+  
+  Closure under all boolean operations for $B_{UF}$ implies that $B_{UF}$ is a Boolean algebra. Furthermore, $S_{UF} \subset R_{<\omega_1} \implies B_{UF} \subset B^{*}$.
+\end{proof}
+
+\begin{corollary}
+$ (B_{UF}, \oplus, \cdot, \bf{0}, \bf{1})$ is a ring, where multiplication is $x \cdot y = x \land y$.
+\end{corollary}
+
+
+\begin{lemma}[Cardinality of perfect and imperfect fairs]\label{lemma_perf_imp_card}
+  Perfect fairs have the same cardinality as the imperfect fairs: \[ |S_{PF}| = |S_{IF}| \]
+\end{lemma}
+\begin{proof}
+  Can be shown by invoking Schröder-Bernstein theorem that there exist a bijective $h: S_{IF} \to S_{PF}$ iff there exists $f$ and $g$, s.t.: 
+  \begin{itemize}
+    \item $f: S_{IF} \to S_{PF}$ is injective - with index $\forall \alpha \in I(S_{IF})$, we have an automorphism $\mu: S_{IF} \to S_{IF}$ defined as $z_\alpha \mapsto x_\alpha$, where  $\forall z_\alpha \in S_{IF}, \exists x_\alpha \in S_{IF}:  x_\alpha \substr z_\alpha$ (Mind the trivial case $x_\alpha = z_\alpha \implies x_\alpha \substr z_\alpha$). Now, by definition of imperfect fairs - each imperfect $x_\alpha$ is constructed by concatenating some fair substring at least twice, so $\exists y_\alpha \in S_{PF}: x_\alpha = y_\alpha \cdot y_\alpha$. One can assemble this into defining $f$ as composition map $z_\alpha \mapsto y_\alpha \mapsto x_\alpha$. Like this every $z_\alpha$ is mapped to a unique $x_\alpha$ and $f$ is injective.
+    \item  $g: S_{PF} \to S_{IF}$ is injective - following on the previous point, with index $\forall \beta \in I(S_{PF})$ and $\forall x_\beta \in S_{PF}$ we have $y_\beta = x_\beta \cdot x_\beta$. Again, by definition of imperfectly fair, $y_\beta \in S_{IF}$. So $g$ can be defined as $x_\beta \mapsto y_\beta$. Like this every $x_\beta$ is mapped to a unique $y_\beta$ and $g$ is injective.
+  \end{itemize}
+\end{proof}
+
+\begin{lemma}[Greater cardinality of unfair countable]\label{lemma_card_uc}
+  Let $(R_{<\omega_1}, P, \pi)$ be a replicata, s.t. $R_{<\omega_1} = S_{UF} \cupdot S_{FC} \cupdot  S_{UC}$.
+  Then, unfair countable strings have greater cardinality than fair countable: \[ |S_{FC}| < |S_{UC}| \]
+\end{lemma}
+\begin{proof}
+  \begin{enumerate}[label=(\roman*)]
+  \item We want to show that there exists no injective map from  $S_{UC}$ to $S_{FC}$. Suppose, for the sake of contradiction, that there exists an injective function $f: S_{UC} \to S_{FC}$. 
+  \item Recall that if some $s$ is unfair countable, then, by construction, $s \in S_{UC}$ iff $\exists w \in S_{FC}: w \substr s$. All unfair countable must contain at least one fair substring. Otherwise, $s$ is finite.
+  \item Given that $f$ is injective, it must map every string from the $dom(f)$ to some unique value in the image $ran(f)$. Namely, $\forall s_x, s_y \in S_{UC}$ we have that - if $s_x \neq s_y$, then $f(s_x) \neq f(s_y)$. 
+  \item Let $u,v \in S_{PF}$ and $u \neq v$. Without loss of generality, the above means that if $f$ is injective, then it maps all pairs of $(u,v)$ found in any unfair formula in $S_{UC}$ one-to-one to a fair counterpart in $S_{FC}$. 
+  \item In terms of pigeonhole principle, if $f$ is injective, then each $s_\alpha \in S_{UC}, \alpha \in I(S_{UC})$ ends up having a unique pigeonhole $f(s_\alpha) \in S_{FC}$.
+  \item For example, take $s_x = (u \cdot v)$ and $s_y = ((u)(v))$. We can only map them to the best candidate "pigeonhole" for $(u,v)$ pair in $S_{FC}$ - the one without parentheses - $f(s_x) = \bos u \cdot v \eos = f(s_y) $. Then this will lead to a contradiction and our initial assumption that $f$ injective must be wrong. So to complete the proof, It remains to clarify what we mean when we say \textit{map to the best candidate "pigeonhole"}.
+  \item Above we assume that such map exists by proposing the plain encoding of the $(u,v)$ pair in form of $\bos u \cdot v \eos$. But maybe we can do better with our argument. We can show that there are not enough candidates.
+  \item Let 
+    \begin{equation*}
+      \begin{aligned}
+      S_p = \{ 
+        \bos (u)v \eos,...,\bos (u)v(u)v \eos, ... \bos ((u)v) \eos, ... \\ 
+        \bos u(v) \eos,...,\bos u(v)u(v) \eos, ..., \bos (u(v)) \eos, ... \\
+        \bos (u)(v) \eos,...,\bos (u)(v)(u)(v) \eos, ..., \bos ((u)(v)) \eos, ... \} 
+      \end{aligned}
+    \end{equation*}  
+    be a set of "pigeons" in need of unique pigeonholes. Note that $|S_p| = |S_{UF}| = \aleph_0$ as it is constructed by replacing $\{0,1\}$ with $\{u,v\}$ in those finite SEFs that contain both $0$ and $1$.
+  \item Now let us reiterate our initial assumption that $f$ is injective (but in line with the argument about existence of the best pigeonhole candidate). Essentially, we have arrived at - $f$ is injective iff one can map every pigeon (formula) in $S_p$ to its respective and unique pigeonhole. For this to be possible there must exist such an encoding that would allow writing up $\{u,v\}$ as a set of fair formulas for all possible $\{u,v\}$ pigeonholes. Assume this is as well possible. It is important to note that such encoding would still mean sticking to the language of $\{0,1\}$ for fair strings plus concatenation.
+  \item Observe that the following pigeons will share the pigeonhole:
+      \[ f(\bos (u)v \eos) = f(\bos u(v) \eos) = f(\bos (u)(v) \eos) = ... = h_1 \]
+      \[ f(\bos (u)v(u)v \eos) = f(\bos  u(v)u(v) \eos) = f(\bos (u)(v)(u)(v) \eos) = ... = h_2 \]
+      \[ ... \]
+    and, in fact, we can continue this list by taking $u_n \in S_{PF}, n \in \nat$ to replace $(u, v)$ pair with countable $(u_1, ..,u_n)$ tuple. It follows that countably many pigeons will have to share the pigeonhole. 
+  \item Also in the above list we have omitted one line: 
+      \[ f(\bos ((u)v) \eos) = f(\bos  (u(v)) \eos) = f(\bos ((u)(v)) \eos) = ... = h_\omega \]
+    which can also be nicely interpreted that those pigeons never get the pigeonhole since if we try to encode $z = \bos ((u)(v)) \eos$ with countably many concatenations, then it will violate the definition for imperfectly fair strings, i.e.: $z \notin S_{PF} \land z \notin S_{IF}$.
+  \end{enumerate}
+  In conclusion, there exists no injective $f: S_{UC} \to S_{FC}$, since (as it turns out) one cannot match all $s_\alpha \in S_{UC}$, so that each formula gets a unique "pigeonhole" assigned, and one cannot do it at least countably many times.
+\end{proof}
+
+All the work we did in solidifying our understanding about the structure $R_{<\omega_1}$ is a preparation work for it to be used as a model. But we need to do few more observations before we can start this next chapter.
+
+\begin{corollary}[Cardinalities of $R_{<\omega_1}$ partition]\label{corollary_card_rep_part}
+  Let $(R_{<\omega_1}, P, \pi)$ be a replicata, s.t. $R_{<\omega_1} = S_{UF} \cupdot S_{FC} \cupdot  S_{UC}$.
+  Then, the following holds:
+  \begin{enumerate}
+    \item $|S_{UF}| = \aleph_0 = \omega$
+    \item $|S_{FC}| = |S_{PF}| = |S_{IF}| = \aleph_1  = \omega_1$
+    \item $|S_{UC}| = \aleph_2  = \omega_2$
+  \end{enumerate}
+\end{corollary}
+\begin{proof}
+  Rather than implicitly relying on the law of excluded middle\footnote{which invokes $AC$ - see \cite{Gillman2002}, but we work in $ZF+DC$}, to show (1-3) we would use the fact that there is partition $R_{<\omega_1}$, which we have arranged in particular strict order - $|S_{UF}| < |S_{FC}| < |S_{UC}|$ 
+  \begin{enumerate}[ {(}1{)} ]
+    \item There are countably many unfair finite SEF equivalence classes $|S_{UF}| = \aleph_0$ as according to \textit{Theorem \ref{th_count_enum_eqcls}}.
+    \item Discussed earlier in the paper \textit{lemma \ref{lemma_uncountfair_seq}} about the uncountability of fairs. Specifically, follows from uncountability of perfect fairs as shown in \textit{lemma \ref{lemma_uncount_pf}} and that $|S_{PF}| = |S_{IF}|$ as shown in \textit{lemma \ref{lemma_perf_imp_card}}. hence  $ |S_{UF}| < |S_{FC}|$
+    \item $|S_{FC}| < |S_{UC}|$ has been just shown in the previous \textit{lemma \ref{lemma_card_uc}}.
+  \end{enumerate}
+  We conclude by assigning respective cardinalities in ascending order $|S_{UF}| = \aleph_0, |S_{FC}|  = \aleph_1, |S_{UC}| = \aleph_2$.
+\end{proof}
+
+The following terminology about \textit{forcing} would be important for our discussion in the next chapter of the paper.
+So let us recall some definitions and specifically the countable chain condition (ccc) on partial order (as discussed in \cite{jech2003set} in the context of \textit{forcing conditions}\footnote{See chapter \textit{14. Forcing} on p. 201-203 in \cite{jech2003set}}). 
+
+\begin{definition}[Forcing "prerequisites"]\label{def_forcing_terms}
+  Let $M$ be a transitive model of $ZFC$, the \textit{ground model}. In $M$, let us consider a nonempty partially ordered set $(P,<)$.
+  \begin{enumerate}[label=(\roman*)]
+    \item We call $(P,<)$ a \textit{notion of forcing} and the elements of $P$ \textit{forcing conditions}.
+    \item We say that $p$ is \textit{stronger} than $q$ if $p < q$.
+    \item If $p$ and $q$ are conditions and there exists $r$ s.t. both $r \leq p$ and
+    $r \leq q$, then $p$ and $q$ are \textit{compatible}; otherwise they are \textit{incompatible}. 
+    \item A set $D \subset P$ is \textit{dense} in $P$ if for every $p \in P$ there is $q \in D$ such that $q ≤ p$.
+    \item A set $W \subset P$ is an \textit{antichain} if its elements are pairwise incompatible.
+  \end{enumerate}
+\end{definition}
+
+Using the above notion of antichain one can formulate the countable chain condition, which would allow to somehow restrict set $P$ as "not too large" and even more. The original idea asks - if $X$ is a dense linearly ordered set and every disjoint collection of open intervals in $X$ is at most countable ($X$ satisfies ccc), then is $P$ isomorphic to real line? This question is called the Suslin's Problem. In topology\footnote{Another typical idea sharing the same purpose of working with sets that are "not too large" also comes from topology, and it is obviously the notion of \textit{compactness}.} (specifically, order theory) - where $W$ is called \textit{strong downwards antichain} - an antichain in which no two distinct elements have a common lower bound in $P$, that is - $\forall x,y \in W: x \neq y \implies \exists z \in P \land z \leq x \land z \leq y$, which is essentially the same as point \textit{(v)} in the above \textit{Definition \ref{def_forcing_terms}}). 
+
+\begin{definition}[Countable Chain Condition (ccc)]\label{def_forcing_ccc}
+A partially ordered set  $(P,<)$ (forcing notion) is said to satisfy the \textit{Countable Chain Condition}, or to be \textit{ccc}, if every (strong) antichain in $P$ is at most countable.
+\end{definition}
+
+Next we show how to construct partial order on $R_{<\omega_1}$. We try to align towards contiguity ideas in \textit{Definition \ref{def_cmp_contiguity_bin_str}}, so that later one partial order can be refined and extended by the other.
+
+\begin{definition}[Substring-Partition Partial order (sppo) on $R_{<\omega_1}$]\label{def_po_substr_rep}
+  Let $(R_{<\omega_1}, P_{\varepsilon}, \pi)$ be a replicata, s.t. $R_{<\omega_1} = S_{UF} \cupdot S_{FC} \cupdot S_{UC}$, where:
+  \begin{itemize}
+    \item $S_{UF}$ be a set of all \textit{unfair finite} SEF equivalence classes in $R_{<\omega_1}$,
+    \item $S_{FC} = S_{PF} \cupdot S_{IF} $ be a set of all \textit{fair countable} SEF equivalence classes in $R_{<\omega_1}$, which can be partition into a set of \textit{perfect fairs} $S_{PF}$ and \textit{imperfect fairs} $S_{IF}$,
+    \item $S_{UC}$ be a set of all \textit{unfair countable} SEF equivalence classes in $R_{<\omega_1}$.
+  \end{itemize}
+  Then, one can define partial order $P_{\varepsilon} = (R_{<\omega_1}, <)$ using substring relation $\substr$ acting on SEFs in $R_{<\omega_1}$ and benefitting from the above partition of $R_{<\omega_1}$:
+  \begin{enumerate}[label=(\roman*)]
+    \item \textbf{by substring}: $\forall s_x,s_y \in R_{<\omega_1}: s_x \substr s_y => s_x < s_y$ 
+    \item \textbf{by partition (kind)}:
+      \begin{enumerate}[label=(\alph*)]
+        \item perfect fairs are less than imperfect fairs: $s_x \in S_{PF} \land s_y \in S_{IF} => s_x < s_y$ 
+        \item fairs are less than unfairs: $s_x \in S_{FC} \land s_y \notin S_{FC} => s_x < s_y$ 
+        \item unfair finite are less than unfair countable: $s_x \in S_{UF} \land s_y \in S_{UC} => s_x < s_y$ 
+      \end{enumerate}
+  \end{enumerate}
+  This is called \textit{substring-partition partial order} (sppo).
+\end{definition}
+
+\begin{theorem}[$R_{<\omega_1}$ with sppo satisfies ccc]\label{theorem_rw_ccc}
+  Let $(R_{<\omega_1}, P_{\varepsilon}, \pi)$ be a replicata with partial order $P_{\varepsilon}$ defined by substring relation on SEFs and partition ordering $S_{PF} < S_{IF} < S_{UF} < S_{UC}$ (see \textit{Definition \ref{def_po_substr_rep}}).
+  Then, $R_{<\omega_1}$ satisfies countable chain condition.
+\end{theorem}
+\begin{proof}
+  (Assume $ZF+DC$). Partial order is defined according to \textit{Definition \ref{def_po_substr_rep}}. Note that (a-c) points in (ii.) are not superfluous (or illustrative), but they are stronger than the consequence of substring relation $\substr$ applied on SEFs alone: $\forall s_x,s_y \in R_{<\omega_1}: s_x \substr s_y => s_x < s_y$. The requirement $s_x \substr s_y$ does not have to be always met, but we can still use partition information to always induce linear order\footnote{Note that if we want to define a lattice then such linear order would need some adoption like fixing $\bos(0)\eos$ as bottom and $\bos(1)_\eos$ as top}: $S_{PF} < S_{IF} < S_{UF} < S_{UC}$. This situation simplifies the rest of the proof.
+
+  Now given the induced linear order by $R_{<\omega_1}$ partition, one can exclude antichains across multiple partitions and consider each disjoint subset individually. We have that $R_{<\omega_1}$ is ccc iff partial order $P_{\varepsilon} = (X, <)$ is ccc, where $X \in \{S_{PF}, S_{IF}, S_{UF}, S_{UC}\}$. So we can break our proof as following: 
+  \begin{itemize}
+    \item $(S_{PF}, <)$ is ccc: follows from the fact that every perfectly fair is a part of some GCGA table (essentially a filter) of almost adjoint perfectly fairs - see the \textit{Lemma \ref{lemma_uncount_pf}} and \textit{Lemma \ref{lemma_uncountfair_seq}}. Furthermore, uncountability of $S_{PF}$ implies that each perfectly fair string is dense, i.e.: $\forall s_y \in S_{PF}, \exists s_x \in S_{PF}: s_x \substr s_y \implies s_x < s_y$, where $s_x$ is a shared prefix somewhere backwards on the context that was formed by scanning the input to construct GCTA table (Recall that the statement that such table exists is equivalent to $DC$ - see \textit{Theorem \ref{theorem_dc_ca_gcta_equivalence}}.)
+    \item $(S_{IF}, <)$ is ccc: by definition $\forall s_x \in S_{IF}, \exists s_y \in S_{IF}: s_y \substr s_x \land s_y = u \cdot u$, where $u \in S_{PF}$. Hence, there is always a perfect fair that would be less than any imperfect fair - $\forall s_x \in S_{IF}: \exists u \in S_{PF}$, s.t. $u < s_x$. So it is not possible to form even a countable antichain in $S_{IF}$ for sppo $P_{\varepsilon}$ on $S_{IF}$. 
+    \item $(S_{UF}, <)$ is ccc: Given that $|S_{UF}| = \aleph_0$ it follows trivially that any subset of $S_{UF}$ cannot form an uncountable antichain. 
+    \item $(S_{UC}, <)$ is ccc: Comes from two points: 
+      \begin{enumerate}[label=(\alph*)]
+        \item By construction, each unfair countable formula $s_x \in S_{UC}$ is formed by replacing some finite substring if unfair finite formula $s_y \in S_{UF}$. Hence, for every $s_y$ there is some finite $s_x$ "template" (or layout) formula, which would be always lesser $s_x < s_y$ (by definition of $P_{\varepsilon}$ - see \textit{Definition \ref{def_po_substr_rep}}) 
+        \item  Note that every $s_x \in S_{UC}$ is also inherently dense (upwards and downwards) as every fair substring $s_v$ must be also a substring of some greater imperfectly fair $s_k$, which in turn, must be a substring of some unfair countable $s_u \in S_{UC}: s_k \substr s_u$, resulting in $s_x < s_u$ (and vice versa).
+      \end{enumerate}
+  \end{itemize}
+\end{proof}
+
+The final evidence demonstrating that \( R_{<\omega_1} \) is ccc wraps up this subsection. In concluding remarks, sets of \( \omega_0 \) and \( \omega_1 \) cardinalities are referred to as smaller sets, while sets of \( \omega_2 \) and greater cardinality are considered by us as not so small or simply much bigger sets.
+
+\subsection{Fair Boolean Algebras}
+
+Next results will be required for the construction of a replicated model in the \textit{\nameref{sec_rep_model}} section. Let's begin by reviewing some notation for boolean operations (depending on the context).
+
+\begin{definition}[Bitwise Boolean Operations on Binary Strings]\label{def_bw_ops}
+  Let $B_\alpha$ be a set of all binary strings of non-zero length $\alpha \in Ord$:
+
+    \[ B_\alpha = \{ s : s \in \{0,1\}^\alpha\}\]
+
+  Then, boolean operations $\neg, \lor, \land, \oplus, \nand$ on any two binary strings (aligned by their length and index positions) can be defined in a bitwise manner. Namely, $\forall u,v,z \in B_\alpha$ and $\forall i \in I(\alpha)$: 
+
+  \begin{align*}
+    z = \neg u &\Leftrightarrow z(i) = \neg u(i), & \text{(NOT)} \\
+    z = u \lor v &\Leftrightarrow z(i) = u(i) \lor v(i), & \text{(OR)} \\
+    z = u \land v &\Leftrightarrow z(i) = u(i) \land v(i), & \text{(AND)} \\
+    z = u \oplus v &\Leftrightarrow z(i) = u(i) \oplus v(i), & \text{(XOR)} \\
+    z = u \nand v &\Leftrightarrow z(i) = u(i) \nand v(i), & \text{(NAND)} \\
+  \end{align*}
+  where logical operations on individual bits\footnote{Also see \textit{cursor functions} in \textit{Definition \ref{def_cursor}} (much earlier in the paper) for notation to access individual bits} $u(i)$ and $v(i)$ are:
+  \begin{itemize}
+    \item \textbf{NOT} - \textit{logical NOT}, \textit{logical negation} or equivalently \textit{binary inverse} (INV);
+    \item \textbf{OR} - \textit{logical OR} or equivalently \textit{binary sum};
+    \item \textbf{AND} - \textit{logical AND} or equivalently \textit{binary multiplication};
+    \item \textbf{XOR} - \textit{exclusive logical OR}, \textit{symmetric difference} or equivalently \textit{exclusive OR};
+    \item \textbf{NAND} - \textit{negated logical AND} or \textit{NOT AND}.
+  \end{itemize}
+  We refer to such string-boolean operations (when applied on the whole binary string in a bulk) as \textit{bitwise boolean operations}.
+\end{definition}
+
+We want to adhere to the following convention:
+  \begin{itemize}
+    \item we use natural number as subscript and index if $\alpha$ is finite $\alpha = n, n \in \nat$ (also $|B_n| \in \nat$);
+    \item when the subscript \(\alpha\) is not specified, it is assumed that \(\alpha = \omega\), and in this context, $\cbin = B_\omega$.
+  \end{itemize}
+
+Furthermore, throughout the paper we are interchangeably using the following equivalent notation for binary operations, which, ideally, deserves some comment as well:
+  \begin{enumerate}[label=(\alph*)]
+    \item $\lor, \land, \neg$ in the context of binary strings (and their Boolean algebras);
+    \item $+, \cdot, -$ in the context of abstract Boolean algebras;
+  \end{enumerate}
+We also use (a) in formulas of formal logical language (e.g. FOL or Set Theory). For example, in this sense notation (a) for binary operations is used in \textit{Lindenbaum algebra}, which can be defined \cite{jech2003set} on the equivalence of  all sequences of FOL language\footnote{FOL language includes propositional logic, which was mentioned in \textit{Theorem \ref{theorem_pitx}} as corresponding to a \textit{binary mess}.} $\L$. So, for the sake of clarity, let us recall a detailed definition of what \textit{Boolean algebra} is from \cite{jech2003set}.
+
+\begin{definition}[Boolean Algebra]\label{def_ba}
+  A Boolean algebra is a set $B$ with at least two elements\footnote{in the context of binary strings we used $\bf{0} = \bos (0) \eos$ and $\bf{1} = \bos (1) \eos$}, $0$ and $1$, endowed with binary operations $+$ and $\cdot$, and a unary operation $-$:
+
+    \[ (B, +, \cdot, -, 0, 1) \]
+
+  The above Boolean operations satisfy the following axioms:
+  \begin{align*}
+    u + v &= v + u, & u \cdot v &= v \cdot u, & & \text{(commutativity)} \\
+    u + (v + w) &= (u + v) + w, & u \cdot (v \cdot w) &= (u \cdot v) \cdot w, & & \text{(associativity)} \\
+    u \cdot (v + w) &= u \cdot v + u \cdot w, & u + (v \cdot w) &= (u + v) \cdot (u + w), & & \text{(distributivity)} \\
+    u \cdot (u + v) &= u, & u + (u \cdot v) &= u, & & \text{(absorption)} \\
+    u + (-u) &= 1, & u \cdot (-u) &= 0. & & \text{(complementation)}
+  \end{align*}
+\end{definition} 
+
+Every Boolean algebra gives rise to a Boolean ring \cite{jech2003set}. The opposite is not true as XOR is not a universal logical gate. But as we will see, there is a logical operation that (if the set is closed under that operation) does give rise to a Boolean Algebra, defined on the same set.
+
+\begin{lemma}[NAND Universality]\label{lemma_nand_universality}
+  All boolean operations including $\land, \lor, \neg$ (AND, OR, NOT) can be expressed via NAND $\nand$.
+\end{lemma}
+\begin{proof}
+  This is a known fact in logic and computer science. This property is called universality, when all other logical operations or gates can be expressed by the few or one gate (as in case of NAND $\nand$ operation). The proof follows directly from the logical formulas below $\forall a,b \in \{0,1\}$:
+  \begin{align*}
+    \neg a     &= a \nand a & \text{(NOT)} \\
+    a \land b  &= \neg(a \nand b) & \text{(AND)} \\
+    a \lor b   &= \neg a \nand \neg b & \text{(OR)} \\
+    a \oplus b &= (a \nand (a \nand b)) \nand (b \nand (a \nand b)) & \text{(XOR)}
+  \end{align*}
+  and so on. Recall that the combination of logical gates AND and NOT are also universal.
+\end{proof}
+
+\begin{corollary}[NAND Closure]\label{corollary_ba_from_nand}
+  If $B$ be a set of at least two elements $\{0,1\}$ closed under boolean operation NAND $\nand$ (or, equivalently, AND $\cdot$ and NOT $-$).
+  Then, $B$ is also closed under  $\land, \lor, \neg$ (AND, OR, NOT) operations.
+\end{corollary}
+\begin{proof}
+  Follows from \textit{Lemma \ref{lemma_nand_universality}}.
+\end{proof}
+
+\begin{theorem}[Boolean Algebra on Binary Strings]\label{theorem_ba_strings}
+  Let $B_\alpha$ be a set of all binary strings of non-zero length $\alpha \in Ord$ and $\alpha \leq \omega$:
+
+  \[ B_\alpha = \{ s : s \in \{0,1\}^\alpha\}, \]
+
+  which is closed under at least one bitwise boolean operation $\nand$ (or, equivalently, two operations $\neg, \and$). Then, there exists a Boolean algebra defined on those binary strings: 
+
+    \[ (B_\alpha, \land, \lor, \neg, \bf{0}, \bf{1}) \]
+\end{theorem}
+\begin{proof}
+  Let $\bf{0}$ and $\bf{1}$ be binary strings of length $\alpha$, consisting either only of zeros, or, only of ones, respectively. Note that $\bf{0}$ and $\bf{1}$ strings are necessarily included in every $B_\alpha$, given that the set contains all binary strings of non-zero length $\alpha$. It also means that the cardinality must be $|B_\alpha| = 2^{\alpha}$. We claim that if $B_\alpha$ is closed under $\land, \lor, \neg$ and satisfies all axioms in \textit{Definition \ref{def_ba}} for each $\alpha$, then $B_\alpha$ is a Boolean algebra $(B_\alpha, \land, \lor, \neg, \bf{0}, \bf{1})$. 
+  
+  We are going to proof this by induction on length $\alpha$:
+  \begin{enumerate}
+    \item \textbf{$\alpha = 1$}: $B_1$ is a trivial Boolean algebra of two (we ignore zero length case).
+    \item \textbf{$\alpha < \omega$}: A finite case is true by induction on $n \in \nat$ with previous cases as base. Assume $\alpha = n$ is true and their exists a Boolean algebra $B_n$. Let us show \textbf{$\alpha = n + 1$}.
+      \begin{enumerate}[label=(\roman*)]
+        \item Define bottom and top algebras $B_{b} = \{ \bos s \cdot 0 \eos \}$ and $B_{t} = \{ \bos s \cdot 1 \eos \}$ by concatenation of $\{0\}$ and $\{1\}$ bits to the binary strings in $B_n$, so that:
+        \[ B_{n+1} = B_{b} \cup B_{t} \]
+        \item Concatenation above can be described with isomorphism $f: \{0,1\}^n \times \{0,1\} \to \{0,1\}^n$, s.t. $B_b = f(B_n, 0)$ and $B_t = f(B_n, 1)$.
+        \item Observe that both $B_{b}$ and $B_{t}$ remain valid Boolean algebras, since axioms in \textit{Definition \ref{def_ba}} are idempotent to the last $n+1$ bit of the string remaining the same (when bitwise boolean operation are applied on the last bit). In other words, if the last bit is treated as a constant $c$, we have that $B_n$ being valid Boolean algebra implies that $f(B_n, c)$ is also an algebra, since $f$ is an isomorphism.
+        \item We will use the concept of isomorphisms to show that the set \(B_{n+1}\), constructed by concatenating a bit to strings in \(B_n\), forms a Boolean algebra under the operations \(\land, \lor,\) and \(\neg\).
+
+        \item[(iv)] \textbf{Merging \(B_b\) and \(B_t\) using isomorphism $f$:}
+        \begin{enumerate}
+            \item \textbf{Isomorphic Representation:} The set \(B_{n+1}\) can be described as \(B_{n+1} = B_b \cup B_t\), which corresponds to \(\{0,1\}^n \times \{0,1\}\). Here, each string in \(B_{n+1}\) can be uniquely identified as a tuple \((s, b)\) where \(s \in B_n\) and \(b \in \{0,1\}\), representing the concatenation of the binary string \(s\) with the bit \(b\).
+
+            \item \textbf{Isomorphism Construction:} Define the function \(f: B_n \times \{0,1\} \to B_{n+1}\) by \(f(s, b) = s \cdot b\). This function is an isomorphism because it is a bijection (one-to-one and onto) and preserves the structure of the Boolean operations when applied element-wise. Furthermore, $f$ preserves monotonicity induced by $B_b < B_t$ - meaning that $\forall u,v \in B_{n+1}$ we have $f(u) \leq f(v)$ whenever $u \leq v$, since we can decide on the corner case $u \in B_b$ and $v \in B_b$ implies $f(u) \leq f(v)$ (or by comparing the last $n+1$ bit).
+
+            \item \textbf{Boolean Operations via Isomorphism:} For any \(s, t \in B_n\) and \(a, b \in \{0,1\}\), define the operations on \(B_{n+1}\) as:
+                \[
+                f(s, a) \land f(t, b) = f(s \land t, a \land b)
+                \]
+                \[
+                f(s, a) \lor f(t, b) = f(s \lor t, a \lor b)
+                \]
+                \[
+                \neg f(s, a) = f(\neg s, \neg a)
+                \]
+                These operations are well-defined due to the closure and Boolean operations properties of \(B_n\) and \(\{0,1\}\).
+
+            \item \textbf{Algebra Properties:} Since both \(B_n\) and \(\{0,1\}\) are Boolean algebras, the product \(B_n \times \{0,1\}\), under these operations, satisfies the axioms of a Boolean algebra:
+                \begin{itemize}
+                    \item \textbf{Closure:} Shown by the definition of operations.
+                    \item \textbf{Associative, Commutative, Distributive:} Inherited from \(B_n\) and \(\{0,1\}\).
+                    \item \textbf{Identity and Inverse Elements:} Follow directly from the identities and inverses in \(B_n\) and \(\{0,1\}\).
+                \end{itemize}
+        \end{enumerate}
+
+      \end{enumerate}
+    \item \textbf{$\alpha = \omega$}: By constructing the set \(B_{n+1}\) through the isomorphism \(f: B_n \times \{0,1\} \to B_{n+1}\) and establishing that it satisfies the Boolean algebra properties under the defined operations, we conclude that \(B_{n+1}\) forms a Boolean algebra. The induction can similarly be carried forward to any finite \(n\) and extended to the countably infinite case \(\alpha = \omega\), arguing by the infinite extension of finite Boolean algebras, given proper handling of limits and closure under operations.
+    
+    However, an alternative line of argument just for the special case $\alpha = \omega$ would be in the context of $(R_{<\omega_1}, P, \pi)$ replicata:
+    \begin{enumerate}[label=(\roman*)]
+      \item $B_\omega = \cbin = \pi(R_{<\omega_1})$
+      \item Elements of $\cbin$ correspond one-to-one to Cantor Set and $|\cbin| = 2^{\aleph_0}$.
+      \item $BPI(R_{<\omega_1}) \implies SRT(R_{<\omega_1})$, where SRT stands for Stone Representation Theorem\footnote{see \textit{Lemma \ref{lemma_bpi_rw}} and \cite{jech2003set} p. 81}:\\
+        \textit{Every boolean algebra is isomorphic to an algebra of sets} or $g: B_\omega \to S(B_\omega)$, where $S(B_\omega)$ is a dual Stone space for $B_\omega$.
+      \item As a compact totally disconnected Hausdorff space, the Cantor set is an example of a Stone space. The latter implies that $\cbin = S(B_\omega)$ and $B_\omega$ is corresponding Boolean algebra on the set of $\{0,1\}^\omega$ strings.
+    \end{enumerate}
+  \end{enumerate}
+  
+  Hence, the theorem is proven, establishing that \(B_\alpha\) is a Boolean algebra for each \(\alpha \in Ord\) where \(\alpha \leq \omega\).
+\end{proof}
+
+
+
+\begin{corollary}
+  Each Boolean algebra on binary strings of length  $\alpha \in Ord$ and $\alpha \leq \omega$:  $(B_\alpha, \land, \lor, \neg, \bf{0}, \bf{1})$ isomorphic to an abstract Boolean algebra $(B_\alpha, +, \cdot, -, 0, 1)$, where $|B_\alpha| = 2^\alpha$.
+\end{corollary}
+\begin{proof}
+  Let $h: B_\alpha \to B_\alpha$ be an automorphism provided by identity. \textit{Definition \ref{def_bw_ops}} implies that boolean bitwise operations on binary strings $\land, \lor, \neg$ are equivalent to $+,\cdot, -$. So after rewriting the formulas, all axioms in \textit{Definition \ref{def_ba}} are satisfied, and the structure remains the same.
+\end{proof}
+
+\begin{definition}[Partial Order]\label{def_po}
+  A \textit{partial order} (p.o.) is a binary relation $\leq$ over a set $P$ that is \textit{reflexive}, \textit{antisymmetric}, and \textit{transitive}. That is, for any elements $a, b, c \in P$, the following conditions hold:
+  \begin{itemize}
+      \item \textbf{Reflexivity:} $a \leq a$
+      \item \textbf{Antisymmetry:} If $a \leq b$ and $b \leq a$, then $a = b$
+      \item \textbf{Transitivity:} If $a \leq b$ and $b \leq c$, then $a \leq c$
+  \end{itemize}
+\end{definition}
+
+We also tend to abuse the notation. If partial order $\leq$ is defined on a set $X$ and $P = X$ we note this fact interchangeably: either as $(P,\leq)$ or $(X,\leq)$, or even as $P(X,\leq)$. But sometimes we just write $P_{\leq}$ to mean the same as $\leq$. If $P_{\leq}$ is defined on $Y \supset X$, then we write $P_{\leq}(X)$ to mean that partial order is restricted to subset or $(X, \leq)$.
+
+Furthermore, let us also recall from \cite{jech2003set} that one can use Boolean-algebraic operations on $B$ to define a partial order $P(B)$ based on the following correspondence:
+
+\[ u \leq v \Leftrightarrow u - v = 0 \]
+
+We can formulate this as a lemma.
+
+\begin{lemma}[Partial Order on Boolean Algebras]\label{lemma_eq_po_ba}
+  If $B$ is a Boolean algebra. Then, there exists a corresponding partial order $P(B)$. 
+\end{lemma}
+\begin{proof}
+  \begin{enumerate}
+  \item Assume $B$ is a Boolean algebra. Define $P(B)$ as the set of elements of $B$.
+  \item Define the partial order $\leq$ on $P(B)$ by $u \leq v$ iff $u \land v = u$ (which is equivalent to $u - v = 0$ in a Boolean algebra, where $u - v$ is defined as $u \land \neg v$).
+  \item This relation is reflexive ($u \leq u$), antisymmetric (if $u \leq v$ and $v \leq u$, then $u = v$), and transitive (if $u \leq v$ and $v \leq w$, then $u \leq w$).
+  \item Hence, $P(B)$ equipped with $\leq$ forms a partial order.
+  \end{enumerate}
+\end{proof}
+
+The converse is not necessarily true, unless partial order is also bounded distributive \textit{lattice} with complementation (each element is its own complement). 
+
+\begin{definition}[Lattice on Partial Order]\label{def_lattice_po}
+  A partially ordered set \((L, \leq)\) is a \emph{lattice} if it satisfies the following criteria:
+  \begin{enumerate}[label=(\roman*)]
+    \item \textbf{Existence of Join and Meet}: For every two elements \(a, b \in L\), there exist unique elements called \textit{supremum} (join or the least upper bound) and \textit{infimum} (meet or the greatest lower bound), of $a$ and $b$, denoted by:      
+    \begin{enumerate}[label=(\alph*)]
+      \item $ sup(a,b) := a \curlyvee b$, also defined as $a = a \curlyvee b \Leftrightarrow a \leq b $
+      \item $ inf(a,b) := a \curlywedge b$, also defined as $b = a \curlywedge b \Leftrightarrow a \leq b $
+    \end{enumerate}
+    Thus \(\curlywedge\) and \(\curlyvee\) binary operations on \(L\).
+    
+    \item \textbf{Monotonicity}: The binary operations \(\curlyvee\) and \(\curlywedge\) are monotone with respect to the partial order \(\leq\), meaning:
+    \[
+    a_1 \leq a_2 \text{ and } b_1 \leq b_2 \implies a_1 \curlyvee b_1 \leq a_2 \curlyvee b_2 \text{ and } a_1 \curlywedge b_1 \leq a_2 \curlywedge b_2.
+    \]
+
+    \item \textbf{Closure under Finite Subsets}: For every finite, non-empty subset \(A \subseteq L\), both \(\sup(A)\) and \(\inf(A)\) exist, thereby ensuring the lattice operations close over finite subsets.
+
+  \end{enumerate}
+    
+  The following additional properties extend the basic lattice framework:  
+  \begin{enumerate}[label=(\roman*), start=4]
+    \item \textbf{Boundedness}: A \emph{bounded lattice} is characterized by the existence of both a greatest element (\emph{maximum} or \emph{top}, denoted $\top$) and a least element (\emph{minimum} or \emph{bottom}, denoted $\bot$), satisfying $x \in L: \bot \leq x \leq \top$.
+    In algebraic terms, this extends $(L, \curlyvee, \curlywedge)$ to $(L, \curlyvee, \curlywedge, \bot, \top)$, where $\bot$ and $\top$ serve as identity elements for $\curlyvee$ and $\curlywedge$ respectively.
+
+    \item \textbf{Completeness}: The lattice \(L\) is termed a complete lattice if for every non-empty subset \(A\) of \(L\), regardless of whether \(A\) is finite or infinite, both \(\sup(A)\) and \(\inf(A)\) exist.
+    
+    \item \textbf{Distributivity}: For any \( x, y, z \in P \), we have:
+    \[
+    x \curlywedge (y \curlyvee z) = (x \curlywedge y) \curlyvee (x \curlywedge z) \quad (\text{distributivity of } \curlywedge \text{ over } \curlyvee).
+    \]
+    \[
+    x \curlyvee (y \curlywedge z) = (x \curlyvee y) \curlywedge (x \curlyvee z) \quad (\text{distributivity of } \curlyvee \text{ over } \curlywedge).
+    \]
+
+    \item \textbf{Complementation}: For every element $a \in L$, there exists a complement denoted $\neg a$, s.t. $a \curlywedge \neg a = \bot$ and $a \curlyvee a = \top$. This complement can be defined in terms of the partial ordering relation as the set-theoretic complement.
+  \end{enumerate}
+\end{definition}
+
+\begin{lemma}[Boolean Algebra on Lattice]\label{lemma_ba_from_lattice}
+  If $(L, \curlyvee, \curlywedge, \bot, \top)$ is a bounded lattice that satisfies complementation and distributivity (\textit{Definition \ref{def_lattice_po}}), then $B(L, +, \cdot, -, 0, 1)$ is a Boolean algebra that can be defined $\forall a,b \in L$ as:
+    \begin{enumerate}[label=(\alph*)]
+      \item $a + b = a \curlyvee b$
+      \item $a \cdot b = a \curlywedge b$
+      \item $-a = \neg a$
+      \item $0 = \bot$
+      \item $1 = \top$
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+  The proof is straightforward check of Boolean algebra axioms in \textit{Definition \ref{def_ba}}. Since the bounded distributive lattice $(L, \curlyvee, \curlywedge, \bot, \top)$ with complementation satisfies the properties of associativity, commutativity, distributivity, identity, and complements with the defined operations, it forms a Boolean algebra $B(L, +, \cdot, -, 0, 1)$.
+\end{proof}
+
+To benefit from the above proof, we will extend partial order $P_{\varepsilon}$ in the discussed way.
+
+\begin{definition}[Fair Partial Order]\label{def_fair_po}
+  Let $(R_{<\omega_1}, P_{\varepsilon}, \pi)$ be a replicata and $P_{FC} := P_{\varepsilon}(S_{FC})$ be called \textit{fair} p.o., defined by a sppo $P_{\varepsilon}$, when restricted to the fair string subset $S_{FC} \subset R_{<\omega_1}$.
+\end{definition}
+
+\begin{lemma}[Fair Lattice on Partial Order]\label{lemma_fair_lattice}
+  Let $(R_{<\omega_1}, P_{\varepsilon}, \pi)$ be a replicata. If $\leq$ is a fair p.o. $P_{\varepsilon}(S_{FC})$ restricted to the fair string subset $S_{FC} \subset R_{<\omega_1}$, then there exists a \textit{fair} lattice
+    \[ (L_{F}, \curlyvee, \curlywedge) \]
+  that can be defined on $P_{\varepsilon}(S_{FC})$.
+\end{lemma}
+\begin{proof}
+  We want to proof that if one takes $\leq$, which is defined as $P_{\varepsilon}(S_{FC})$ (see \textit{Definition \ref{def_po_substr_rep}}) and use $\leq$ to define $(L_{F}, \curlyvee, \curlywedge)$ as specified by (i-iii) properties in \textit{Definition \ref{def_lattice_po}}, then it is a lattice. We will do so, by showing that $(L_{F}, \curlyvee, \curlywedge)$ satisfies property (i), which implies (ii) and (iii):
+
+  \begin{enumerate}[label=(\roman*)]
+    \item Recall, that p.o. $\leq$ is dense on both $S_{PF}$ and $S_{IF}$ (as discussed in the proof of \textit{Theorem \ref{theorem_rw_ccc}}). This, coupled with $S_{FC} = S_{PF} \cupdot S_{IF}$, implies existence of meets and joins for all $x,y \in S_{FC}$.
+    \item Monotonicity is implied by (i).
+    \item It follows by an induction argument from (i) that every non-empty finite subset of a lattice has a least upper bound and a greatest lower bound.
+  \end{enumerate}
+\end{proof}
+
+\begin{lemma}[Fair Boolean Algebra]\label{lemma_fair_ba}
+  If $(L_{F}, \curlyvee, \curlywedge)$ is fair lattice on $P_{\varepsilon}(S_{FC})$, then it can be extended to complete Boolean algebra with restricted $\curlyvee, \curlywedge$ as $\cdvee, \cdwedge$, namely:
+    \[ (B_{F}, \cdvee, \cdwedge, \neg, \bot, \top), \]
+  where: 
+    \begin{itemize}
+      \item $\neg$ is defined as a bitwise boolean operation(see \textit{Definition \ref{def_bw_ops}});
+      \item $\bot$ and $\top$ are countable binary strings, consisting either only of zeros, or, only of ones, respectively.
+      \item $\cdwedge$ is restricted as $\cdwedge := x \curlywedge y $, where either $x \in S_{PF} \land y \in S_{IF}$ or $x \in S_{IF} \land y \in S_{PF}$.
+      \item $\cdvee$ is restricted as $\cdvee := x \curlyvee y $, where either $x \in S_{PF} \land y \in S_{IF}$ or $x \in S_{IF} \land y \in S_{PF}$.
+    \end{itemize}
+  We refer to such complete Boolean algebra as \text{fair}.
+\end{lemma}
+\begin{proof}  
+  The result follows if we apply \textit{Lemma \ref{lemma_ba_from_lattice}}. Lemma \ref{lemma_fair_lattice} implies that $(L_{F}, \curlyvee, \curlywedge)$ already satisfies properties (i - iii) in \textit{Definition \ref{def_lattice_po}}. This means we need to show the remaining properties (iv - vii):
+  \begin{enumerate}[label=(\roman*), start=4]
+    \item We extend the $L_{F}$ as $B_{F} := P_{\varepsilon}(S_{FC}, \leq) \cup \{\bot, \top\}$, so that $\forall x,y \in B_{F}: \bot \leq x \leq \top$.
+    \item According to discussion in \textit{Theorem \ref{theorem_rw_ccc}} $P_{\varepsilon}$ is dense on $S_{PF}$ as well as $S_{IF}$. Note that the lattice is bounded with $\bot$ and $\top$ and $S_{FC} = S_{PF} \cupdot S_{IF}$ implies that if $X \subset S_{FC}$ then $inf(X)$ and $sup(X)$ are defined by induction.
+    \item $\cdvee, \cdwedge$ are restricted versions of $\curlyvee, \curlywedge$ essentially reinterpreting $P_{\varepsilon}(S_{FC})$ within symmetry induced by the linear order $\bot < S_{PF} < S_{IF} < \top$. Given that $S_{FC} = S_{PF} \cupdot S_{IF}$, let's fix $x$ and $y$, so that $x \in S_{PF} \land y \in S_{IF}$ implies $(x \cdwedge y) = x$ and $(x \cdvee y) = y$ (or vice versa if $x \in S_{IF} \land y \in S_{PF}$). The latter guarantees distributivity. 
+    \item Follows from the above extension as we defined bitwise boolean $\neg$ operation.
+  \end{enumerate}
+\end{proof}
+
+\subsection{Quasi-Large Cardinals}\label{subsection_quasilarge_cardinals}
+
+Working with \( PIT(R_{<\omega_1}) \) offers a nice segue to many crucial proofs, as highlighted in the literature. This approach not only aids in establishing important results but also highlights potent implications for \textit{fair determinacy} and the \textit{partition of \( R_{<\omega_1} \)}, as presented in \textit{Corollary \ref{corollary_fair_determinacy}} and \textit{Lemma \ref{lemma_part_replicata}} respectively.
+
+Let us recall notions about partition (in the context of Ramsey Theorem) and cardinal compactness \cite{jech2003set}.
+
+The symbol $\kappa \longrightarrow (\lambda)^n_m$ (read: \textit{$\kappa$ arrows $\lambda$}) denotes the following \textit{partition property}: 
+
+\begin{definition}[Generalized Ramsey partition property (arrow notation)]
+Every partition of $[\kappa]^n$ into $m$ pieces has a homogeneous set of size $\lambda$. In other words, every $F : [\kappa]^n \longrightarrow m$ is constant on $[H]^n$ for some $H \subset \kappa$ such that $|H| = \lambda$.
+\end{definition}
+
+Using arrow notation Ramsey Theorem will be expressed as following.
+
+\begin{theorem}[Ramsey Theorem]
+  $\aleph_0 \longrightarrow (\aleph_0)^n_m$, where $n,m \in \omega$
+\end{theorem}
+
+When $m=2$ we simply write $\kappa \to (\lambda)^n$.
+
+If the cardinal satisfies certain compactness theorem for infinitary languages, then it is called "weakly compact"\footnote{See \textit{Definition 9.8} and \textit{Lemma 9.9} in \cite{jech2003set}}. A weakly compact cardinal is uncountable and fulfills the partition property \( \kappa \longrightarrow (\kappa)^2 \). Such cardinals are also inherently inaccessible, a property derived assuming ZFC, where strong limit cardinals, as discussed in various lemmas and definitions, play a crucial role.
+
+Let us assume $ZF+DC$ instead and continue with a hypothetical scenario of this paper where the continuum, denoted as \( 2^{\aleph_0} \), equals \( \aleph_2 \)—an uncountable, regular cardinal that does not qualify as a strong limit cardinal yet exhibits properties similar to those of a weakly compact cardinal, such as the partition and tree properties—we encounter a highly unconventional and non-standard situation in set theory. This hypothesis, which negates the CH by positing \( 2^{\aleph_0} \) as \( \aleph_2 \) or larger, adheres to standard properties of being uncountable and regular but not a strong limit cardinal, as \( \aleph_1 < \aleph_2 \) but \( 2^{\aleph_1} \geq \aleph_2 \). 
+
+If \( \aleph_2 \) possessed the partition property of a weakly compact cardinal, it would suggest that for some functions \( f: [\aleph_2]^2 \to 2 \), there exists a subset \( H \) of cardinality \( \aleph_2 \) where \( f \) is constant on \( [H]^2 \). Additionally, if \( \aleph_2 \) exhibited the tree property, it would mean every tree of height \( \aleph_2 \) with levels smaller than \( \aleph_2 \) contains a branch of length \( \aleph_2 \). These adjustments would necessitate significant changes to standard set theory, introducing new combinatorial principles and potentially altering the structure of the set-theoretic universe.
+
+To capture this scenario semantically, we consider a model \( N \) of $ZF+DC$ in which \( \aleph_1 \) is a measurable cardinal, yet not a large cardinal in the traditional sense (since it is accessible). This situation demonstrates that certain large cardinal properties can occur at accessible cardinals within $ZF+DC$, potentially consistent with the existence of large cardinals but not necessarily requiring them.
+
+We formalize this notion with the following definition.
+
+\begin{definition}[Quasi-Large Cardinal]\label{def_quasi_large_cardinal}
+  Let \( N \) be a model of $ZF+DC$. An ordinal \( \gamma \in \operatorname{Ord}^N \) is called a \emph{quasi-large cardinal} in \( N \) if \( \gamma \) is an accessible cardinal in \( N \) that satisfies large cardinal properties typically associated with inaccessible cardinals. For example, \( \gamma \) in \( N \) carries a normal measure.
+\end{definition}
+
+This definition captures the essence of a cardinal that, while accessible, exhibits characteristics of large cardinals. It allows us to discuss cardinals that behave like large cardinals without necessitating their existence, aligning with the nuances possible in $ZF$ without the Axiom of Choice.
+
+Now, let us take a closer look at another remarkable consequence of \textit{partition of $R_{<\omega_1}$} (\textit{Lemma \ref{lemma_part_replicata}}).
+
+\begin{definition}[Weakly Compact Cardinal]
+  A cardinal $\kappa$ is \textit{weakly compact} if it is uncountable and satisfies the partition property $\kappa \longrightarrow (\kappa)^2$.
+\end{definition}
+
+\begin{theorem}[Weak compactness of $\cont$]
+  Let $\cont = 2^\aleph_0$ be cardinality of the continuum. We state that $\cont$ is a (quasi) weakly compact cardinal. Namely, $\cont \longrightarrow (\cont)^2$.
+\end{theorem}
+\begin{proof}
+  Follows from $\cont$ being a quasi-measurable cardinal (see \textit{Theorem \ref{theorem_cont_quasi_measurable}} below).
+\end{proof}
+
+Finally, we will look at defining a two-valued measure on $R_{<\omega_1}$. Recall\footnote{Also see \textit{Theorem 10.1 (due to Ulam)} and \textit{Lemma 10.2} on p.126-128 in \cite{jech2003set}} from \cite{jech2003set}:
+
+\begin{lemma}[\(\kappa\)-complete Ultrafilter]
+  Let \(\kappa\) be the least cardinal with the property that there is a nonprincipal \(\sigma\)-complete ultrafilter on \(\kappa\), and let \(U\) be such an ultrafilter. Then \(U\) is \(\kappa\)-complete.
+\end{lemma}
+
+This lemma allows for a more succinct definition of a \textit{measurable cardinal}. 
+
+\begin{definition}[Measurable cardinal]\label{def_measurable_cardinal}
+  An uncountable cardinal \(\kappa\) is \textit{measurable} if there exists a \(\kappa\)-complete nonprincipal ultrafilter \(U\) on \(\kappa\).
+\end{definition}
+
+Also note further results from \cite{jech2003set} that in $ZFC$:
+\begin{itemize}
+  \item \textit{every measurable cardinal is inaccessible};
+  \item \textit{every measurable cardinal is weakly compact};
+  \item \textit{every measurable cardinal carries a normal measure}.
+\end{itemize}
+
+In terms of the above \textit{Definition \ref{def_quasi_large_cardinal}}, one can easily derive the notion \textit{quasi-measurable} cardinal (assuming that it exists in a large enough model).
+
+\begin{definition}[Quasi-measurable cardinal]\label{def_quasimeasurable_cardinal}
+  An uncountable cardinal \(\kappa\) is \textit{quasi-measurable} if it is quasi-large (see \textit{Definition \ref{def_quasi_large_cardinal}}) and there exists a \(\kappa\)-complete nonprincipal ultrafilter \(U\) on \(\kappa\).
+\end{definition}
+
+\begin{theorem}[Normal measure on $\cont$]\label{theorem_cont_quasi_measurable}
+  Let $\cont = 2^{\aleph_0}$ be cardinality of the continuum. We state that $\cont$ is quasi-measurable. Furthermore, there exists a two-valued measure $\mu: \cont \to \{0,1\}$ defined as null-value for $S \subset \cont$, namely:
+
+      \[
+    \mu(x) = 
+    \begin{cases} 
+    0 & \text{if } x \in S; \\
+    1 & \text{otherwise}.
+    \end{cases}
+    \]
+
+\end{theorem}
+\begin{proof}
+  Assume $ZF+DC$. One approach for the proof would be to invoke $Ultrafilter(R_{<\omega_1})$ given that $|R_{<\omega_1}| = \cont$ (see \textit{Theorem \ref{theorem_pitx}}). This will also allow to define the two-value measure on $R_{<\omega_1}$ (such as $\mu$). 
+
+  Another approach would be even more straight-forward. We can simply invoke \textit{Theorem \ref{theorem_perfect_determinacy} of \nameref{theorem_perfect_determinacy}} to define $\mu$ for $S_{PF} \subset R_{<\omega_1}$. This will result in the existence of the $\sigma$-complete $Ultrafilter(R_{<\omega_1})$. In fact such ultrafilter will be a normal measure carried by $\cont$.
+
+  Either way, it is obvious that if there exists a model of $ZF+DC$ in which $R_{<\omega_1}$ is constructable, it implies the existence of the quasi-measurable cardinal size of continuum $\cont$.
+\end{proof}
+
